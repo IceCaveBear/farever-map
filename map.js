@@ -14,7 +14,7 @@ let s2 = 1.75;
 let b1 = -3100;
 let b2 = 1750;
 
-L.imageOverlay('cropped.png', bounds).addTo(map);
+L.imageOverlay('cropped.webp', bounds).addTo(map);
 
 map.fitBounds(bounds);
 
