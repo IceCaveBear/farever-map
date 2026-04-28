@@ -1,0 +1,40 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+
+label {
+  font-weight: bold;
+}
+
+.leaflet-top.leaflet-right {
+  /* border: 1px solid black; */
+  padding: 0.4em;
+  margin: 0;
+  user-select: none;
+}
+
+.legend.leaflet-control {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.legend.leaflet-control label {
+  overflow: hidden;
+  border: 1px solid black;
+  border-radius: 3px;
+  background-color: rgb(19, 102, 33);
+}
+
+.leaflet-bottom.leaflet-right {
+  display: none;
+}
