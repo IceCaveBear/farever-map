@@ -1,11 +1,31 @@
+@font-face {
+  font-family: Noto;
+  src: url("noto.ttf");
+}
+
 html, body {
   height: 100%;
   margin: 0;
+  font-family: Noto;
 }
 
+.page--flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.leaflet-container {
+  background-image: url("fog.webp");
+}
+span.map--container {  
+  height: 80vh;
+  width: 100vw;
+  
+}
 #map {
-  height: 100%;
-  width: 100%;
+  height: 80vh;
+  width: 100vw;
+  margin: auto;
 }
 
 
@@ -13,28 +33,53 @@ label {
   font-weight: bold;
 }
 
-.leaflet-top.leaflet-right {
-  /* border: 1px solid black; */
+.legend {
   padding: 0.4em;
-  margin: 0;
   user-select: none;
+  background-color: rgb(190, 190, 190);
 }
-
-.legend.leaflet-control {
-  padding: 0;
-  margin: 0;
+.legend div {
   display: flex;
-  flex-direction: column;
-  gap: 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-shrink: 0;
 }
 
-.legend.leaflet-control label {
-  overflow: hidden;
+.legend label {
   border: 1px solid black;
   border-radius: 3px;
-  background-color: rgb(19, 102, 33);
+  border: 5px solid transparent;
+  border-image: url("box.png") 5 stretch;
+  margin: 0.1em;
+  font-size: 1em;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 0.5rem;
+}
+
+.legend span.count {
+  margin-right: 0.2em;
 }
 
 .leaflet-bottom.leaflet-right {
   display: none;
+}
+
+.legend label input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.check--image {
+  width: 20px;
+  height: 20px;
+  background-image: url("check0.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.legend label input:checked + .check--image {
+  background-image: url("check1.png");
 }

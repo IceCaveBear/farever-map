@@ -64,12 +64,9 @@ async function loadData() {
       }
 
     const stylingDict = {
-      'Gatherables': new cMarker({
-            fillColor: "#a7a042"
-          }).props,
       'Misc': new cMarker().props,
       'Plants': new cMarker({
-            fillColor: "#44db36"
+            fillColor: "#ee74a3"
           }).props,
       // 'Jump pads': new cMarker({
       //       fillColor: "#00ccff"
@@ -92,6 +89,18 @@ async function loadData() {
           }).props,
       'Mobs': new cMarker({
             fillColor: "#d13a3a"
+          }).props,
+      'Sparkling mobs': new cMarker({
+            fillColor: "#eb19c8"
+          }).props,
+      'Dungeons': new cMarker({
+            fillColor: "#430dd8"
+          }).props,
+      'Checkpoints': new cMarker({
+            fillColor: "#4db3db"
+          }).props,
+      'Minibosses': new cMarker({
+            fillColor: "#eb681c"
           }).props
     }
 
@@ -102,8 +111,20 @@ async function loadData() {
       'Chests':  new iconMarker({
         'iconUrl': './icons/mapMarker2.png'
       }).props,
+      'Orb Chests':  new iconMarker({
+        'iconUrl': './icons/mapMarker11.png'
+      }).props,
       'NPCs':  new iconMarker({
-        'iconUrl': './icons/mapMarker7.png'
+        'iconUrl': './icons/mapMarker8.png'
+      }).props,
+      'Dungeons':  new iconMarker({
+        'iconUrl': './icons/mapMarker3.png'
+      }).props,
+      'Checkpoints':  new iconMarker({
+        'iconUrl': './icons/mapMarker6.png'
+      }).props,
+      'Minibosses':  new iconMarker({
+        'iconUrl': './icons/mapMarker1.png'
       }).props,
     }
 
@@ -134,11 +155,10 @@ async function loadData() {
     
 
     // legend code
+      
+      const returnLegendLabelDiv = () => {
 
-    const legend = L.control({ position: 'topright' });
-
-    legend.onAdd = function () {
-      const div = L.DomUtil.create('div', 'legend');
+      const div = document.createElement('div');
       div.innerHTML = '';
 
       const checkedArray = ['Obelisks', 'NPCs', 'Chests'];
@@ -154,15 +174,18 @@ async function loadData() {
         div.innerHTML += `
           <label style="color: ${colour}">
             <input type="checkbox" ${isChecked} data-layer="${name}">
-            ${name} <span class="count">(${count})</span>
+            <span class="check--image"></span>${name} <span class="count">(${count})</span>
           </label>
         `;
       });
 
       return div;
     };
+    
+    console.log(layers)
+    const legend = document.querySelector('div.legend');
+    legend.appendChild(returnLegendLabelDiv())
 
-    legend.addTo(map);
     L.DomEvent.disableClickPropagation(
       document.querySelector('.legend')
     );
