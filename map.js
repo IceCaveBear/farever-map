@@ -49,7 +49,7 @@ async function loadData() {
     class cMarker {
         constructor(fargs={}) {
           this.props = {
-              radius: 4,
+              radius: 5,
               fillColor: "#ffa958",
               color: "#ffffff",
               weight: 1.05,
