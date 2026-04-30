@@ -175,7 +175,7 @@ async function loadData() {
         }
         div.innerHTML += `
           <label style="color: ${colour}">
-            <input type="checkbox" ${isChecked} data-layer="${name}">
+            <input type="checkbox" ${isChecked} data-layer="${name}" class="category">
             <span class="check--image"></span>${name} <span class="count">(${count})</span>
           </label>
         `;
@@ -215,26 +215,35 @@ async function loadData() {
 
 loadData();
 
-const zoomLevels = {
-  "-5": 1,
-  "-4": 1.1,
-  "-3": 1.2,
-  "-2": 1.3,
-  "-1": 1.4,
-  "0": 1.5,
-  "1": 1.6,
-}
-const baseZoom = map.getZoom();
-map.on('zoomend', () => {
+// const STORAGE_KEY = 'selectedCategories';
 
-  const zoom = map.getZoom();
-  const scale = map.getZoomScale(zoom, baseZoom);
+// function getSelectedCategories() {
+//   return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+// }
 
-  // circleMarkers.forEach(circle => {
-  //   const r = circle.options.baseRadius;
-  //   circle.setRadius(r * scale);
-  // });
+// function saveSelectedCategories(categories) {
+//   localStorage.setItem(STORAGE_KEY, JSON.stringify(categories));
+// }
 
+// document.querySelectorAll('.category').forEach(cb => {
+//   cb.addEventListener('change', () => {
+//     const selected = getSelectedCategories();
 
+//     if (cb.checked) {
+//       if (!selected.includes(cb.value)) {
+//         selected.push(cb.value);
+//       }
+//     } else {
+//       const index = selected.indexOf(cb.value);
+//       if (index !== -1) selected.splice(index, 1);
+//     }
 
-});
+//     saveSelectedCategories(selected);
+//   });
+// });
+
+// const selected = getSelectedCategories();
+
+// document.querySelectorAll('.category').forEach(cb => {
+//   cb.checked = selected.includes(cb.value);
+// });
