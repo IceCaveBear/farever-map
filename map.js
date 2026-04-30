@@ -49,7 +49,7 @@ async function loadData() {
     class cMarker {
         constructor(fargs={}) {
           this.props = {
-              radius: 5,
+              radius: 6,
               fillColor: "#ffa958",
               color: "#ffffff",
               weight: 1.05,
@@ -212,3 +212,27 @@ async function loadData() {
 }
 
 loadData();
+
+const zoomLevels = {
+  "-5": 1,
+  "-4": 1.1,
+  "-3": 1.2,
+  "-2": 1.3,
+  "-1": 1.4,
+  "0": 1.5,
+  "1": 1.6,
+}
+const baseZoom = map.getZoom();
+map.on('zoomend', () => {
+
+  const zoom = map.getZoom();
+  const scale = map.getZoomScale(zoom, baseZoom);
+
+  // circleMarkers.forEach(circle => {
+  //   const r = circle.options.baseRadius;
+  //   circle.setRadius(r * scale);
+  // });
+
+
+
+});
