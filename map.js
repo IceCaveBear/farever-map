@@ -32,7 +32,7 @@ async function loadData() {
 
     class iconMarker {
       constructor(fargs={}) {
-        const factor = 20;
+        const factor = 28;
         this.props = {
           'iconUrl': './icons/mapMarker1.png',
           'iconSize': [factor, factor],
