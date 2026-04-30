@@ -103,6 +103,9 @@ async function loadData() {
           }).props,
       'Minibosses': new cMarker({
             fillColor: "#eb681c"
+          }).props,
+      'Critters': new cMarker({
+            fillColor: "#de58ff"
           }).props
     }
 
