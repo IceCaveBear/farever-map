@@ -1,6 +1,8 @@
 const map = L.map('map', {
   crs: L.CRS.Simple,
-  minZoom: -5
+  minZoom: -4,
+  tap: true,
+  tapTolerance: 15
 });
 
 const tileSize = 1024;
@@ -49,7 +51,7 @@ async function loadData() {
     class cMarker {
         constructor(fargs={}) {
           this.props = {
-              radius: 6,
+              radius: 7,
               fillColor: "#ffa958",
               color: "#ffffff",
               weight: 1.05,
