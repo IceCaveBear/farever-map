@@ -154,7 +154,7 @@ async function loadData() {
     const circleDict = {
       'Recipes': new circleArea({
           fillColor: "#9b7700",
-          radius: coordToMapScalar*50,
+          radius: coordToMapScalar*80,
           opacity: 0.5,
           fillOpacity: 0.5
         }).props,
