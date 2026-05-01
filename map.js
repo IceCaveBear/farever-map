@@ -11,8 +11,9 @@ const bounds = [
   [0, 0],
   [4096, 4096]
 ];
-let s1 = 1.75;
-let s2 = 1.75;
+let coordToMapScalar = 1.75
+let s1 = coordToMapScalar;
+let s2 = coordToMapScalar;
 let b1 = -3100;
 let b2 = 1750;
 
@@ -65,6 +66,23 @@ async function loadData() {
         }
       }
 
+      class circleArea {
+        constructor(fargs={}) {
+          this.props = {
+            radius: coordToMapScalar*50,
+            fillColor: "#ffa958",
+            color: "#ffffff",
+            weight: 1.05,
+            opacity: 1,
+            fillOpacity: 1
+          }
+
+          for (const [k, v] of Object.entries(fargs)){
+            this.props[k] = v
+          }
+        }
+      }
+
     const stylingDict = {
       'Misc': new cMarker().props,
       'Plants': new cMarker({
@@ -76,9 +94,6 @@ async function loadData() {
       'Chests': new cMarker({
             fillColor: "#ffc400",
             color: "#fffb00"
-          }).props,
-      'Recipes': new cMarker({
-            fillColor: "#9b7700",
           }).props,
       'Ores': new cMarker({
             fillColor: "#8758d3"
@@ -106,7 +121,10 @@ async function loadData() {
           }).props,
       'Critters': new cMarker({
             fillColor: "#de58ff"
-          }).props
+          }).props,
+        'Recipes': new circleArea({
+          fillColor: "#9b7700",
+        }).props,
     }
 
     const iconDict = {
@@ -133,6 +151,14 @@ async function loadData() {
       }).props,
     }
 
+    const circleDict = {
+      'Recipes': new circleArea({
+          fillColor: "#9b7700",
+          radius: coordToMapScalar*50,
+          opacity: 0.5,
+          fillOpacity: 0.5
+        }).props,
+    }
     
 
     // If it's an array:
@@ -148,9 +174,13 @@ async function loadData() {
       if(category in iconDict){
         let icon = L.icon(iconDict[category])
         newMarker = L.marker(coords, {'icon': icon})
+      } else if(category in circleDict){
+        newMarker = L.circle(coords, circleDict[category])
       } else if(category in stylingDict){
         newMarker = L.circleMarker(coords, stylingDict[category])
-      } else {
+      } 
+      
+      else {
         newMarker = L.circleMarker(coords, new cMarker().props)
       }
       newMarker.bindPopup(item.label);
