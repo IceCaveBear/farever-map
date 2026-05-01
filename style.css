@@ -56,6 +56,9 @@ label {
   cursor: pointer;
   gap: 0.5rem;
 }
+.leaflet-popup-content {
+  font-family: Noto;
+}
 
 .legend span.count {
   margin-right: 0.2em;
