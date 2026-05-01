@@ -7,7 +7,7 @@
     "y": 1049.4819,
     "z": 109.0828,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -20,7 +20,7 @@
     "y": 1030.6749,
     "z": 108.2278,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -371,7 +371,7 @@
     "y": 213.0766,
     "z": 9.3693,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -384,7 +384,7 @@
     "y": 207.0766,
     "z": 21.7088,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -397,7 +397,7 @@
     "y": 264.0365,
     "z": 12.1453,
     "unit": "Z2_Crimson_Patrol_World_4",
-    "label": "Z 2 Crimson Patrol World 4",
+    "label": "\u2022 5 x Observant Crimson Archer (Lvl 13-14) (\ud83c\udfb2100%)",
     "categories": [
       "Mobs"
     ]
@@ -410,7 +410,7 @@
     "y": 215.0766,
     "z": 25.0255,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -670,7 +670,7 @@
     "y": 1138.8096,
     "z": 120,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -891,7 +891,7 @@
     "y": 1933.424,
     "z": 67.5,
     "unit": "Z1_Start_Patrol_World",
-    "label": "Z 1 Start Patrol World",
+    "label": "\u2022 Sparkling Slime (Lvl 2) (\ud83c\udfb2100%)",
     "categories": [
       "Mobs"
     ]
@@ -1645,7 +1645,7 @@
     "y": 485.7469,
     "z": 52.644,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -1658,7 +1658,7 @@
     "y": 496.1917,
     "z": 52.5148,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -1970,7 +1970,7 @@
     "y": 798.9554,
     "z": 403.5,
     "unit": "Z1_Bee_Tree",
-    "label": "Z 1 Bee Tree",
+    "label": "\u2022 Apix Watcher (Lvl 11-12) (\ud83c\udfb225%)<br>\u2022 Apix Builder (Lvl 9-10) (\ud83c\udfb225%)<br>\u2022 2 x Tipsy Apix Harvester (Lvl 9-10) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -1983,7 +1983,7 @@
     "y": 786.5129,
     "z": 403.5,
     "unit": "Z1_Bee_Tree",
-    "label": "Z 1 Bee Tree",
+    "label": "\u2022 Apix Watcher (Lvl 11-12) (\ud83c\udfb225%)<br>\u2022 Apix Builder (Lvl 9-10) (\ud83c\udfb225%)<br>\u2022 2 x Tipsy Apix Harvester (Lvl 9-10) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -2308,7 +2308,7 @@
     "y": 1333.696,
     "z": 64.3373,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -2321,7 +2321,7 @@
     "y": 1294.2986,
     "z": 69.3998,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -2334,7 +2334,7 @@
     "y": 1302.9774,
     "z": 72.0375,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -2347,7 +2347,7 @@
     "y": 1287.3061,
     "z": 60.6827,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -2360,7 +2360,7 @@
     "y": 1338.8022,
     "z": 61.0306,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -2373,7 +2373,7 @@
     "y": 1300.6094,
     "z": 59.953,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -2516,7 +2516,7 @@
     "y": 734.8999,
     "z": 143.5025,
     "unit": "Z1_Bee_Patrol_World",
-    "label": "Z 1 Bee Patrol World",
+    "label": "\u2022 2 x Apix Watcher (Lvl 11-12) (\ud83c\udfb2100%)",
     "categories": [
       "Mobs"
     ]
@@ -2659,7 +2659,7 @@
     "y": 310.0766,
     "z": 51.6507,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -3296,7 +3296,7 @@
     "y": 497.609,
     "z": 3.0626,
     "unit": "Z1_Kobold_Patrol_Unique",
-    "label": "Z 1 Kobold Patrol Unique",
+    "label": "\u2022 2 x Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb2100%)",
     "categories": [
       "Mobs"
     ]
@@ -3309,7 +3309,7 @@
     "y": 489.044,
     "z": 162.8586,
     "unit": "Z1_Crimson_Patrol_Stronghold_World_Unique",
-    "label": "Z 1 Crimson Patrol Stronghold World Unique",
+    "label": "\u2022 3 x Crimson Soldier (Lvl 8-10) (\ud83c\udfb2100%)",
     "categories": [
       "Mobs"
     ]
@@ -3569,7 +3569,7 @@
     "y": 406.1973,
     "z": 39.0148,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -3582,7 +3582,7 @@
     "y": 400.894,
     "z": 36.0148,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -3595,9 +3595,9 @@
     "y": 423.894,
     "z": 36.1089,
     "unit": "Boar_Z2W_U",
-    "label": "Spark-infused Boar (Lvl 14)",
+    "label": "Sparkling Boar (Lvl 14)",
     "categories": [
-      "Mobs"
+      "Sparkling mobs"
     ]
   },
   {
@@ -3959,7 +3959,7 @@
     "y": 1156.4533,
     "z": 89.6896,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -5545,7 +5545,7 @@
     "y": 938.126,
     "z": 411,
     "unit": "Z1_Bee_Tree",
-    "label": "Z 1 Bee Tree",
+    "label": "\u2022 Apix Watcher (Lvl 11-12) (\ud83c\udfb225%)<br>\u2022 Apix Builder (Lvl 9-10) (\ud83c\udfb225%)<br>\u2022 2 x Tipsy Apix Harvester (Lvl 9-10) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -5558,7 +5558,7 @@
     "y": 889.8864,
     "z": 421.5,
     "unit": "Z1_Bee_Tree",
-    "label": "Z 1 Bee Tree",
+    "label": "\u2022 Apix Watcher (Lvl 11-12) (\ud83c\udfb225%)<br>\u2022 Apix Builder (Lvl 9-10) (\ud83c\udfb225%)<br>\u2022 2 x Tipsy Apix Harvester (Lvl 9-10) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -5636,7 +5636,7 @@
     "y": 1063.2216,
     "z": 100.4557,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -5896,7 +5896,7 @@
     "y": 991.618,
     "z": 115.1896,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -6468,7 +6468,7 @@
     "y": 1291.7324,
     "z": 75.6393,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -6481,7 +6481,7 @@
     "y": 1312.0273,
     "z": 70.9073,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -6494,7 +6494,7 @@
     "y": 1342.259,
     "z": 74.25,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -8080,7 +8080,7 @@
     "y": 399.105,
     "z": 20.2648,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -8457,7 +8457,7 @@
     "y": 384.4414,
     "z": 2.25,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -9471,7 +9471,7 @@
     "y": 1386.8239,
     "z": 57,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -9733,7 +9733,7 @@
     "unit": "GiantCrab_Z1W_U",
     "label": "Sparkling Crustacean (Lvl 11)",
     "categories": [
-      "Sparkling mobs"
+      "Mobs"
     ]
   },
   {
@@ -9861,7 +9861,7 @@
     "y": 533,
     "z": 205,
     "unit": "Z1_Crimson_Patrol_Stronghold_World_2",
-    "label": "Z 1 Crimson Patrol Stronghold Spawner",
+    "label": "\u2022 3 x Crimson Archer (Lvl 8-10) (\ud83c\udfb2100%)",
     "categories": [
       "Mobs"
     ]
@@ -10290,7 +10290,7 @@
     "y": 886.3379,
     "z": 113.2807,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -10303,7 +10303,7 @@
     "y": 888.6108,
     "z": 113.25,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -10355,7 +10355,7 @@
     "y": 456.7555,
     "z": 54.7648,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -10368,7 +10368,7 @@
     "y": 424.7473,
     "z": 45.0735,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -11122,7 +11122,7 @@
     "y": 181.4968,
     "z": 0.2562,
     "unit": "GiantCrab_Z1W_2",
-    "label": "Voracious Crustacean (Lvl 10-12)",
+    "label": "GiantCrab Z 1W 2",
     "categories": [
       "Mobs"
     ]
@@ -11499,7 +11499,7 @@
     "y": 1375.1139,
     "z": 64.7367,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -12656,7 +12656,7 @@
     "y": 1180.7308,
     "z": 95.4621,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -12682,7 +12682,7 @@
     "y": 1226.1848,
     "z": 82.5363,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -12695,7 +12695,7 @@
     "y": 1196.8513,
     "z": 92.25,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -12708,7 +12708,7 @@
     "y": 1241.7723,
     "z": 79.156,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -12721,7 +12721,7 @@
     "y": 1219.3731,
     "z": 74.7419,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -12838,7 +12838,7 @@
     "y": 1446.0754,
     "z": 99.75,
     "unit": "Z1_World_Critters_Ladybugs",
-    "label": "Z 1 World Critters Ladybugs",
+    "label": "\u2022 Blue Leggybug (\ud83c\udfb224.5%)<br>\u2022 Grass Leggybug (\ud83c\udfb224.5%)<br>\u2022 Purple Leggybug (\ud83c\udfb224.5%)<br>\u2022 Red Leggybug (\ud83c\udfb224.5%)<br>\u2022 Sparkling Leggybug (\ud83c\udfb21%)<br>\u2022 Night Leggybug (\ud83c\udfb21%)",
     "categories": [
       "Mobs"
     ]
@@ -13332,7 +13332,7 @@
     "y": 950.7758,
     "z": 116.8976,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -14463,7 +14463,7 @@
     "y": 1120.2513,
     "z": 96.9829,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -14476,7 +14476,7 @@
     "y": 1081.5324,
     "z": 102.6494,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -14671,7 +14671,7 @@
     "y": 375.7917,
     "z": 36.0148,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -14684,7 +14684,7 @@
     "y": 317.809,
     "z": 40.5148,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -14697,7 +14697,7 @@
     "y": 288.2815,
     "z": 28.2098,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -14879,7 +14879,7 @@
     "y": 410.9212,
     "z": 2.25,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -14892,7 +14892,7 @@
     "y": 452.2191,
     "z": 5.8216,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -14905,7 +14905,7 @@
     "y": 450.0616,
     "z": 5.8216,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -14918,7 +14918,7 @@
     "y": 416.7318,
     "z": 3.7991,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -14931,7 +14931,7 @@
     "y": 410.2208,
     "z": 3.7325,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -14970,7 +14970,7 @@
     "y": 410.9919,
     "z": 2.25,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -15035,7 +15035,7 @@
     "y": 406.1974,
     "z": 2.25,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -15048,7 +15048,7 @@
     "y": 413.6456,
     "z": 2.25,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -15165,7 +15165,7 @@
     "y": 635.5691,
     "z": 204.75,
     "unit": "Z1_Crimson_Patrol_Stronghold_World_1",
-    "label": "Z 1 Crimson Patrol Stronghold World 1",
+    "label": "\u2022 2 x Crimson Soldier (Lvl 8-10) (\ud83c\udfb2100%)",
     "categories": [
       "Mobs"
     ]
@@ -15529,7 +15529,7 @@
     "y": 141.5766,
     "z": 45.1396,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -15542,7 +15542,7 @@
     "y": 177.6014,
     "z": 43.6859,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -15555,7 +15555,7 @@
     "y": 102.4386,
     "z": 50.3358,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -15568,7 +15568,7 @@
     "y": 131.2812,
     "z": 48.0875,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -16244,7 +16244,7 @@
     "y": 437.3858,
     "z": 3,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -16257,7 +16257,7 @@
     "y": 429.5207,
     "z": 3,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -16270,7 +16270,7 @@
     "y": 440.6017,
     "z": 3,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -16283,7 +16283,7 @@
     "y": 432.2268,
     "z": 3,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -16296,7 +16296,7 @@
     "y": 452.1291,
     "z": 3,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -16309,7 +16309,7 @@
     "y": 422.0711,
     "z": 3,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -17206,7 +17206,7 @@
     "y": 397.9724,
     "z": 131.25,
     "unit": "Z1_Crimson_Patrol_Stronghold_World_2",
-    "label": "Z 1 Crimson Patrol Stronghold World 2",
+    "label": "\u2022 3 x Crimson Archer (Lvl 8-10) (\ud83c\udfb2100%)",
     "categories": [
       "Mobs"
     ]
@@ -17466,7 +17466,7 @@
     "y": 306.4953,
     "z": 12.2663,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -17479,7 +17479,7 @@
     "y": 336.9009,
     "z": 10.2037,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -17947,7 +17947,7 @@
     "y": 1377.3115,
     "z": 62.25,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -17960,7 +17960,7 @@
     "y": 1355.9229,
     "z": 74.25,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -17973,7 +17973,7 @@
     "y": 1361.6172,
     "z": 62.25,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -18246,7 +18246,7 @@
     "y": 55.0123,
     "z": 57.75,
     "unit": "Z2_Crimson_Patrol_World",
-    "label": "Z 2 Crimson Patrol World",
+    "label": "\u2022 3 x Carmine Hound (Lvl 13-14) (\ud83c\udfb2100%)",
     "categories": [
       "Mobs"
     ]
@@ -18441,7 +18441,7 @@
     "y": 492.8179,
     "z": 54.0148,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -18532,7 +18532,7 @@
     "y": 1185.3983,
     "z": 82.0647,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -19039,7 +19039,7 @@
     "y": 284.0766,
     "z": 54.5788,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -19104,7 +19104,7 @@
     "y": 207.1483,
     "z": 0.1953,
     "unit": "GiantCrab_Z1W_2",
-    "label": "Voracious Crustacean (Lvl 10-12)",
+    "label": "GiantCrab Z 1W 2",
     "categories": [
       "Mobs"
     ]
@@ -19299,7 +19299,7 @@
     "y": 1020.8403,
     "z": 107.1221,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -19312,7 +19312,7 @@
     "y": 960.6994,
     "z": 113.25,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -19338,7 +19338,7 @@
     "y": 454.9135,
     "z": 3.0618,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -19520,7 +19520,7 @@
     "y": 290.0766,
     "z": 51.7669,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -19767,7 +19767,7 @@
     "y": 165.5766,
     "z": 26.2648,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -19780,7 +19780,7 @@
     "y": 147.0766,
     "z": 31.2075,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -19793,7 +19793,7 @@
     "y": 190.5766,
     "z": 31.3068,
     "unit": "Z2_Wild_Azuram",
-    "label": "Z 2 Wild Azuram",
+    "label": "\u2022 Reclusive Boar (Lvl 13-14) (\ud83c\udfb250%)<br>\u2022 Coyote (Lvl 13-14) (\ud83c\udfb250%)",
     "categories": [
       "Mobs"
     ]
@@ -19936,7 +19936,7 @@
     "y": 1277.3139,
     "z": 70.0153,
     "unit": "Z1_Forest",
-    "label": "Z 1 Forest",
+    "label": "\u2022 Wolf (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Boar (Lvl 11-12) (\ud83c\udfb245.5%)<br>\u2022 Alpha Wolf (Lvl 11) (\ud83c\udfb29.1%)",
     "categories": [
       "Mobs"
     ]
@@ -20105,7 +20105,7 @@
     "y": 636,
     "z": 205,
     "unit": "Z1_Crimson_Patrol_Stronghold_World",
-    "label": "Z 1 Crimson Patrol Stronghold Spawner",
+    "label": "\u2022 2 x Crimson Archer (Lvl 8-10) (\ud83c\udfb2100%)",
     "categories": [
       "Mobs"
     ]
@@ -20482,7 +20482,7 @@
     "y": 474.6324,
     "z": 3,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -20495,7 +20495,7 @@
     "y": 461.8772,
     "z": 3,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -20729,7 +20729,7 @@
     "y": 377.9367,
     "z": 2.25,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -20781,7 +20781,7 @@
     "y": 323.3602,
     "z": 3.75,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -20794,7 +20794,7 @@
     "y": 321.4478,
     "z": 3.1311,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -20807,7 +20807,7 @@
     "y": 311.5809,
     "z": 2.25,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -20833,7 +20833,7 @@
     "y": 367.794,
     "z": 2.25,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -20846,7 +20846,7 @@
     "y": 377.998,
     "z": 2.25,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
@@ -20859,7 +20859,7 @@
     "y": 343.0499,
     "z": 2.25,
     "unit": "Z1_Kobold_Mines_2",
-    "label": "Z 1 Kobold Mines 2",
+    "label": "\u2022 Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb242.9%)<br>\u2022 Unpredictable Kobold Overseer (Lvl 10-11) (\ud83c\udfb228.6%)<br>\u2022 Trustworthy Kobold Thief (Lvl 10-11) (\ud83c\udfb228.6%)",
     "categories": [
       "Mobs"
     ]
