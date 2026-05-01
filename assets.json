@@ -397,7 +397,7 @@
     "y": 264.0365,
     "z": 12.1453,
     "unit": "Z2_Crimson_Patrol_World_4",
-    "label": "\u2022 5 x Observant Crimson Archer (Lvl 13-14) (\ud83c\udfb2100%)",
+    "label": "5 x Observant Crimson Archer (Lvl 13-14)",
     "categories": [
       "Mobs"
     ]
@@ -891,7 +891,7 @@
     "y": 1933.424,
     "z": 67.5,
     "unit": "Z1_Start_Patrol_World",
-    "label": "\u2022 Sparkling Slime (Lvl 2) (\ud83c\udfb2100%)",
+    "label": "Sparkling Slime (Lvl 2)",
     "categories": [
       "Mobs"
     ]
@@ -2516,7 +2516,7 @@
     "y": 734.8999,
     "z": 143.5025,
     "unit": "Z1_Bee_Patrol_World",
-    "label": "\u2022 2 x Apix Watcher (Lvl 11-12) (\ud83c\udfb2100%)",
+    "label": "2 x Apix Watcher (Lvl 11-12)",
     "categories": [
       "Mobs"
     ]
@@ -3296,7 +3296,7 @@
     "y": 497.609,
     "z": 3.0626,
     "unit": "Z1_Kobold_Patrol_Unique",
-    "label": "\u2022 2 x Freelance Kobold Miner (Lvl 9-10) (\ud83c\udfb2100%)",
+    "label": "2 x Freelance Kobold Miner (Lvl 9-10)",
     "categories": [
       "Mobs"
     ]
@@ -3309,7 +3309,7 @@
     "y": 489.044,
     "z": 162.8586,
     "unit": "Z1_Crimson_Patrol_Stronghold_World_Unique",
-    "label": "\u2022 3 x Crimson Soldier (Lvl 8-10) (\ud83c\udfb2100%)",
+    "label": "3 x Crimson Soldier (Lvl 8-10)",
     "categories": [
       "Mobs"
     ]
@@ -9861,7 +9861,7 @@
     "y": 533,
     "z": 205,
     "unit": "Z1_Crimson_Patrol_Stronghold_World_2",
-    "label": "\u2022 3 x Crimson Archer (Lvl 8-10) (\ud83c\udfb2100%)",
+    "label": "3 x Crimson Archer (Lvl 8-10)",
     "categories": [
       "Mobs"
     ]
@@ -15165,7 +15165,7 @@
     "y": 635.5691,
     "z": 204.75,
     "unit": "Z1_Crimson_Patrol_Stronghold_World_1",
-    "label": "\u2022 2 x Crimson Soldier (Lvl 8-10) (\ud83c\udfb2100%)",
+    "label": "2 x Crimson Soldier (Lvl 8-10)",
     "categories": [
       "Mobs"
     ]
@@ -17206,7 +17206,7 @@
     "y": 397.9724,
     "z": 131.25,
     "unit": "Z1_Crimson_Patrol_Stronghold_World_2",
-    "label": "\u2022 3 x Crimson Archer (Lvl 8-10) (\ud83c\udfb2100%)",
+    "label": "3 x Crimson Archer (Lvl 8-10)",
     "categories": [
       "Mobs"
     ]
@@ -18246,7 +18246,7 @@
     "y": 55.0123,
     "z": 57.75,
     "unit": "Z2_Crimson_Patrol_World",
-    "label": "\u2022 3 x Carmine Hound (Lvl 13-14) (\ud83c\udfb2100%)",
+    "label": "3 x Carmine Hound (Lvl 13-14)",
     "categories": [
       "Mobs"
     ]
@@ -20105,7 +20105,7 @@
     "y": 636,
     "z": 205,
     "unit": "Z1_Crimson_Patrol_Stronghold_World",
-    "label": "\u2022 2 x Crimson Archer (Lvl 8-10) (\ud83c\udfb2100%)",
+    "label": "2 x Crimson Archer (Lvl 8-10)",
     "categories": [
       "Mobs"
     ]
