@@ -132,7 +132,7 @@ label {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 9em;
+  height: 11.4em;
   width: 6em; 
   border: none;
   padding: 0;
@@ -160,8 +160,8 @@ label {
     font-size: 1.5em;
   }
   .leaflet-bar.leaflet-control.go--to--legend--button {
-    height: 6em;
-    width: 4em;
+    height: 6.84em;
+    width: 3.6em;
   }
   .leaflet-touch .leaflet-bar a {
     height: 1.6em;
@@ -169,7 +169,7 @@ label {
     line-height: 1.6em;
   }
   .leaflet-popup-content {
-    font-size: 1.5em;
+    font-size: 1.2em;
   }
 }
 
@@ -181,8 +181,8 @@ label {
     font-size: 1.5em;
   }
   .leaflet-bar.leaflet-control.go--to--legend--button {
-    height: 6em;
-    width: 4em;
+    height: 6.84em;
+    width: 3.6em;
   }
   .leaflet-touch .leaflet-bar a {
     height: 1.6em;
@@ -190,7 +190,7 @@ label {
     line-height: 1.6em;
   }
   .leaflet-popup-content {
-    font-size: 1.5em;
+    font-size: 1.2em;
   }
 }
 
@@ -202,8 +202,8 @@ label {
     font-size: 1.5em;
   }
   .leaflet-bar.leaflet-control.go--to--legend--button {
-    height: 6em;
-    width: 4em;
+    height: 6.84em;
+    width: 3.6em;
   }
   .leaflet-touch .leaflet-bar a {
     height: 1.6em;
