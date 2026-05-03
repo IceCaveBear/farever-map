@@ -168,6 +168,9 @@ label {
     width: 1.6em; 
     line-height: 1.6em;
   }
+  .leaflet-popup-content {
+    font-size: 1.5em;
+  }
 }
 
 @media (min-width: 640px) {
@@ -185,6 +188,9 @@ label {
     height: 1.6em;
     width: 1.6em; 
     line-height: 1.6em;
+  }
+  .leaflet-popup-content {
+    font-size: 1.5em;
   }
 }
 
