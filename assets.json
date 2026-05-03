@@ -202,7 +202,7 @@
     "y": 1243.2261,
     "z": 87,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -215,7 +215,7 @@
     "y": 1245.8814,
     "z": 145.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -228,7 +228,7 @@
     "y": 1229.1852,
     "z": 144.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -293,7 +293,7 @@
     "y": 252.6578,
     "z": 8.4803,
     "unit": null,
-    "label": "R 2Plant 3 Small",
+    "label": "R 2 Plant 3 Small",
     "categories": [
       "Plants"
     ]
@@ -397,7 +397,7 @@
     "y": 1009.1944,
     "z": 22.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -436,7 +436,7 @@
     "y": 963.2772,
     "z": 74.25,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -553,7 +553,7 @@
     "y": 882.2577,
     "z": 144,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -722,7 +722,7 @@
     "y": 394.8637,
     "z": 110.2249,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -735,7 +735,7 @@
     "y": 392.7478,
     "z": 131.25,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -748,7 +748,7 @@
     "y": 397.6085,
     "z": 131.25,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -800,7 +800,7 @@
     "y": 414.5885,
     "z": 36.75,
     "unit": null,
-    "label": "CopperOre Large",
+    "label": "Copper Ore Large",
     "categories": [
       "Ores"
     ]
@@ -930,7 +930,7 @@
     "y": 522.4006,
     "z": 125.0427,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -943,7 +943,7 @@
     "y": 562.6193,
     "z": 121.7239,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -956,7 +956,7 @@
     "y": 548.6696,
     "z": 115.9199,
     "unit": null,
-    "label": "IronOre Small",
+    "label": "Iron Ore Small",
     "categories": [
       "Ores"
     ]
@@ -969,7 +969,7 @@
     "y": 132,
     "z": 141.0643,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -1118,6 +1118,19 @@
     ]
   },
   {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -559.5379,
+    "y": 2095.3948,
+    "z": 2.3415,
+    "unit": null,
+    "label": "Tyra Firma",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
     "name": "CopperOre_Small",
     "source": "Gameplay/Prefabs/Gatherables/Ores/Z1/CopperOre_Small.prefab",
     "type": "reference",
@@ -1125,7 +1138,7 @@
     "y": 1345.0083,
     "z": 93.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -1164,7 +1177,7 @@
     "y": 1401.9646,
     "z": 84.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -1177,7 +1190,7 @@
     "y": 1390.6637,
     "z": 93.75,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -1190,7 +1203,7 @@
     "y": 511.8292,
     "z": 50.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -1294,7 +1307,7 @@
     "y": 181.539,
     "z": 24.75,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -1307,7 +1320,7 @@
     "y": 171.5575,
     "z": 24.75,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -1316,8 +1329,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": 49.0469,
-    "y": 187.1078,
+    "x": 79.5169,
+    "y": 232.1017,
     "z": 24.75,
     "unit": null,
     "label": "Recipe Chest",
@@ -1385,7 +1398,7 @@
     "y": 82.9694,
     "z": 47.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -1502,7 +1515,7 @@
     "y": 726.847,
     "z": 138.75,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -1511,8 +1524,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": -232.4342,
-    "y": 769.7068,
+    "x": -268.2942,
+    "y": 755.1944,
     "z": 37.5,
     "unit": null,
     "label": "Recipe Chest",
@@ -1528,7 +1541,7 @@
     "y": 347.0653,
     "z": 156,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -1541,7 +1554,7 @@
     "y": 799.2883,
     "z": 78.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -1580,7 +1593,7 @@
     "y": 850.2971,
     "z": 47.2,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -1593,7 +1606,7 @@
     "y": 791.0669,
     "z": 45,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -1927,21 +1940,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -703.2431,
-    "y": 798.7191,
-    "z": 203.75,
-    "unit": null,
-    "label": "Red Orb",
-    "categories": [
-      "Secret orbs"
-    ]
-  },
-  {
-    "name": "RedOrb_World",
-    "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
-    "type": "reference",
     "x": -734.3031,
-    "y": 801.4543,
+    "y": 793.9543,
     "z": 203.75,
     "unit": null,
     "label": "Red Orb",
@@ -1954,7 +1954,20 @@
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
     "x": -668.3031,
-    "y": 798.0884,
+    "y": 802.0884,
+    "z": 203.75,
+    "unit": null,
+    "label": "Red Orb",
+    "categories": [
+      "Secret orbs"
+    ]
+  },
+  {
+    "name": "RedOrb_World",
+    "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
+    "type": "reference",
+    "x": -691.5031,
+    "y": 826.6291,
     "z": 203.75,
     "unit": null,
     "label": "Red Orb",
@@ -2087,7 +2100,7 @@
     "y": 409.5088,
     "z": 6,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -2100,7 +2113,7 @@
     "y": 416.0794,
     "z": 183.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -2347,7 +2360,7 @@
     "y": 472.3634,
     "z": 164.9876,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -2360,7 +2373,7 @@
     "y": 188.0718,
     "z": 19.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -2373,7 +2386,7 @@
     "y": 178.5526,
     "z": 146.25,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -2386,7 +2399,7 @@
     "y": 190.8355,
     "z": 146.25,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -2412,9 +2425,22 @@
     "y": 646.3231,
     "z": 157.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -931.3504,
+    "y": 605.4484,
+    "z": 19.5,
+    "unit": null,
+    "label": "Haydn Seek",
+    "categories": [
+      "Haydn Seek"
     ]
   },
   {
@@ -2659,7 +2685,7 @@
     "y": 219.8168,
     "z": 51.3406,
     "unit": null,
-    "label": "R 2Plant 2 Small",
+    "label": "R 2 Plant 2 Small",
     "categories": [
       "Plants"
     ]
@@ -2711,7 +2737,7 @@
     "y": 954.1677,
     "z": 81.7543,
     "unit": null,
-    "label": "RespawnPoint",
+    "label": "Respawn Point",
     "categories": [
       "Checkpoints"
     ]
@@ -2789,7 +2815,7 @@
     "y": 689.6062,
     "z": 123.0264,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -2912,6 +2938,19 @@
     ]
   },
   {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -359.9948,
+    "y": 1043.8214,
+    "z": 83.25,
+    "unit": null,
+    "label": "Rita Von Cheese",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
     "name": "Madrigold_Large",
     "source": "Gameplay/Prefabs/Gatherables/Plants/Z1/Madrigold_Large.prefab",
     "type": "reference",
@@ -2928,8 +2967,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -261.857,
-    "y": 1027.99,
+    "x": -266.407,
+    "y": 1042.4595,
     "z": 74.25,
     "unit": null,
     "label": "Red Orb",
@@ -2945,7 +2984,7 @@
     "y": 1053.1134,
     "z": 59.7773,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -2980,8 +3019,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -577.7321,
-    "y": 1266.4481,
+    "x": -540.5221,
+    "y": 1260.2495,
     "z": 76.7877,
     "unit": null,
     "label": "Red Orb",
@@ -2993,8 +3032,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -636.5721,
-    "y": 1256.9485,
+    "x": -625.8321,
+    "y": 1296.9658,
     "z": 91.6711,
     "unit": null,
     "label": "Red Orb",
@@ -3045,8 +3084,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -738.3081,
-    "y": 1921.3474,
+    "x": -702.5181,
+    "y": 1868.7643,
     "z": 44.25,
     "unit": null,
     "label": "Red Orb",
@@ -3058,8 +3097,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -709.3182,
-    "y": 1865.4351,
+    "x": -772.6382,
+    "y": 1891.0467,
     "z": 44.25,
     "unit": null,
     "label": "Red Orb",
@@ -3071,8 +3110,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -723.509,
-    "y": 1866.3202,
+    "x": -717.359,
+    "y": 1887.5127,
     "z": 44.5,
     "unit": null,
     "label": "Red Orb",
@@ -3283,7 +3322,7 @@
     "y": 831.4637,
     "z": 4.9257,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -3292,8 +3331,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 316.3721,
-    "y": 908.0176,
+    "x": 325.9021,
+    "y": 904.7164,
     "z": 21.75,
     "unit": null,
     "label": "Red Orb",
@@ -3309,7 +3348,7 @@
     "y": 351.7729,
     "z": 8.2994,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -3322,7 +3361,7 @@
     "y": 336.3673,
     "z": 6.2483,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -3439,7 +3478,7 @@
     "y": 1429.8703,
     "z": 51.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -3452,7 +3491,7 @@
     "y": 1380.6407,
     "z": 52.6758,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -3734,8 +3773,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": -86.3409,
-    "y": 690.5865,
+    "x": -155.3609,
+    "y": 745.2624,
     "z": 79.4808,
     "unit": null,
     "label": "Recipe Chest",
@@ -3803,7 +3842,7 @@
     "y": 1080.0205,
     "z": 65.4947,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -3855,7 +3894,7 @@
     "y": 1136.1143,
     "z": 135,
     "unit": null,
-    "label": "CopperOre Large",
+    "label": "Copper Ore Large",
     "categories": [
       "Ores"
     ]
@@ -3868,7 +3907,7 @@
     "y": 124.2073,
     "z": -33,
     "unit": "Elemental_Z2W_Underwater_2",
-    "label": "Elemental Z 2W Underwater 2",
+    "label": "Elemental Z 2 W Underwater 2",
     "categories": [
       "Mobs"
     ]
@@ -3881,7 +3920,7 @@
     "y": 129.0833,
     "z": -39,
     "unit": "Elemental_Z2W_Underwater_2",
-    "label": "Elemental Z 2W Underwater 2",
+    "label": "Elemental Z 2 W Underwater 2",
     "categories": [
       "Mobs"
     ]
@@ -3903,8 +3942,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": -940.2823,
-    "y": 1149.1587,
+    "x": -950.8423,
+    "y": 1124.6226,
     "z": 96.75,
     "unit": null,
     "label": "Recipe Chest",
@@ -3968,13 +4007,26 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -621.1692,
-    "y": 233.9866,
+    "x": -559.4492,
+    "y": 236.2974,
     "z": 163.0673,
     "unit": null,
     "label": "Red Orb",
     "categories": [
       "Secret orbs"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -611.4409,
+    "y": 276.8961,
+    "z": 222.75,
+    "unit": null,
+    "label": "Hilda Lambert",
+    "categories": [
+      "NPCs"
     ]
   },
   {
@@ -3998,7 +4050,7 @@
     "y": 852.2371,
     "z": 14.25,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -4017,6 +4069,19 @@
     ]
   },
   {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -41.4893,
+    "y": 548.8684,
+    "z": 58.5,
+    "unit": null,
+    "label": "Shirley Templar",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
     "name": "CopperOre_Small",
     "source": "Gameplay/Prefabs/Gatherables/Ores/Z1/CopperOre_Small.prefab",
     "type": "reference",
@@ -4024,7 +4089,7 @@
     "y": 265.096,
     "z": 0.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -4076,7 +4141,7 @@
     "y": 1970.0965,
     "z": 57,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -4089,7 +4154,7 @@
     "y": 499.3305,
     "z": 149.2,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -4232,7 +4297,7 @@
     "y": 151.0925,
     "z": 44.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -4245,7 +4310,7 @@
     "y": 134.0317,
     "z": 38.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -4375,7 +4440,7 @@
     "y": 1037.173,
     "z": 67.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -4388,7 +4453,7 @@
     "y": 981.2849,
     "z": 17.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -4505,7 +4570,7 @@
     "y": 164.0749,
     "z": 47.2236,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -4527,8 +4592,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -53.8267,
-    "y": 211.0189,
+    "x": -42.0367,
+    "y": 239.4599,
     "z": 124.25,
     "unit": null,
     "label": "Red Orb",
@@ -4540,8 +4605,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -87.7352,
-    "y": 193.9136,
+    "x": -12.3952,
+    "y": 164.9457,
     "z": 138.9885,
     "unit": null,
     "label": "Red Orb",
@@ -4553,8 +4618,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -31.7573,
-    "y": 198.829,
+    "x": -65.0573,
+    "y": 196.5146,
     "z": 152.9855,
     "unit": null,
     "label": "Red Orb",
@@ -4566,8 +4631,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -34.5423,
-    "y": 220.3378,
+    "x": -29.3723,
+    "y": 182.1023,
     "z": 152.9855,
     "unit": null,
     "label": "Red Orb",
@@ -4579,8 +4644,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -66.2172,
-    "y": 204.3958,
+    "x": -57.4172,
+    "y": 186.1402,
     "z": 152.9855,
     "unit": null,
     "label": "Red Orb",
@@ -4592,8 +4657,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": -18.4788,
-    "y": 199.1,
+    "x": -58.7988,
+    "y": 159.0036,
     "z": 96.75,
     "unit": null,
     "label": "Recipe Chest",
@@ -4713,7 +4778,7 @@
     "y": 523.2767,
     "z": 121.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -4849,11 +4914,24 @@
     ]
   },
   {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -746.9137,
+    "y": 1318.756,
+    "z": 93,
+    "unit": null,
+    "label": "Beelly the Bee",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -674.4499,
-    "y": 1354.8822,
+    "x": -650.9199,
+    "y": 1387.5782,
     "z": 122.7491,
     "unit": null,
     "label": "Red Orb",
@@ -4865,8 +4943,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -708.037,
-    "y": 1367.9291,
+    "x": -656.237,
+    "y": 1344.8924,
     "z": 139.8515,
     "unit": null,
     "label": "Red Orb",
@@ -4917,8 +4995,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -934.1449,
-    "y": 1521.5116,
+    "x": -984.3749,
+    "y": 1534.9175,
     "z": 49.25,
     "unit": null,
     "label": "Red Orb",
@@ -4930,8 +5008,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -942.5549,
-    "y": 1535.0915,
+    "x": -938.3149,
+    "y": 1498.9496,
     "z": 53.25,
     "unit": null,
     "label": "Red Orb",
@@ -4943,8 +5021,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -929.2949,
-    "y": 1497.3696,
+    "x": -921.4449,
+    "y": 1480.5408,
     "z": 44.75,
     "unit": null,
     "label": "Red Orb",
@@ -4960,7 +5038,7 @@
     "y": 1470.8155,
     "z": 116.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -5086,8 +5164,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -47.4639,
-    "y": 1485.6081,
+    "x": -17.6139,
+    "y": 1465.8109,
     "z": 111.5,
     "unit": null,
     "label": "Red Orb",
@@ -5099,8 +5177,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -38.7639,
-    "y": 1508.1738,
+    "x": -28.0339,
+    "y": 1506.3236,
     "z": 104.5,
     "unit": null,
     "label": "Red Orb",
@@ -5112,8 +5190,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": -9.2357,
-    "y": 1495.743,
+    "x": -54.5457,
+    "y": 1521.4829,
     "z": 2.9,
     "unit": null,
     "label": "Recipe Chest",
@@ -5142,7 +5220,7 @@
     "y": 404.3097,
     "z": 175.4307,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -5259,7 +5337,7 @@
     "y": 347.7867,
     "z": 46.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -5268,8 +5346,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 341.3936,
-    "y": 881.5005,
+    "x": 334.9236,
+    "y": 833.9395,
     "z": 22.0213,
     "unit": null,
     "label": "Red Orb",
@@ -5281,8 +5359,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 334.0687,
-    "y": 880.9344,
+    "x": 289.2387,
+    "y": 841.6167,
     "z": 21.75,
     "unit": null,
     "label": "Red Orb",
@@ -5519,7 +5597,7 @@
     "y": 960.5525,
     "z": 55.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -5532,7 +5610,7 @@
     "y": 1034.0675,
     "z": 73.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -5545,7 +5623,7 @@
     "y": 1048.3148,
     "z": 80.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -5597,7 +5675,7 @@
     "y": 77.8617,
     "z": -30,
     "unit": "Elemental_Z2W_Underwater_2",
-    "label": "Elemental Z 2W Underwater 2",
+    "label": "Elemental Z 2 W Underwater 2",
     "categories": [
       "Mobs"
     ]
@@ -5610,7 +5688,7 @@
     "y": 67.0062,
     "z": -30,
     "unit": "Elemental_Z2W_Underwater_2",
-    "label": "Elemental Z 2W Underwater 2",
+    "label": "Elemental Z 2 W Underwater 2",
     "categories": [
       "Mobs"
     ]
@@ -5623,7 +5701,7 @@
     "y": 40.3762,
     "z": -27,
     "unit": "Elemental_Z2W_Underwater_2",
-    "label": "Elemental Z 2W Underwater 2",
+    "label": "Elemental Z 2 W Underwater 2",
     "categories": [
       "Mobs"
     ]
@@ -5636,9 +5714,22 @@
     "y": 36.0456,
     "z": -27,
     "unit": "Elemental_Z2W_Underwater_2",
-    "label": "Elemental Z 2W Underwater 2",
+    "label": "Elemental Z 2 W Underwater 2",
     "categories": [
       "Mobs"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -377.6961,
+    "y": 1355.9551,
+    "z": 52.5,
+    "unit": null,
+    "label": "Ruby Garland",
+    "categories": [
+      "NPCs"
     ]
   },
   {
@@ -5649,7 +5740,20 @@
     "y": 1421.2238,
     "z": 52.5,
     "unit": null,
-    "label": "WanderingMerchant",
+    "label": "Wandering Merchant",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -349.2146,
+    "y": 1413.9869,
+    "z": 52.5,
+    "unit": null,
+    "label": "H. Catchum",
     "categories": [
       "NPCs"
     ]
@@ -5792,7 +5896,7 @@
     "y": 694.8006,
     "z": 159.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -5831,7 +5935,7 @@
     "y": 714.3867,
     "z": 72,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -5844,7 +5948,7 @@
     "y": 711.9418,
     "z": 45,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -6022,8 +6126,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -646.7102,
-    "y": 1630.3374,
+    "x": -589.7402,
+    "y": 1638.0039,
     "z": 126.7611,
     "unit": null,
     "label": "Red Orb",
@@ -6035,8 +6139,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -543.4462,
-    "y": 1626.4442,
+    "x": -542.1562,
+    "y": 1622.5009,
     "z": 113.5546,
     "unit": null,
     "label": "Red Orb",
@@ -6048,8 +6152,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -588.829,
-    "y": 1672.8708,
+    "x": -588.189,
+    "y": 1676.1818,
     "z": 120.4121,
     "unit": null,
     "label": "Red Orb",
@@ -6061,8 +6165,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -537.3794,
-    "y": 1629.7123,
+    "x": -592.7994,
+    "y": 1638.966,
     "z": 104.7209,
     "unit": null,
     "label": "Red Orb",
@@ -6130,7 +6234,7 @@
     "y": 402.0957,
     "z": 180.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -6143,7 +6247,7 @@
     "y": 464.0054,
     "z": 165.2341,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -6156,7 +6260,7 @@
     "y": 1502.7744,
     "z": 1.5157,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -6169,7 +6273,7 @@
     "y": 1453.4928,
     "z": 47.25,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -6260,7 +6364,7 @@
     "y": 1306.4426,
     "z": 59.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -6364,7 +6468,7 @@
     "y": 1311.3366,
     "z": 135,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -6390,7 +6494,7 @@
     "y": 1320.8815,
     "z": 88.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -6533,7 +6637,7 @@
     "y": 62.3874,
     "z": 33,
     "unit": null,
-    "label": "CopperOre Large",
+    "label": "Copper Ore Large",
     "categories": [
       "Ores"
     ]
@@ -6767,7 +6871,7 @@
     "y": 948.6096,
     "z": 144.026,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -6867,8 +6971,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 310.0269,
-    "y": 661.1172,
+    "x": 327.7269,
+    "y": 640.247,
     "z": -30.75,
     "unit": null,
     "label": "Red Orb",
@@ -6893,8 +6997,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -595.9725,
-    "y": 1449.7245,
+    "x": -573.9325,
+    "y": 1430.8305,
     "z": 111.4177,
     "unit": null,
     "label": "Red Orb",
@@ -6906,8 +7010,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -575.8106,
-    "y": 1478.4165,
+    "x": -597.2306,
+    "y": 1477.4594,
     "z": 111.4177,
     "unit": null,
     "label": "Red Orb",
@@ -6919,8 +7023,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -588.5078,
-    "y": 1451.3201,
+    "x": -570.0178,
+    "y": 1429.3366,
     "z": 58.7633,
     "unit": null,
     "label": "Red Orb",
@@ -6932,8 +7036,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -527.1175,
-    "y": 1433.1842,
+    "x": -540.8875,
+    "y": 1472.1117,
     "z": 57.6199,
     "unit": null,
     "label": "Red Orb",
@@ -6949,7 +7053,7 @@
     "y": 1386.0651,
     "z": -23.25,
     "unit": null,
-    "label": "CopperOre Large",
+    "label": "Copper Ore Large",
     "categories": [
       "Ores"
     ]
@@ -6958,8 +7062,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 461.9847,
-    "y": 1443.6995,
+    "x": 410.8447,
+    "y": 1472.7655,
     "z": -71.25,
     "unit": null,
     "label": "Red Orb",
@@ -6971,8 +7075,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 456.3001,
-    "y": 1438.6489,
+    "x": 439.4401,
+    "y": 1454.4159,
     "z": -71.25,
     "unit": null,
     "label": "Red Orb",
@@ -7001,7 +7105,7 @@
     "y": 848.3935,
     "z": 47.0695,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -7036,8 +7140,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -689.839,
-    "y": 1883.0907,
+    "x": -719.119,
+    "y": 1866.6221,
     "z": 47,
     "unit": null,
     "label": "Red Orb",
@@ -7079,7 +7183,7 @@
     "y": 233.5496,
     "z": -30,
     "unit": "Elemental_Z2W_Underwater_2",
-    "label": "Elemental Z 2W Underwater 2",
+    "label": "Elemental Z 2 W Underwater 2",
     "categories": [
       "Mobs"
     ]
@@ -7092,7 +7196,7 @@
     "y": 226.5222,
     "z": -30,
     "unit": "Elemental_Z2W_Underwater_2",
-    "label": "Elemental Z 2W Underwater 2",
+    "label": "Elemental Z 2 W Underwater 2",
     "categories": [
       "Mobs"
     ]
@@ -7105,7 +7209,7 @@
     "y": 195.324,
     "z": -33,
     "unit": "Elemental_Z2W_Underwater_2",
-    "label": "Elemental Z 2W Underwater 2",
+    "label": "Elemental Z 2 W Underwater 2",
     "categories": [
       "Mobs"
     ]
@@ -7144,7 +7248,7 @@
     "y": 484.5243,
     "z": 60,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -7235,7 +7339,7 @@
     "y": 563.8714,
     "z": 114.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -7248,7 +7352,7 @@
     "y": 517.0166,
     "z": 114.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -7462,6 +7566,45 @@
     ]
   },
   {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -1006.263,
+    "y": 68.9138,
+    "z": 230.25,
+    "unit": null,
+    "label": "Miss Arte",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -985.7856,
+    "y": 67.095,
+    "z": 230.25,
+    "unit": null,
+    "label": "Hilda Lambert",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -995.8255,
+    "y": 66.7878,
+    "z": 230.25,
+    "unit": null,
+    "label": "Chapel Groan",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
     "name": "RespawnZone",
     "source": "Gameplay/Elements/RespawnPoint.prefab",
     "type": "reference",
@@ -7469,7 +7612,7 @@
     "y": 1450.395,
     "z": 47.25,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -7595,8 +7738,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 410.2793,
-    "y": 527.7076,
+    "x": 409.7293,
+    "y": 519.6372,
     "z": 93.75,
     "unit": null,
     "label": "Red Orb",
@@ -7612,7 +7755,7 @@
     "y": 716.7609,
     "z": 113.2239,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -7742,7 +7885,7 @@
     "y": 1172.1049,
     "z": 17.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -7881,8 +8024,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": 29.2751,
-    "y": 586.6128,
+    "x": 78.3751,
+    "y": 568.9617,
     "z": 34.5,
     "unit": null,
     "label": "Recipe Chest",
@@ -7911,7 +8054,7 @@
     "y": 1030.2651,
     "z": 0.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -8076,8 +8219,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": -1222.6697,
-    "y": 567.8052,
+    "x": -1251.3197,
+    "y": 541.5426,
     "z": 111,
     "unit": null,
     "label": "Recipe Chest",
@@ -8106,7 +8249,7 @@
     "y": 879.6999,
     "z": 144,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -8119,7 +8262,7 @@
     "y": 1010.0256,
     "z": 323.25,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -8132,7 +8275,7 @@
     "y": 919.283,
     "z": 439.5,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -8145,7 +8288,7 @@
     "y": 112.5769,
     "z": 63.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -8158,7 +8301,7 @@
     "y": 181.4968,
     "z": 0.2562,
     "unit": "GiantCrab_Z1W_2",
-    "label": "GiantCrab Z 1W 2",
+    "label": "Giant Crab Z 1 W 2",
     "categories": [
       "Mobs"
     ]
@@ -8275,7 +8418,7 @@
     "y": 784.9389,
     "z": 34.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -8288,7 +8431,7 @@
     "y": 842.068,
     "z": 102.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -8327,7 +8470,7 @@
     "y": 841.1076,
     "z": 110.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -8418,7 +8561,7 @@
     "y": 368.9344,
     "z": 2.25,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -8431,7 +8574,7 @@
     "y": 1404.0982,
     "z": 53,
     "unit": null,
-    "label": "CopperOre Large",
+    "label": "Copper Ore Large",
     "categories": [
       "Ores"
     ]
@@ -8440,8 +8583,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -502.3786,
-    "y": 1445.6881,
+    "x": -498.7486,
+    "y": 1467.1892,
     "z": 88.75,
     "unit": null,
     "label": "Red Orb",
@@ -8561,7 +8704,7 @@
     "y": 247.0062,
     "z": 117.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -8570,8 +8713,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -384.4469,
-    "y": 1523.528,
+    "x": -379.5269,
+    "y": 1520.6946,
     "z": 62.5032,
     "unit": null,
     "label": "Red Orb",
@@ -8587,7 +8730,7 @@
     "y": 1502.1044,
     "z": 57.75,
     "unit": null,
-    "label": "MountTamer",
+    "label": "Mount Tamer",
     "categories": [
       "NPCs"
     ]
@@ -8600,7 +8743,7 @@
     "y": 212.0495,
     "z": 24.75,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -8613,7 +8756,7 @@
     "y": 213.307,
     "z": 24.75,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -8665,7 +8808,7 @@
     "y": 1340.3071,
     "z": -48.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -8678,7 +8821,7 @@
     "y": 1330.6955,
     "z": -8.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -8704,7 +8847,7 @@
     "y": 1315.322,
     "z": 72,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -8739,8 +8882,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -106.3728,
-    "y": 1326.9541,
+    "x": -33.3528,
+    "y": 1315.539,
     "z": 13.7097,
     "unit": null,
     "label": "Red Orb",
@@ -8756,7 +8899,7 @@
     "y": 364.6225,
     "z": 52.5,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -8873,7 +9016,7 @@
     "y": 680.6,
     "z": 69.6725,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -9016,9 +9159,22 @@
     "y": 374.1892,
     "z": 131.25,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -786.4412,
+    "y": 1822.9583,
+    "z": 1.7827,
+    "unit": null,
+    "label": "Haydn Seek",
+    "categories": [
+      "Haydn Seek"
     ]
   },
   {
@@ -9042,7 +9198,7 @@
     "y": 442.1798,
     "z": 111,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -9068,7 +9224,7 @@
     "y": 426.9098,
     "z": 120,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -9077,8 +9233,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -1157.137,
-    "y": 445.5547,
+    "x": -1159.577,
+    "y": 441.2983,
     "z": 90,
     "unit": null,
     "label": "Red Orb",
@@ -9090,8 +9246,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -1121.097,
-    "y": 456.2058,
+    "x": -1148.927,
+    "y": 504.1467,
     "z": 75,
     "unit": null,
     "label": "Red Orb",
@@ -9103,8 +9259,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -1125.577,
-    "y": 466.4329,
+    "x": -1151.457,
+    "y": 445.3866,
     "z": 60,
     "unit": null,
     "label": "Red Orb",
@@ -9116,8 +9272,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -1102.727,
-    "y": 447.8878,
+    "x": -1156.437,
+    "y": 480.924,
     "z": 45,
     "unit": null,
     "label": "Red Orb",
@@ -9129,8 +9285,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -1174.897,
-    "y": 460.9031,
+    "x": -1168.307,
+    "y": 495.6274,
     "z": 105,
     "unit": null,
     "label": "Red Orb",
@@ -9168,8 +9324,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -217.937,
-    "y": 1007.2789,
+    "x": -277.287,
+    "y": 1054.8967,
     "z": 74.25,
     "unit": null,
     "label": "Red Orb",
@@ -9181,8 +9337,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -220.867,
-    "y": 1042.2038,
+    "x": -211.297,
+    "y": 1016.8252,
     "z": 74.25,
     "unit": null,
     "label": "Red Orb",
@@ -9194,8 +9350,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -228.647,
-    "y": 1028.7409,
+    "x": -204.917,
+    "y": 1028.6633,
     "z": 74.25,
     "unit": null,
     "label": "Red Orb",
@@ -9207,8 +9363,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -240.097,
-    "y": 1057.5032,
+    "x": -276.897,
+    "y": 1036.5684,
     "z": 74.25,
     "unit": null,
     "label": "Red Orb",
@@ -9220,8 +9376,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -254.607,
-    "y": 1002.3451,
+    "x": -242.397,
+    "y": 1032.8056,
     "z": 74.25,
     "unit": null,
     "label": "Red Orb",
@@ -9438,6 +9594,19 @@
     ]
   },
   {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": 55.3726,
+    "y": 1070.7272,
+    "z": 274.5,
+    "unit": null,
+    "label": "Haydn Seek",
+    "categories": [
+      "Haydn Seek"
+    ]
+  },
+  {
     "name": "CopperOre_Large",
     "source": "Gameplay/Prefabs/Gatherables/Ores/Z1/CopperOre_Large.prefab",
     "type": "reference",
@@ -9445,7 +9614,7 @@
     "y": 197.3977,
     "z": 80.25,
     "unit": null,
-    "label": "CopperOre Large",
+    "label": "Copper Ore Large",
     "categories": [
       "Ores"
     ]
@@ -9532,8 +9701,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 304.2638,
-    "y": 994.9093,
+    "x": 349.8538,
+    "y": 992.874,
     "z": 51.9364,
     "unit": null,
     "label": "Red Orb",
@@ -9545,8 +9714,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 330.0582,
-    "y": 948.0375,
+    "x": 321.0682,
+    "y": 996.1,
     "z": 46.6858,
     "unit": null,
     "label": "Red Orb",
@@ -9558,8 +9727,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 324.0956,
-    "y": 968.1609,
+    "x": 332.5556,
+    "y": 983.97,
     "z": 40.7163,
     "unit": null,
     "label": "Red Orb",
@@ -9584,8 +9753,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": 350.4818,
-    "y": 972.1873,
+    "x": 371.9518,
+    "y": 964.4602,
     "z": 75.75,
     "unit": null,
     "label": "Recipe Chest",
@@ -9627,7 +9796,7 @@
     "y": 1150.9476,
     "z": 144,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -9653,7 +9822,7 @@
     "y": 1097.4094,
     "z": 0.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -9770,7 +9939,7 @@
     "y": 1110.4499,
     "z": 0.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -9987,8 +10156,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -841.7827,
-    "y": 2038.6396,
+    "x": -883.2427,
+    "y": 2098.6814,
     "z": 107.25,
     "unit": null,
     "label": "Red Orb",
@@ -10000,8 +10169,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -878.0727,
-    "y": 2062.9945,
+    "x": -850.5927,
+    "y": 2077.6966,
     "z": 107.75,
     "unit": null,
     "label": "Red Orb",
@@ -10013,8 +10182,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -835.0827,
-    "y": 2030.0996,
+    "x": -836.8127,
+    "y": 2049.2708,
     "z": 107.25,
     "unit": null,
     "label": "Red Orb",
@@ -10108,7 +10277,7 @@
     "y": 1227.9541,
     "z": 135,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -10160,7 +10329,7 @@
     "y": 1156.0187,
     "z": 58.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -10173,7 +10342,7 @@
     "y": 1222.7688,
     "z": 243.75,
     "unit": null,
-    "label": "AncientThyme Large",
+    "label": "Ancient Thyme Large",
     "categories": [
       "Plants"
     ]
@@ -10186,7 +10355,7 @@
     "y": 1187.5801,
     "z": 144.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -10199,7 +10368,7 @@
     "y": 1205.7697,
     "z": 88.6552,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -10212,7 +10381,7 @@
     "y": 1247.3714,
     "z": 86.1472,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -10264,7 +10433,7 @@
     "y": 618.0388,
     "z": 111,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -10394,7 +10563,7 @@
     "y": 517.7823,
     "z": 79.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -10472,7 +10641,20 @@
     "y": 1994.1831,
     "z": 67.5027,
     "unit": null,
-    "label": "WanderingMerchant",
+    "label": "Wandering Merchant",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -829.2148,
+    "y": 1960.5586,
+    "z": 67.5,
+    "unit": null,
+    "label": "Hilda Lambert",
     "categories": [
       "NPCs"
     ]
@@ -10504,11 +10686,24 @@
     ]
   },
   {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -834.4633,
+    "y": 1981.9211,
+    "z": 67.5,
+    "unit": null,
+    "label": "Miss Arte",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -806.2592,
-    "y": 1997.4172,
+    "x": -752.9792,
+    "y": 1986.1378,
     "z": 80.2783,
     "unit": null,
     "label": "Red Orb",
@@ -10667,7 +10862,7 @@
     "y": 925.598,
     "z": 439.5,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -10706,7 +10901,7 @@
     "y": 916.2661,
     "z": 408.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -10764,11 +10959,24 @@
     ]
   },
   {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -505.3236,
+    "y": 1165.2859,
+    "z": 254.1619,
+    "unit": null,
+    "label": "Haydn Seek",
+    "categories": [
+      "Haydn Seek"
+    ]
+  },
+  {
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -539.9809,
-    "y": 1067.7567,
+    "x": -568.1609,
+    "y": 1109.0097,
     "z": 253.3954,
     "unit": null,
     "label": "Red Orb",
@@ -10849,7 +11057,7 @@
     "y": 867.9857,
     "z": 70.3326,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -10901,7 +11109,7 @@
     "y": 938.2973,
     "z": 102.8451,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -10914,7 +11122,7 @@
     "y": 937.9393,
     "z": 88.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -11005,7 +11213,7 @@
     "y": 1064.541,
     "z": 12.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -11200,7 +11408,7 @@
     "y": 403.46,
     "z": 2.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -11213,7 +11421,7 @@
     "y": 566.6821,
     "z": 168.5728,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -11278,7 +11486,7 @@
     "y": 583.6723,
     "z": 115.0552,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -11317,7 +11525,7 @@
     "y": 1384.1195,
     "z": 118.5,
     "unit": null,
-    "label": "CopperOre Large",
+    "label": "Copper Ore Large",
     "categories": [
       "Ores"
     ]
@@ -11447,7 +11655,7 @@
     "y": 1395.7168,
     "z": 125.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -11499,7 +11707,7 @@
     "y": 99.6801,
     "z": 58.4,
     "unit": null,
-    "label": "R 2Plant 2 Small",
+    "label": "R 2 Plant 2 Small",
     "categories": [
       "Plants"
     ]
@@ -11629,7 +11837,7 @@
     "y": 561.5936,
     "z": 58.5,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -11642,7 +11850,7 @@
     "y": 525.6278,
     "z": 79.5,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -11671,6 +11879,19 @@
     "label": "Lost City of Mayda",
     "categories": [
       "Dungeons"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -136.8853,
+    "y": 1856.7745,
+    "z": 3.3209,
+    "unit": null,
+    "label": "Lamb Ada",
+    "categories": [
+      "NPCs"
     ]
   },
   {
@@ -11759,7 +11980,7 @@
     "y": 424.7093,
     "z": 56.9,
     "unit": null,
-    "label": "R 2Plant 2 Small",
+    "label": "R 2 Plant 2 Small",
     "categories": [
       "Plants"
     ]
@@ -11811,7 +12032,7 @@
     "y": 1480.6264,
     "z": 72,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -11902,7 +12123,7 @@
     "y": 1277.4828,
     "z": 27,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -11915,7 +12136,7 @@
     "y": 1263.7468,
     "z": 17.7465,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -12266,7 +12487,7 @@
     "y": 438.0589,
     "z": 3,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -12370,9 +12591,22 @@
     "y": 300.5276,
     "z": 210,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -709.9109,
+    "y": 337.6553,
+    "z": 222.7507,
+    "unit": null,
+    "label": "Al Scarpone",
+    "categories": [
+      "NPCs"
     ]
   },
   {
@@ -12396,7 +12630,7 @@
     "y": 340.8112,
     "z": 2.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -12435,7 +12669,7 @@
     "y": 379.4933,
     "z": 219.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -12474,7 +12708,7 @@
     "y": 1394.551,
     "z": 99.75,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -12600,8 +12834,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -806.2547,
-    "y": 891.7336,
+    "x": -832.5547,
+    "y": 898.5001,
     "z": 380.25,
     "unit": null,
     "label": "Red Orb",
@@ -12613,8 +12847,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -859.1737,
-    "y": 950.4708,
+    "x": -834.3137,
+    "y": 917.1767,
     "z": 375.9499,
     "unit": null,
     "label": "Red Orb",
@@ -12630,7 +12864,7 @@
     "y": 915.0532,
     "z": 227.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -12838,7 +13072,7 @@
     "y": 379.3994,
     "z": 175.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -12851,7 +13085,7 @@
     "y": 376.6807,
     "z": 160.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -12877,7 +13111,7 @@
     "y": 475.6498,
     "z": 163.431,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -12903,7 +13137,7 @@
     "y": 465.2847,
     "z": 7.3753,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -12916,7 +13150,7 @@
     "y": 691.3028,
     "z": 66.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -12938,8 +13172,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 259.544,
-    "y": 741.5707,
+    "x": 279.894,
+    "y": 723.024,
     "z": 126.25,
     "unit": null,
     "label": "Red Orb",
@@ -12951,8 +13185,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 278.554,
-    "y": 731.5962,
+    "x": 321.084,
+    "y": 717.53,
     "z": 115.75,
     "unit": null,
     "label": "Red Orb",
@@ -12964,8 +13198,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 246.405,
-    "y": 776.3106,
+    "x": 251.175,
+    "y": 769.4721,
     "z": 113.25,
     "unit": null,
     "label": "Red Orb",
@@ -12977,8 +13211,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -564.8489,
-    "y": 1459.52,
+    "x": -582.4889,
+    "y": 1462.3244,
     "z": 105.4177,
     "unit": null,
     "label": "Red Orb",
@@ -13111,7 +13345,7 @@
     "y": 1251.008,
     "z": 6.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -13163,7 +13397,7 @@
     "y": 715.3564,
     "z": 276.75,
     "unit": null,
-    "label": "CopperOre Large",
+    "label": "Copper Ore Large",
     "categories": [
       "Ores"
     ]
@@ -13185,8 +13419,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 454.8242,
-    "y": 1452.5282,
+    "x": 401.9342,
+    "y": 1467.7906,
     "z": -71.25,
     "unit": null,
     "label": "Red Orb",
@@ -13241,7 +13475,7 @@
     "y": 1341.6605,
     "z": 61.5,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -13280,7 +13514,7 @@
     "y": 1189.4162,
     "z": 0.7,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -13302,13 +13536,39 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -718.9483,
-    "y": 1217.3493,
+    "x": -772.8483,
+    "y": 1235.8944,
     "z": 136,
     "unit": null,
     "label": "Red Orb",
     "categories": [
       "Secret orbs"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -776.9645,
+    "y": 1204.328,
+    "z": 123,
+    "unit": null,
+    "label": "Hilda Lambert",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -786.6042,
+    "y": 1212.4035,
+    "z": 123,
+    "unit": null,
+    "label": "H. Catchum",
+    "categories": [
+      "NPCs"
     ]
   },
   {
@@ -13436,7 +13696,7 @@
     "y": 1346.4068,
     "z": 1.4,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -13445,8 +13705,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -659.4839,
-    "y": 1400.6038,
+    "x": -635.3339,
+    "y": 1383.0349,
     "z": 1.6635,
     "unit": null,
     "label": "Red Orb",
@@ -13458,8 +13718,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -656.9977,
-    "y": 1368.2038,
+    "x": -667.9377,
+    "y": 1384.0155,
     "z": 1.3,
     "unit": null,
     "label": "Red Orb",
@@ -13471,8 +13731,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -648.2752,
-    "y": 1383.4564,
+    "x": -649.4552,
+    "y": 1411.6179,
     "z": 1.2293,
     "unit": null,
     "label": "Red Orb",
@@ -13488,7 +13748,7 @@
     "y": 509.946,
     "z": 162,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -13731,8 +13991,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -400.1798,
-    "y": 979.5564,
+    "x": -411.3398,
+    "y": 974.761,
     "z": 172.4548,
     "unit": null,
     "label": "Red Orb",
@@ -13744,8 +14004,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -365.3098,
-    "y": 961.8031,
+    "x": -416.9298,
+    "y": 1009.1135,
     "z": 172.4548,
     "unit": null,
     "label": "Red Orb",
@@ -13757,8 +14017,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -379.1298,
-    "y": 949.8969,
+    "x": -434.5598,
+    "y": 1019.6172,
     "z": 182.4548,
     "unit": null,
     "label": "Red Orb",
@@ -13774,7 +14034,7 @@
     "y": 858.5672,
     "z": 14.25,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -13783,8 +14043,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -1287.7989,
-    "y": 860.2853,
+    "x": -1283.7589,
+    "y": 864.1007,
     "z": -10.5,
     "unit": null,
     "label": "Red Orb",
@@ -13796,8 +14056,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -1284.4873,
-    "y": 883.4837,
+    "x": -1256.4373,
+    "y": 845.5336,
     "z": -10.5,
     "unit": null,
     "label": "Red Orb",
@@ -13809,8 +14069,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -1300.6602,
-    "y": 900.613,
+    "x": -1306.7602,
+    "y": 846.3407,
     "z": -10.5,
     "unit": null,
     "label": "Red Orb",
@@ -13826,7 +14086,7 @@
     "y": 481.1406,
     "z": 53.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -13848,8 +14108,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": 435.7274,
-    "y": 558.5612,
+    "x": 480.2674,
+    "y": 499.0614,
     "z": 62.25,
     "unit": null,
     "label": "Recipe Chest",
@@ -13861,8 +14121,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 420.5893,
-    "y": 506.9706,
+    "x": 452.3293,
+    "y": 539.6399,
     "z": 82.75,
     "unit": null,
     "label": "Red Orb",
@@ -13874,8 +14134,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 429.5193,
-    "y": 517.395,
+    "x": 464.1993,
+    "y": 548.6464,
     "z": 86.75,
     "unit": null,
     "label": "Red Orb",
@@ -13887,8 +14147,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 437.4293,
-    "y": 499.8139,
+    "x": 443.7593,
+    "y": 523.9999,
     "z": 90.25,
     "unit": null,
     "label": "Red Orb",
@@ -13904,7 +14164,7 @@
     "y": 1963.55,
     "z": 11.25,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -14086,7 +14346,7 @@
     "y": 919.4212,
     "z": 21.1396,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -14095,8 +14355,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 355.2662,
-    "y": 972.9768,
+    "x": 336.9562,
+    "y": 959.4063,
     "z": 57.4937,
     "unit": null,
     "label": "Red Orb",
@@ -14190,7 +14450,7 @@
     "y": 1083.2548,
     "z": 17.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -14203,7 +14463,7 @@
     "y": 1138.5957,
     "z": 59.25,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -14255,7 +14515,7 @@
     "y": 620.5473,
     "z": 11.7038,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -14346,7 +14606,7 @@
     "y": 565.0533,
     "z": 5.0815,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -14372,7 +14632,7 @@
     "y": 207.1483,
     "z": 0.1953,
     "unit": "GiantCrab_Z1W_2",
-    "label": "GiantCrab Z 1W 2",
+    "label": "Giant Crab Z 1 W 2",
     "categories": [
       "Mobs"
     ]
@@ -14476,7 +14736,7 @@
     "y": 585.7199,
     "z": 108,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -14515,7 +14775,7 @@
     "y": 1746.5613,
     "z": 9,
     "unit": null,
-    "label": "RespawnPoint",
+    "label": "Respawn Point",
     "categories": [
       "Checkpoints"
     ]
@@ -14563,8 +14823,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 148.8689,
-    "y": 1243.5974,
+    "x": 170.3089,
+    "y": 1186.5884,
     "z": 132.6728,
     "unit": null,
     "label": "Red Orb",
@@ -14576,8 +14836,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 157.41,
-    "y": 1227.5678,
+    "x": 187.2,
+    "y": 1187.7933,
     "z": 142.6,
     "unit": null,
     "label": "Red Orb",
@@ -14589,8 +14849,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 123.93,
-    "y": 1197.3455,
+    "x": 184.11,
+    "y": 1194.648,
     "z": 152.6,
     "unit": null,
     "label": "Red Orb",
@@ -14602,8 +14862,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 115.85,
-    "y": 1231.5188,
+    "x": 147.33,
+    "y": 1238.1136,
     "z": 162.6,
     "unit": null,
     "label": "Red Orb",
@@ -14615,8 +14875,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 147.3,
-    "y": 1216.5278,
+    "x": 140.73,
+    "y": 1232.5939,
     "z": 172.6,
     "unit": null,
     "label": "Red Orb",
@@ -14645,7 +14905,7 @@
     "y": 345.5229,
     "z": 52.5,
     "unit": null,
-    "label": "R 2Plant 2 Small",
+    "label": "R 2 Plant 2 Small",
     "categories": [
       "Plants"
     ]
@@ -14710,7 +14970,7 @@
     "y": 1393.357,
     "z": 93.75,
     "unit": null,
-    "label": "RespawnZone",
+    "label": "Respawn Zone",
     "categories": [
       "Checkpoints"
     ]
@@ -14823,8 +15083,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 435.9917,
-    "y": 1308.835,
+    "x": 409.1417,
+    "y": 1335.7099,
     "z": 62.25,
     "unit": null,
     "label": "Red Orb",
@@ -14836,8 +15096,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 436.8817,
-    "y": 1300.0435,
+    "x": 413.8917,
+    "y": 1298.3521,
     "z": 60.25,
     "unit": null,
     "label": "Red Orb",
@@ -14849,8 +15109,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 454.2917,
-    "y": 1330.8982,
+    "x": 436.8817,
+    "y": 1367.8935,
     "z": 51.75,
     "unit": null,
     "label": "Red Orb",
@@ -14862,8 +15122,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": 423.5117,
-    "y": 1357.8638,
+    "x": 456.1617,
+    "y": 1327.8654,
     "z": 48.75,
     "unit": null,
     "label": "Red Orb",
@@ -14911,11 +15171,24 @@
     ]
   },
   {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -373.2554,
+    "y": 1457.8147,
+    "z": 49.9899,
+    "unit": null,
+    "label": "Scout Pilgrim",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -348.8532,
-    "y": 1509.1806,
+    "x": -290.1032,
+    "y": 1458.6699,
     "z": 88.5032,
     "unit": null,
     "label": "Red Orb",
@@ -14927,8 +15200,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -316.9332,
-    "y": 1453.6842,
+    "x": -278.4732,
+    "y": 1472.3271,
     "z": 98.5032,
     "unit": null,
     "label": "Red Orb",
@@ -14940,8 +15213,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -288.3232,
-    "y": 1473.2295,
+    "x": -315.0932,
+    "y": 1483.633,
     "z": 108.5032,
     "unit": null,
     "label": "Red Orb",
@@ -14953,8 +15226,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -326.9232,
-    "y": 1503.5685,
+    "x": -272.8932,
+    "y": 1454.0489,
     "z": 118.5032,
     "unit": null,
     "label": "Red Orb",
@@ -14966,8 +15239,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -295.7832,
-    "y": 1450.062,
+    "x": -288.9132,
+    "y": 1494.4847,
     "z": 128.5032,
     "unit": null,
     "label": "Red Orb",
@@ -14983,7 +15256,20 @@
     "y": 1445.8063,
     "z": 52.5,
     "unit": null,
-    "label": "ProfessionTrainer",
+    "label": "Profession Trainer",
+    "categories": [
+      "NPCs"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -363.0632,
+    "y": 1450.8836,
+    "z": 49.6385,
+    "unit": null,
+    "label": "Hilda Lambert",
     "categories": [
       "NPCs"
     ]
@@ -15022,7 +15308,7 @@
     "y": 1500.9288,
     "z": 75.75,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -15100,7 +15386,7 @@
     "y": 601.3932,
     "z": 58.5,
     "unit": null,
-    "label": "CopperOre Large",
+    "label": "Copper Ore Large",
     "categories": [
       "Ores"
     ]
@@ -15113,7 +15399,7 @@
     "y": 610.5762,
     "z": 162.75,
     "unit": null,
-    "label": "AncientThyme Large",
+    "label": "Ancient Thyme Large",
     "categories": [
       "Plants"
     ]
@@ -15139,7 +15425,7 @@
     "y": 644.0075,
     "z": 119.5552,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -15256,7 +15542,7 @@
     "y": 188.2967,
     "z": -33,
     "unit": "Elemental_Z2W_Underwater_2",
-    "label": "Elemental Z 2W Underwater 2",
+    "label": "Elemental Z 2 W Underwater 2",
     "categories": [
       "Mobs"
     ]
@@ -15330,8 +15616,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -880.0296,
-    "y": 1083.9212,
+    "x": -944.7896,
+    "y": 1126.914,
     "z": 217.25,
     "unit": null,
     "label": "Red Orb",
@@ -15343,8 +15629,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -858.4596,
-    "y": 1131.3606,
+    "x": -866.0296,
+    "y": 1148.7697,
     "z": 208.25,
     "unit": null,
     "label": "Red Orb",
@@ -15356,8 +15642,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -872.8796,
-    "y": 1075.6846,
+    "x": -884.6996,
+    "y": 1088.2829,
     "z": 198.25,
     "unit": null,
     "label": "Red Orb",
@@ -15369,8 +15655,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -843.7396,
-    "y": 1160.7634,
+    "x": -824.4596,
+    "y": 1150.1678,
     "z": 172.75,
     "unit": null,
     "label": "Red Orb",
@@ -15386,7 +15672,7 @@
     "y": 1082.9332,
     "z": 5.0086,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -15451,7 +15737,7 @@
     "y": 464.9823,
     "z": 3,
     "unit": null,
-    "label": "CopperOre Large",
+    "label": "Copper Ore Large",
     "categories": [
       "Ores"
     ]
@@ -15460,8 +15746,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": -921.0614,
-    "y": 475.0849,
+    "x": -927.1514,
+    "y": 514.9411,
     "z": 166.5,
     "unit": null,
     "label": "Recipe Chest",
@@ -15490,7 +15776,7 @@
     "y": 14.2401,
     "z": 211.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -15551,8 +15837,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -61.9739,
-    "y": 1505.9107,
+    "x": -17.2339,
+    "y": 1461.9644,
     "z": 114.5,
     "unit": null,
     "label": "Red Orb",
@@ -15564,8 +15850,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -24.5439,
-    "y": 1438.3417,
+    "x": -16.9339,
+    "y": 1437.0204,
     "z": 116,
     "unit": null,
     "label": "Red Orb",
@@ -15597,6 +15883,19 @@
     "label": "Ratsar's Lair",
     "categories": [
       "Dungeons"
+    ]
+  },
+  {
+    "name": "",
+    "source": "",
+    "type": "object",
+    "x": -582.4526,
+    "y": 311.0395,
+    "z": 222.75,
+    "unit": null,
+    "label": "Miss Arte",
+    "categories": [
+      "NPCs"
     ]
   },
   {
@@ -15698,7 +15997,7 @@
     "y": 317.0202,
     "z": 196.5,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -15707,8 +16006,8 @@
     "name": "RedOrb_World",
     "source": "Gameplay/Prefabs/Gatherables/Secret_World/RedOrb_World.prefab",
     "type": "reference",
-    "x": -561.27,
-    "y": 317.0095,
+    "x": -566.87,
+    "y": 335.4424,
     "z": 236.25,
     "unit": null,
     "label": "Red Orb",
@@ -15724,7 +16023,7 @@
     "y": 355.2248,
     "z": 196.5,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]
@@ -15733,8 +16032,8 @@
     "name": "Recipe_Chest",
     "source": "Gameplay/Elements/Recipe_Chest.prefab",
     "type": "reference",
-    "x": -532.4934,
-    "y": 375.4882,
+    "x": -541.8934,
+    "y": 398.7553,
     "z": 223.9871,
     "unit": null,
     "label": "Recipe Chest",
@@ -15958,7 +16257,7 @@
     "y": 1400.1635,
     "z": 99.75,
     "unit": null,
-    "label": "AncientThyme Small",
+    "label": "Ancient Thyme Small",
     "categories": [
       "Plants"
     ]
@@ -15984,7 +16283,7 @@
     "y": 1416.56,
     "z": 0.7,
     "unit": null,
-    "label": "CopperOre Small",
+    "label": "Copper Ore Small",
     "categories": [
       "Ores"
     ]

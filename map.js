@@ -104,7 +104,10 @@ async function loadData() {
           }).props,
       'NPCs': new cMarker({
             fillColor: "#27ad71"
-          }).props,      
+          }).props,  
+      'Haydn Seek': new cMarker({
+        fillColor: "#129a27",
+      }).props,    
       'Obelisks': new cMarker({
             fillColor: "rgb(110, 26, 199)"
           }).props,
@@ -156,7 +159,7 @@ async function loadData() {
       }).props,
       'Minibosses':  new iconMarker({
         'iconUrl': './icons/mapMarker1.png'
-      }).props,
+      }).props
     }
 
     const circleDict = {
@@ -169,6 +172,12 @@ async function loadData() {
       'Secret orbs': new circleArea({
           fillColor: "#a23030",
           radius: coordToMapScalar*80,
+          opacity: 0.5,
+          fillOpacity: 0.5
+        }).props,
+      'Haydn Seek': new circleArea({
+          fillColor: "#129a27",
+          radius: coordToMapScalar*120,
           opacity: 0.5,
           fillOpacity: 0.5
         }).props,
