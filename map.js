@@ -95,7 +95,7 @@ async function loadData() {
             fillColor: "#c68a09",
             color: "#fffb00"
           }).props,
-      'Orb Chests': new cMarker({
+      'Orb chests': new cMarker({
             fillColor: "#bb5b11",
             color: "#fffb00"
           }).props,
@@ -127,8 +127,11 @@ async function loadData() {
       'Critters': new cMarker({
             fillColor: "#de58ff"
           }).props,
-        'Recipes': new circleArea({
+        'Recipes': new cMarker({
           fillColor: "#9b7700",
+        }).props,
+        'Secret orbs': new cMarker({
+          fillColor: "#a23030",
         }).props,
     }
 
@@ -139,7 +142,7 @@ async function loadData() {
       'Chests':  new iconMarker({
         'iconUrl': './icons/mapMarker2.png'
       }).props,
-      'Orb Chests':  new iconMarker({
+      'Orb chests':  new iconMarker({
         'iconUrl': './icons/mapMarker11.png'
       }).props,
       'NPCs':  new iconMarker({
@@ -159,6 +162,12 @@ async function loadData() {
     const circleDict = {
       'Recipes': new circleArea({
           fillColor: "#9b7700",
+          radius: coordToMapScalar*80,
+          opacity: 0.5,
+          fillOpacity: 0.5
+        }).props,
+      'Secret orbs': new circleArea({
+          fillColor: "#a23030",
           radius: coordToMapScalar*80,
           opacity: 0.5,
           fillOpacity: 0.5
