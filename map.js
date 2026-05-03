@@ -52,7 +52,7 @@ async function loadData() {
     class cMarker {
         constructor(fargs={}) {
           this.props = {
-              radius: 7,
+              radius: 9,
               fillColor: "#ffa958",
               color: "#ffffff",
               weight: 1.05,
@@ -92,7 +92,11 @@ async function loadData() {
       //       fillColor: "#00ccff"
       //     }).props,
       'Chests': new cMarker({
-            fillColor: "#ffc400",
+            fillColor: "#c68a09",
+            color: "#fffb00"
+          }).props,
+      'Orb Chests': new cMarker({
+            fillColor: "#bb5b11",
             color: "#fffb00"
           }).props,
       'Ores': new cMarker({
@@ -105,7 +109,8 @@ async function loadData() {
             fillColor: "rgb(110, 26, 199)"
           }).props,
       'Mobs': new cMarker({
-            fillColor: "#d13a3a"
+            fillColor: "#d13a3a",
+            radius: 8,
           }).props,
       'Sparkling mobs': new cMarker({
             fillColor: "#eb19c8"
@@ -280,3 +285,32 @@ loadData();
 // document.querySelectorAll('.category').forEach(cb => {
 //   cb.checked = selected.includes(cb.value);
 // });
+
+//up arrow code
+
+const ScrollControl = L.Control.extend({
+  options: {
+    position: 'topright'
+  },
+
+  onAdd: function (map) {
+    // Add your custom class here
+    const container = L.DomUtil.create(
+      'div',
+      'leaflet-bar leaflet-control go--to--legend--button'
+    );
+
+    L.DomEvent.disableClickPropagation(container);
+
+    container.onclick = function () {
+      const target = document.getElementById('legend');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    return container;
+  }
+});
+
+map.addControl(new ScrollControl());
