@@ -219,7 +219,7 @@ async function loadData() {
       const div = document.createElement('div');
       div.innerHTML = '';
 
-      const checkedArray = ['Obelisks', 'NPCs', 'Chests'];
+      const checkedArray = [];
       
       Object.keys(layers).forEach(name => {
         const count = layers[name].getLayers().length;
@@ -257,13 +257,16 @@ async function loadData() {
 
           if (e.target.checked) {
             map.addLayer(layer);
+            
           } else {
             map.removeLayer(layer);
+            
           }
+          updateLocalStorage();
         });
       });
 
-
+    loadChecked(layers);
   } catch (error) {
     console.error('Failed to load JSON:', error);
   }
@@ -271,39 +274,38 @@ async function loadData() {
 
 loadData();
 
-// const STORAGE_KEY = 'selectedCategories';
+//store selections in localStorage
 
-// function getSelectedCategories() {
-//   return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-// }
+function updateLocalStorage(){
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  let checked = [];
+  checkboxes.forEach(box => {
+    if (box.checked) {
+      checked.push(box.dataset.layer);
+    }
+  });
+  localStorage.setItem('checkedBoxes', JSON.stringify(checked));
+}
+//load selections on page load
+function loadChecked(layers) {
+  const saved = JSON.parse(localStorage.getItem('checkedBoxes')) || [];
 
-// function saveSelectedCategories(categories) {
-//   localStorage.setItem(STORAGE_KEY, JSON.stringify(categories));
-// }
+  document.querySelectorAll('input[type="checkbox"]').forEach(input => {
+    const name = input.dataset.layer;
 
-// document.querySelectorAll('.category').forEach(cb => {
-//   cb.addEventListener('change', () => {
-//     const selected = getSelectedCategories();
-
-//     if (cb.checked) {
-//       if (!selected.includes(cb.value)) {
-//         selected.push(cb.value);
-//       }
-//     } else {
-//       const index = selected.indexOf(cb.value);
-//       if (index !== -1) selected.splice(index, 1);
-//     }
-
-//     saveSelectedCategories(selected);
-//   });
-// });
-
-// const selected = getSelectedCategories();
-
-// document.querySelectorAll('.category').forEach(cb => {
-//   cb.checked = selected.includes(cb.value);
-// });
-
+    if (saved.includes(name)) {
+      input.checked = true;
+      if (layers[name]) {
+        map.addLayer(layers[name]);
+      }
+    } else {
+      input.checked = false;
+      if (layers[name]) {
+        map.removeLayer(layers[name]);
+      }
+    }
+  });
+}
 //up arrow code
 
 const ScrollControl = L.Control.extend({
