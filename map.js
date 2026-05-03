@@ -214,7 +214,7 @@ async function loadData() {
         div.innerHTML += `
           <label style="color: ${colour}">
             <input type="checkbox" ${isChecked} data-layer="${name}" class="category">
-            <span class="check--image"></span>${name} <span class="count">(${count})</span>
+            <span class="check--image"></span><span class="category--text">${name}</span><span class="count">(${count})</span>
           </label>
         `;
       });

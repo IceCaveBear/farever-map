@@ -78,8 +78,8 @@ label {
 }
 
 .check--image {
-  width: 20px;
-  height: 20px;
+  width: 2em;
+  height: 2em;
   background-image: url("check0.png");
   background-size: contain;
   background-repeat: no-repeat;
@@ -128,23 +128,44 @@ label {
 
 .leaflet-bar.leaflet-control.go--to--legend--button {
   background-image: url("arrow.png");
-  background-size: contain;
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
-  height: 30px;
-  width: 50px; 
-  transform: rotate(90deg);
+  height: 9em;
+  width: 6em; 
   border: none;
   padding: 0;
-  margin-top: 20px;
-  margin-right: 2px;
 }
 
+.leaflet-touch .leaflet-bar a {
+  height: 2.5em;
+  width: 2.5em; 
+  line-height: 2.5em;
+}
 
-@media (max-width: 480px) {}
+.leaflet-popup-content {
+  font-size: 2em;
+}
 
-@media (max-width: 640px) {}
+.legend label span.category--text,  .legend label span.count {
+  font-size: 2em;
+}
 
-@media (min-width: 768px) {}
+@media (min-width: 480px) {
+  .legend label span.category--text,  .legend label span.count {
+    font-size: 3em;
+  }
+  .intro--paragraph {
+    font-size: 2.5em;
+  }
+}
+
+@media (min-width: 640px) {
+}
+
+@media (min-width: 768px) {
+ 
+}
 
 @media (min-width: 1024px) {}
 
