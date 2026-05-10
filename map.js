@@ -1,6 +1,6 @@
 const map = L.map('map', {
   crs: L.CRS.Simple,
-  minZoom: -3,
+  minZoom: -8,
   tap: true,
   tapTolerance: 15
 });
@@ -9,13 +9,13 @@ const tileSize = 1024;
 
 const bounds = [
   [0, 0],
-  [4096, 4096]
+  [5120, 3584]
 ];
-let coordToMapScalar = 1.75
+let coordToMapScalar = 0.89
 let s1 = coordToMapScalar;
 let s2 = coordToMapScalar;
-let b1 = -3100;
-let b2 = 1750;
+let b1 = -1595;
+let b2 = 1724;
 
 L.imageOverlay('cropped.webp', bounds).addTo(map);
 
@@ -165,19 +165,19 @@ async function loadData() {
     const circleDict = {
       'Recipes': new circleArea({
           fillColor: "#9b7700",
-          radius: coordToMapScalar*80,
+          radius: coordToMapScalar*40,
           opacity: 0.5,
           fillOpacity: 0.5
         }).props,
       'Secret orbs': new circleArea({
           fillColor: "#a23030",
-          radius: coordToMapScalar*80,
+          radius: coordToMapScalar*40,
           opacity: 0.5,
           fillOpacity: 0.5
         }).props,
       'Haydn Seek': new circleArea({
-          fillColor: "#129a27",
-          radius: coordToMapScalar*120,
+          fillColor: "#00d2d9",
+          radius: coordToMapScalar*70,
           opacity: 0.5,
           fillOpacity: 0.5
         }).props,
