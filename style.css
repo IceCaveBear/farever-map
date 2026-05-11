@@ -7,6 +7,10 @@ html, body {
   overflow: hidden;
   background: #111;
   position: fixed; width: 100%;
+  /* Prevent Discord/embedded browser zoom issues */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: none;
 }
 
 /* ── Map ── */
@@ -57,9 +61,9 @@ html, body {
 /* Hide the separator that follows the about section in compact (about is hidden so sep is orphaned) */
 #sidebar.compact #sb-sep-about { display: none !important; }
 
-/* ── Sidebar header ── */
+/* ── Sidebar header — sharp angle #785a37 → #8e6a41 ── */
 #sb-header {
-  background: rgb(120, 90, 55);
+  background: linear-gradient(135deg, #785a37 50%, #8e6a41 50%);
   color: white;
   padding: 0.7em 0.8em;
   display: flex;
@@ -150,10 +154,10 @@ html, body {
   cursor: pointer;
   flex-shrink: 0;
   user-select: none;
-  background: #388e9f;
+  background: linear-gradient(135deg, #4c9da8 50%, #74babe 50%);
   color: white;
 }
-#sb-about-row:hover { background: #2d7a8a; }
+#sb-about-row:hover { filter: brightness(0.92); }
 #sb-about-row span:first-child { font-size: 0.82em; font-weight: 700; color: white; }
 #sb-about-chevron { font-size: 0.72em; color: rgba(255,255,255,0.8); }
 #sb-about-panel {
@@ -337,20 +341,28 @@ html, body {
 }
 .sb-cat-row input:checked ~ .sb-check-img { background-image: url("check1.png"); }
 
-/* PNG icon (iconDict cats) — 28×28 matching map markers */
+/* PNG icon — centred in fixed 28px slot */
 .sb-cat-icon {
   width: 28px; height: 28px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
-/* Colour square (non-icon cats) — 22×22 (20% smaller than icons) */
+/* Colour dot — 22×22 square, centred inside its wrapper */
 .sb-cat-dot {
   width: 22px; height: 22px;
   border-radius: 4px;
-  flex-shrink: 0;
-  display: inline-block;
   border: 1.5px solid rgba(0,0,0,0.15);
+  display: block;
+}
+/* Fixed-width wrapper matches PNG icon width (28px) so text aligns */
+.sb-cat-dot-wrap {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .sb-cat-name {
@@ -380,13 +392,27 @@ html, body {
 
 /* cat tooltip handled in tool-btn section above */
 
-/* ── Hint bar ── */
+/* ── Scroll indicators — only visible when off-screen content exists ── */
+#sb-scroll-up, #sb-scroll-down {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #b2a46f 50%, #ccba8c 50%);
+  flex-shrink: 0;
+  padding: 0.22em 0;
+  pointer-events: none;
+  z-index: 10;
+}
+#sb-scroll-up  { border-bottom: 1px solid rgba(255,255,255,0.15); }
+#sb-scroll-down { border-top:   1px solid rgba(255,255,255,0.15); }
+
+/* ── Hint bar — sharp angle #b0665d → #ce715c ── */
 #sb-hint {
   display: flex;
   align-items: center;
   gap: 0.5em;
   padding: 0.55em 0.85em;
-  background: #c86356;
+  background: linear-gradient(135deg, #b0665d 50%, #ce715c 50%);
   color: white;
   font-size: 0.78em;
   font-weight: bold;
@@ -460,6 +486,9 @@ html, body {
 
 /* ── Mobile ── */
 @media (max-width: 767px) {
+  /* Hide +/- zoom controls — use pinch to zoom instead */
+  .leaflet-control-zoom { display: none !important; }
+
   #sidebar { width: 290px; }
   #sidebar.compact { width: 52px; }
   #sidebar.closed { transform: translateX(290px); }
@@ -468,4 +497,25 @@ html, body {
   .sb-cat-row { min-height: 2.8em; }
   #sb-hint { font-size: 0.75em; }
   #sb-float-input { width: 180px; }
+}
+
+/* ── Compact active/pressed states ── */
+#sidebar.compact .sb-tool-btn.active,
+#sidebar.compact .sb-cat-row input:checked + .sb-check-img + * {
+  /* Handled per-element below */
+}
+
+/* Hide-completed active state */
+#sb-hide-btn.active {
+  background: rgba(0,0,0,0.18) !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.25);
+}
+
+/* Checked category row — show a subtle inset in compact */
+#sidebar.compact .sb-cat-row:has(input:checked) {
+  background: rgba(0,0,0,0.1);
+  box-shadow: inset 2px 0 0 rgba(120,90,55,0.6);
+}
+#sidebar.compact .sb-cat-row:has(input:checked):hover {
+  background: rgba(0,0,0,0.15);
 }
