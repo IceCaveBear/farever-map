@@ -1,5 +1,11 @@
 // ─── Map ──────────────────────────────────────────────────────────────────────
-const map = L.map('map', { crs: L.CRS.Simple, minZoom: -8, tap: true, tapTolerance: 15 });
+const map = L.map('map', {
+  crs: L.CRS.Simple,
+  minZoom: -8,
+  tap: true,
+  tapTolerance: 15,
+  zoomControl: !( /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768 ),
+});
 const bounds = [[0,0],[5120,3584]];
 const s1=0.89, s2=0.89, b1=-1595, b2=1724, coordToMapScalar=0.89;
 L.imageOverlay('cropped.webp', bounds).addTo(map);
@@ -224,7 +230,7 @@ function buildSidebar(layers) {
     row.setAttribute('data-tip', name);
     const indicator = iconUrl
       ? `<img src="${iconUrl}" class="sb-cat-icon" alt="">`
-      : `<span class="sb-cat-dot" style="background:${colour}"></span>`;
+      : `<span class="sb-cat-dot-wrap"><span class="sb-cat-dot" style="background:${colour}"></span></span>`;
     row.innerHTML = `
       <input type="checkbox" data-layer="${name}" class="category" style="display:none">
       <span class="sb-check-img"></span>
@@ -274,6 +280,27 @@ function buildSidebar(layers) {
   iconTools.addEventListener('mouseleave', () => { sbTip.style.display = 'none'; });
   btnToggleView.addEventListener('click', () => { sbTip.style.display = 'none'; });
   sidebar.appendChild(catList);
+
+  // ── Scroll indicators for compact cat list ────────────────────────
+  const scrollUp   = mk('div', {id:'sb-scroll-up'});
+  const scrollDown = mk('div', {id:'sb-scroll-down'});
+  scrollUp.innerHTML   = `<svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,7 6,1 11,7"/></svg>`;
+  scrollDown.innerHTML = `<svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,1 6,7 11,1"/></svg>`;
+  sidebar.insertBefore(scrollUp, catList);
+  sidebar.appendChild(scrollDown); // will be before sep/hint
+
+  function updateScrollIndicators() {
+    const canUp   = catList.scrollTop > 8;
+    const canDown = catList.scrollHeight - catList.scrollTop - catList.clientHeight > 8;
+    scrollUp.style.display   = canUp   ? 'flex' : 'none';
+    scrollDown.style.display = canDown ? 'flex' : 'none';
+  }
+  catList.addEventListener('scroll', updateScrollIndicators);
+  btnToggleView.addEventListener('click', () => setTimeout(updateScrollIndicators, 300));
+  // Use requestAnimationFrame + setTimeout to ensure layout is fully painted before measuring
+  requestAnimationFrame(() => setTimeout(updateScrollIndicators, 50));
+  window.addEventListener('resize', updateScrollIndicators);
+
   sidebar.appendChild(sep({id:'sb-sep-hint'}));
 
   // ── Hint bar ──────────────────────────────────────────────────────
@@ -356,7 +383,14 @@ function buildSidebar(layers) {
     document.getElementById('sb-search'),
     document.getElementById('sb-search-clear'),
     document.getElementById('sb-search-row'),
-    layers
+    layers,
+    () => { // onResultClick: close sidebar on mobile
+      if (window.innerWidth < 768) {
+        sidebarOpen = false;
+        saveView();
+        applyLayout(true);
+      }
+    }
   );
 
   // ── Hide completed ────────────────────────────────────────────────
@@ -436,7 +470,7 @@ function buildFloatingSearch(layers, anchorEl) {
 }
 
 // ─── Shared search wiring ─────────────────────────────────────────────────────
-function wireSearch(input, clearBtn, container, layers) {
+function wireSearch(input, clearBtn, container, layers, onResultClick) {
   let searchActive = false, savedVis = {}, resultsBox = null;
 
   function removeResults() { resultsBox?.remove(); resultsBox = null; }
@@ -466,6 +500,7 @@ function wireSearch(input, clearBtn, container, layers) {
         removeResults();
         input.value = label;
         if (clearBtn) clearBtn.style.display = '';
+        if (onResultClick) onResultClick();
       });
       resultsBox.appendChild(item);
     });
