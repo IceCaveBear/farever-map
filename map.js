@@ -6,7 +6,7 @@ const map = L.map('map', {
 const bounds = [[0,0],[5120,3584]];
 const s1=0.89, s2=0.89, b1=-1595, b2=1724, coordToMapScalar=0.89;
 L.imageOverlay('cropped.webp', bounds).addTo(map);
-map.fitBounds(bounds);
+// fitBounds called after sidebar renders (see initMap)
 map.getContainer().addEventListener('contextmenu', e => e.preventDefault());
 map.on('contextmenu', () => {});
 const isMobile = () => window.innerWidth < 768;
@@ -49,7 +49,10 @@ const COLOURS = {
   'Mobs':'#d13a3a','Sparkling mobs':'#eb19c8','Dungeons':'#430dd8',
   'Checkpoints':'#4db3db','Minibosses':'#eb681c','Critters':'#de58ff',
   'Recipes':'#9b7700','Secret orbs':'#a23030',
-  // Gatherable subtypes
+  'Slimes':'#4cbb6a','Nepsids':'#3a9abf','Crabs':'#c0392b','Spirits':'#7f60c2',
+  'Coyotes':'#c8853a','Skunks':'#8b5e3c','Kobolds':'#6a7a3a','Crimson':'#b03030',
+  'Golems':'#888a7a','Sparkles':'#70c8d0','Bees':'#d4a017','Wolves':'#5a6a8a',
+  'Boars':'#7a4a2a','Demons':'#8b1a1a','Sprouts':'#5a9a3a',
   'Copper':'#c67c3a','Tin':'#7a9bb5','Tungstene':'#9b7daa',
   'Madrigold':'#e8a030','Lavendula':'#9b59b6','Ancient Thyme':'#5d8a5e','Zealotus':'#c0392b',
 };
@@ -64,8 +67,25 @@ const FILTER_GROUPS = [
   { key:'poi',         title:'Points of Interest',icon:'⭐', cats:['Obelisks','Dungeons','Checkpoints'] },
   { key:'collectables',title:'Collectables',      icon:'📦', cats:['Chests','Secret orbs','Orb chests','Recipes','Critters'] },
   { key:'gatherables', title:'Gatherables',       icon:'🌿', cats:['Plants','Ores'], hasSub:true },
-  { key:'enemies',     title:'Enemies',           icon:'⚔️', cats:['Mobs','Minibosses','Sparkling mobs'] },
+  { key:'enemies',     title:'Enemies',           icon:'⚔️', cats:['Minibosses','Sparkling mobs'], hasMobSub:true },
 ];
+const MOB_FACTIONS = {
+  'Bees':     { icon:'./icons/mobs/bee.png' },
+  'Boars':    { icon:'./icons/mobs/boar.png' },
+  'Coyotes':  { icon:'./icons/mobs/coyote.png' },
+  'Crabs':    { icon:'./icons/mobs/crab.png' },
+  'Crimson':  { icon:'./icons/mobs/crimson.png' },
+  'Demons':   { icon:'./icons/mobs/demon.png' },
+  'Golems':   { icon:'./icons/mobs/golem.png' },
+  'Sparkles': { icon:'./icons/mobs/sparkle.png' },
+  'Kobolds':  { icon:'./icons/mobs/kobold.png' },
+  'Nepsids':  { icon:'./icons/mobs/nepsid.png' },
+  'Skunks':   { icon:'./icons/mobs/skunk.png' },
+  'Slimes':   { icon:'./icons/mobs/slime.png' },
+  'Spirits':  { icon:'./icons/mobs/spirits.png' },
+  'Sprouts':  { icon:'./icons/mobs/sprout.png' },
+  'Wolves':   { icon:'./icons/mobs/wolf.png' },
+};
 const ORE_SUBS   = {
   'Copper':    { labels:['Copper Ore Large','Copper Ore Small'], icon:'./icons/gatherables/copper.png?v=3' },
   'Tin':       { labels:['Tin Ore Large','Tin Ore Small'],       icon:'./icons/gatherables/tin.png?v=3' },
@@ -77,8 +97,52 @@ const PLANT_SUBS = {
   'Ancient Thyme':{ labels:['Ancient Thyme Large','Ancient Thyme Small'],  icon:'./icons/gatherables/ancientthyme.png?v=3' },
   'Zealotus':     { labels:['Zealotus','Zealotus Large','Zealotus Small'], icon:'./icons/gatherables/zealous.png?v=3' },
 };
+const MOB_UNIT_FACTION = {
+  // Bees
+  'Z1_Bee_Patrol_World':'Bees','Z1_Bee_Tree':'Bees','Z2_Bee_Nescent':'Bees',
+  'Z2_Bee_Nescent_3':'Bees','Z2_Bee_Patrol_World_Elite':'Bees',
+  // Crimson
+  'Crimson_Z1W_Sword_2':'Crimson','Dog_Z1W_Crimson':'Crimson',
+  'Z1_Crimson_Patrol_Stronghold_World':'Crimson','Z1_Crimson_Patrol_Stronghold_World_1':'Crimson',
+  'Z1_Crimson_Patrol_Stronghold_World_2':'Crimson','Z1_Crimson_Patrol_Stronghold_World_Unique':'Crimson',
+  'Z2_Crimson_Patrol_World':'Crimson','Z2_Crimson_Patrol_World_2':'Crimson',
+  'Z2_Crimson_Patrol_World_3':'Crimson','Z2_Crimson_Patrol_World_4':'Crimson',
+  'Z2_Crimson_Patrol_World_6':'Crimson','Z2_Crimson_Peasant_Nescent':'Crimson',
+  'TODO_Z2W_Peasant':'Crimson',
+  // Golems
+  'Golem_Z2W_Wind2':'Golems','Z2_Golem_Eksod_Exterior':'Golems','Z2_Golem_Eksod_Interior':'Golems',
+  'Z2_Golem_Krisomal_Exterior':'Golems','Z2_Golem_Krisomal_Interior':'Golems',
+  // Sparkles (golem-family, distinct icon)
+  'Elemental_Z1W_Earth':'Sparkles',
+  'Elemental_Z1W_Earth_2':'Sparkles',
+  'Elemental_Z1W_Underwater':'Sparkles',   // Naya Sparkle — was wrongly Spirits
+  'Elemental_Z2W_Underwater_U':'Sparkles', // Aquamarine Sparkle
+  // Spirits (non-sparkle elementals + herald)
+  'Elemental_Z2W':'Spirits','Elemental_Z2W_2':'Spirits',
+  'Elemental_Z2W_Underwater_2':'Spirits','TODO_Z1W_HeraldSpirit':'Spirits',
+  // Kobolds
+  'Z1_Kobold_Mines_2':'Kobolds','Z1_Kobold_Patrol_Unique':'Kobolds',
+  'Z2_Kobold_Eksod':'Kobolds','Z2_Kobold_Eksod_Ogre':'Kobolds',
+  // Nepsids
+  'Z2_Manfish_Krisomal':'Nepsids',
+  // Sprouts
+  'Z2_Plant_Azuram_NoRice':'Sprouts','Z2_Plant_Nescent_NoRice':'Sprouts',
+  // Wolves (true wolves)
+  'Z1_Forest':'Wolves',
+  // Coyotes (wild zone patrols — coyote icon)
+  'Z1_Start_Patrol_World':'Coyotes','Z2_Wild_Azuram':'Coyotes','Z2_Wild_Nescent':'Coyotes',
+  // Critters (miscategorised as Mobs in data)
+  'Z1_World_Critters_Lizard':'__Critters__',
+  'Z1_World_Critters_Squirel':'__Critters__',
+  'Z1_World_Critters_Frog':'__Critters__',
+  'Z1_World_Critters_Ladybugs':'__Critters__',
+  'Z1_World_Critters_StinkBug':'__Critters__',
+  'Z1_World_Critters_Tortorock':'__Critters__',
+  'Z1_World_Critters_Sheep':'__Critters__',
+  // Dummy — skip
+  'Dummy':'__skip__',
+};
 const GATHERABLE_SUBS = { Ores: ORE_SUBS, Plants: PLANT_SUBS };
-
 const SVG = {
   search:  `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4"/><line x1="10" y1="10" x2="14" y2="14"/></svg>`,
   eye:     `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/></svg>`,
@@ -90,6 +154,7 @@ const SVG = {
   sub:     `<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="10" height="10" rx="2"/></svg>`,
   zone:    `<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="7,1 13,13 1,13"/></svg>`,
   route:   `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 12 Q4 5 9 4"/><polyline points="7,2 9,4 7,6" fill="none"/></svg>`,
+  trash:   `<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="1,3 13,3"/><path d="M4 3V2h6v1"/><rect x="3" y="4" width="8" height="9" rx="1"/></svg>`,
 };
 
 // ─── Region labels ────────────────────────────────────────────────────────────
@@ -113,25 +178,102 @@ function getLabelCSS(tier, zoom) {
     return `font-family:Arial,sans-serif;font-size:${fs}px;font-weight:500;color:rgba(255,255,255,0.88);letter-spacing:0.03em;text-shadow:0 0 ${sh(4)}px rgba(0,0,0,0.95),${sh(1)}px ${sh(1)}px 0 rgba(0,0,0,0.8);pointer-events:none;white-space:nowrap;`;
   }
 }
-function makeRegionIcon(name, tier) {
-  return L.divIcon({ html:`<div style="${getLabelCSS(tier,map.getZoom())}">${name}</div>`, className:'', iconAnchor:[0,0], iconSize:null });
-}
-function isRegionVisible(tier) { return tier==='region'?showRegions:tier==='subregion'?showSubregions:showZones; }
-function refreshRegionVisibility() {
-  regionLabels.forEach(({marker,tier}) => {
-    if (isRegionVisible(tier)) { if (!regionLayer.hasLayer(marker)) marker.addTo(regionLayer); }
-    else regionLayer.removeLayer(marker);
+function makeRegionIcon(name, tier, interactive) {
+  const cursor = interactive ? 'cursor:pointer;' : 'pointer-events:none;';
+  const base = getLabelCSS(tier, map.getZoom()).replace('pointer-events:none;','').replace('cursor:default;','');
+  return L.divIcon({
+    html: `<div style="${base}${cursor}">${name}</div>`,
+    className: '', iconAnchor:[0,0], iconSize:null
   });
 }
-map.on('zoomend', () => regionLabels.forEach(({marker,name,tier}) => { if (regionLayer.hasLayer(marker)) marker.setIcon(makeRegionIcon(name,tier)); }));
+function isRegionVisible(tier) { return tier==='region'?showRegions:tier==='subregion'?showSubregions:showZones; }
+function isZoomVisible(tier) {
+  const z = map.getZoom();
+  if (tier === 'zone')      return z >= 0;    // zones only at zoom 0+
+  if (tier === 'subregion') return z >= -2;   // subregions at medium zoom
+  return true;                                 // regions always
+}
+function refreshRegionVisibility() {
+  regionLabels.forEach(({marker,tier}) => {
+    if (isRegionVisible(tier) && isZoomVisible(tier)) {
+      if (!regionLayer.hasLayer(marker)) marker.addTo(regionLayer);
+    } else {
+      regionLayer.removeLayer(marker);
+    }
+  });
+}
+map.on('zoomend', () => {
+  // First update visibility (adds/removes markers)
+  refreshRegionVisibility();
+  // Then refresh icons for everything currently visible
+  regionLabels.forEach(({marker,name,tier}) => {
+    if (regionLayer.hasLayer(marker)) {
+      const interactive = (tier === 'region' || tier === 'subregion' || tier === 'zone');
+      marker.setIcon(makeRegionIcon(name, tier, interactive));
+    }
+  });
+});
 async function loadRegions() {
   try {
     const r = await fetch('regions.json'); if (!r.ok) return;
     const data = await r.json();
+
+    // Group zones by their nearest region for bounding box calculation
+    const regionEntries = data.filter(d => d.tier === 'region');
+    const zoneEntries   = data.filter(d => d.tier === 'zone');
+
+    // Assign each zone to nearest region
+    function nearestRegion(lat, lng) {
+      let best = null, bestDist = Infinity;
+      regionEntries.forEach(re => {
+        const d = Math.hypot(re.lat - lat, re.lng - lng);
+        if (d < bestDist) { bestDist = d; best = re.name; }
+      });
+      return best;
+    }
+    const regionZones = {}; // regionName → [{lat,lng}]
+    zoneEntries.forEach(z => {
+      const rn = nearestRegion(z.lat, z.lng);
+      if (rn) { if (!regionZones[rn]) regionZones[rn] = []; regionZones[rn].push(z); }
+    });
+
     data.forEach(({name,tier,lat,lng}) => {
-      const m = L.marker([lat,lng], { icon:makeRegionIcon(name,tier), interactive:false, keyboard:false, zIndexOffset:tier==='region'?1000:tier==='subregion'?700:500 });
+      const interactive = (tier === 'region' || tier === 'subregion' || tier === 'zone');
+      const icon = makeRegionIcon(name, tier, interactive);
+      const m = L.marker([lat,lng], {
+        icon,
+        interactive,
+        keyboard: false,
+        zIndexOffset: tier==='region'?1000:tier==='subregion'?700:500
+      });
+
+      if (interactive) {
+        m.on('click', () => {
+          if (tier === 'region') {
+            // Fit bounding box of all its zones
+            const zones = regionZones[name] || [];
+            if (zones.length > 1) {
+              const lats = [lat, ...zones.map(z=>z.lat)];
+              const lngs = [lng, ...zones.map(z=>z.lng)];
+              const pad  = 80;
+              map.flyToBounds([[Math.min(...lats)-pad, Math.min(...lngs)-pad],[Math.max(...lats)+pad, Math.max(...lngs)+pad]], {animate:true, duration:0.8, padding:[40,40]});
+            } else {
+              map.flyTo([lat, lng], -2, {animate:true, duration:0.8});
+            }
+          } else if (tier === 'subregion') {
+            map.flyTo([lat, lng], -1, {animate:true, duration:0.6});
+          } else {
+            map.flyTo([lat, lng], 0, {animate:true, duration:0.5});
+          }
+        });
+        m.getElement && m.on('add', () => {
+          const el = m.getElement();
+          if (el) el.style.cursor = 'pointer';
+        });
+      }
+
       regionLabels.push({name,tier,lat,lng,marker:m});
-      if (isRegionVisible(tier)) m.addTo(regionLayer);
+      if (isRegionVisible(tier) && isZoomVisible(tier)) m.addTo(regionLayer);
     });
   } catch(e) { console.warn('No regions.json'); }
 }
@@ -163,27 +305,7 @@ let routeDrawActive = false; // mouse is held down drawing
 let routePoints  = [];
 let routePreviewLayer = null;
 let routesVisible = localStorage.getItem('routesVisible') !== '0';
-
-// Convert raw drawn points to smoothed Catmull-Rom curve
-function smoothPoints(pts, tension=0.4, steps=8) {
-  if (pts.length < 2) return pts;
-  if (pts.length === 2) return pts;
-  const out = [pts[0]];
-  for (let i=0; i<pts.length-1; i++) {
-    const p0 = pts[Math.max(0,i-1)];
-    const p1 = pts[i];
-    const p2 = pts[i+1];
-    const p3 = pts[Math.min(pts.length-1,i+2)];
-    for (let t=1; t<=steps; t++) {
-      const s = t/steps;
-      const s2=s*s, s3=s2*s;
-      const lat = 0.5*((2*p1[0])+(-p0[0]+p2[0])*s+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*s2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*s3);
-      const lng = 0.5*((2*p1[1])+(-p0[1]+p2[1])*s+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*s2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*s3);
-      out.push([lat,lng]);
-    }
-  }
-  return out;
-}
+let globalRouteOpacity = parseFloat(localStorage.getItem('routeOpacity')||'0.88');
 
 // Subsample raw points to avoid too many stored points
 function subsample(pts, minDist=15) {
@@ -203,7 +325,7 @@ const custRouteLayer  = L.layerGroup().addTo(map);
 
 function saveCustom() {
   localStorage.setItem('customMarkers', JSON.stringify(customMarkers.map(({lat,lng,icon,colour,note})=>({lat,lng,icon,colour,note}))));
-  localStorage.setItem('customRoutes',  JSON.stringify(customRoutes.map(({points,colour})=>({points,colour}))));
+  localStorage.setItem('customRoutes',  JSON.stringify(customRoutes.map(({points,colour,note,opacity})=>({points,colour,note:note||'',opacity:opacity??0.88}))));
 }
 function makeCustMarkerIcon(icon, colour) {
   return L.divIcon({ html:`<div style="font-size:1.6em;color:${colour};text-shadow:1px 1px 4px rgba(0,0,0,0.7),0 0 8px rgba(0,0,0,0.5);line-height:1;cursor:pointer;">${icon}</div>`, className:'', iconAnchor:[12,22], iconSize:null });
@@ -237,7 +359,7 @@ function openCustPopup(marker) {
   if (isMobile()) {
     const sb = document.getElementById('sidebar');
     if (sb && !sb.style.transform) {
-      sb.style.transform = `translateX(${sb.offsetWidth||290}px)`;
+      sb.style.transform = `translateX(${sb.offsetWidth||310}px)`;
       let done = false;
       setTimeout(() => map.once('popupclose', () => { if(!done){done=true; sb.style.transform='';} }), 150);
     }
@@ -249,7 +371,7 @@ map.on('popupopen', () => {
   if (!isMobile()) return;
   const sb = document.getElementById('sidebar');
   if (!sb || sb.style.transform) return;
-  sb.style.transform = `translateX(${sb.offsetWidth||290}px)`;
+  sb.style.transform = `translateX(${sb.offsetWidth||310}px)`;
   map.once('popupclose', () => { sb.style.transform = ''; });
 });
 function renderRoutes() {
@@ -258,11 +380,11 @@ function renderRoutes() {
   customRoutes.forEach((route, ri) => {
     if (route.points.length < 2) return;
     const raw = route.points.map(p=>[p[0],p[1]]);
-    const smooth = smoothPoints(raw);
+    const smooth = raw;
     const colour = route.colour||'#e74c3c';
-
-    // Draw smooth line
-    const line = L.polyline(smooth, { color:colour, weight:3.5, opacity:0.88, smoothFactor:1 });
+    const opacity = (route.hidden ? 0 : globalRouteOpacity);
+    if (route.hidden) return; // skip hidden routes
+    const line = L.polyline(smooth, { color:colour, weight:3.5, opacity:opacity, smoothFactor:1 });
     line.addTo(custRouteLayer);
 
     // Place directional arrows along path
@@ -313,18 +435,110 @@ function buildRoutePopup(route, ri) {
 function updateRoutePreview() {
   if (routePreviewLayer) map.removeLayer(routePreviewLayer);
   if (routePoints.length >= 2) {
-    const smooth = smoothPoints(routePoints);
+    const smooth = routePoints;
     routePreviewLayer = L.polyline(smooth, {color:selectedCustColour, weight:3, dashArray:'5 4', opacity:0.8, smoothFactor:1}).addTo(map);
   }
 }
 function finishRoute() {
-  const sub = subsample(routePoints, 12);
+  const sub = subsample(routePoints, 30);
   if (sub.length >= 2) { customRoutes.push({points:sub, colour:selectedCustColour, note:''}); saveCustom(); renderRoutes(); }
   routePoints = []; routeDrawActive = false;
   if (routePreviewLayer) { map.removeLayer(routePreviewLayer); routePreviewLayer=null; }
 }
 
-// ─── Load & init ──────────────────────────────────────────────────────────────
+// ─── Permalink: read URL hash on load ────────────────────────────────────────
+(function readPermalink() {
+  // Priority 1: URL hash (shared link)
+  const hash = window.location.hash.replace('#','');
+  const m = hash.match(/^@(-?\d+\.?\d*),(-?\d+\.?\d*),([-\d.]+)$/);
+  if (m) {
+    map.setView([parseFloat(m[1]), parseFloat(m[2])], parseFloat(m[3]));
+    window._permalinkApplied = true;
+    return;
+  }
+  // Priority 2: last saved position in localStorage
+  try {
+    const saved = localStorage.getItem('mapLastPos');
+    if (saved) {
+      const {lat,lng,zoom} = JSON.parse(saved);
+      map.setView([lat,lng], zoom);
+      window._permalinkApplied = true; // skip fitBounds
+    }
+  } catch(e) {}
+})();
+
+// Save position continuously
+map.on('moveend', () => {
+  const c = map.getCenter(), z = map.getZoom();
+  localStorage.setItem('mapLastPos', JSON.stringify({lat:+c.lat.toFixed(2),lng:+c.lng.toFixed(2),zoom:+z.toFixed(2)}));
+});
+
+function copyPermalink() {
+  const c = map.getCenter();
+  const z = map.getZoom();
+  const hash = `#@${c.lat.toFixed(1)},${c.lng.toFixed(1)},${z.toFixed(1)}`;
+  const url  = window.location.origin + window.location.pathname + hash;
+  window.history.replaceState(null, '', hash);
+  navigator.clipboard?.writeText(url).then(() => {
+    showToast('📋 Link copied!');
+  }).catch(() => {
+    prompt('Copy this link:', url);
+  });
+}
+function showToast(msg) {
+  let t = document.getElementById('map-toast');
+  if (!t) { t = document.createElement('div'); t.id='map-toast'; t.style.cssText='position:fixed;bottom:5em;left:50%;transform:translateX(-50%);background:rgba(30,20,10,0.88);color:white;padding:0.5em 1.2em;border-radius:20px;font-size:0.88em;font-weight:700;z-index:2000;pointer-events:none;transition:opacity 0.4s;'; document.body.appendChild(t); }
+  t.textContent = msg; t.style.opacity='1';
+  clearTimeout(t._to);
+  t._to = setTimeout(() => t.style.opacity='0', 2000);
+}
+// ─── Dungeon label fixes & wiki links ────────────────────────────────────────
+const DUNGEON_NAME_FIX = {
+  'Honeyzabethâ€™s Hivetrunk': "Honeyzabeth's Hivetrunk",
+  'Honeyzabeth\u2019s Hivetrunk': "Honeyzabeth's Hivetrunk",
+};
+const DUNGEON_WIKI = {
+  'Lost City of Mayda':       { w:'Lost_City_of_Mayda',       a:'Lost_City_of_Mayda_(walkthrough)' },
+  'Mine Estrone':             { w:'Mine_Estrone',             a:'Mine_Estrone_(walkthrough)' },
+  "Crabgantua's Gorge":       { w:"Crabgantua's_Gorge",       a:"Crabgantua's_Gorge_(walkthrough)" },
+  "Ratsar's Lair":            { w:"Ratsar's_Lair",            a:"Ratsar's_Lair_(walkthrough)" },
+  'Trunk of the Hivetree':    { w:'Trunk_of_the_Hivetree',    a:'Trunk_of_the_Hivetree' },
+  "Lady Bee's Palace":        { w:"Lady_Bee's_Palace",        a:"Lady_Bee's_Palace_(walkthrough)" },
+  "Ruins of Gorgon's Hollow": { w:"Ruins_of_Gorgon's_Hollow", a:"Ruins_of_Gorgon's_Hollow" },
+  'Abyss of New Atlaan':      { w:'Abyss_of_New_Atlaan',      a:'Abyss_of_New_Atlaan' },
+  "Honeyzabeth's Hivetrunk":  { w:"Honeyzabeth's_Hivetrunk",  a:"Honeyzabeth's_Hivetrunk" },
+  'Cheese Station':           { w:'Cheese_Station',           a:'Cheese_Station' },
+  'Crimson Barracks':         { w:'Crimson_Barracks',         a:'Crimson_Barracks' },
+  "Chakram's Chapel":         { w:"Chakram's_Chapel",         a:"Chakram's_Chapel" },
+};
+const WIKI_LOOT_PAGE = 'https://farever.wiki/Dungeons_loots:_Armors_%26_Weapons';
+function getDungeonLabel(rawLabel, coords) {
+  if (DUNGEON_NAME_FIX[rawLabel]) return DUNGEON_NAME_FIX[rawLabel];
+  if (rawLabel === 'Dungeon entrance') {
+    const [lat, lng] = coords;
+    if (lat > 1400 && lat < 1600 && lng > 2400 && lng < 2750) return "Ruins of Gorgon's Hollow";  // lat~1495, lng~2587
+    if (lat < 800  && lng > 2900)                              return 'Abyss of New Atlaan';        // lat~670,  lng~3050
+    if (lat < 500  && lng > 1400 && lng < 1900)               return 'Lost City of Mayda';         // lat~386,  lng~1627
+    if (lat > 1800 && lng > 3400)                              return "Honeyzabeth's Hivetrunk";    // lat~1907, lng~3582
+    if (lat > 1100 && lat < 1350 && lng < 900)                return 'Trunk of the Hivetree';      // lat~1269, lng~749
+    if (lat > 1350 && lat < 1500 && lng < 900)                return "Lady Bee's Palace";          // lat~1412, lng~755
+  }
+  return rawLabel;
+}
+function dungeonWikiLink(label) {
+  const entry = DUNGEON_WIKI[label]; if (!entry) return '';
+  const weaponUrl = WIKI_LOOT_PAGE + '#Weapons';
+  const armorUrl  = WIKI_LOOT_PAGE + '#' + entry.a;
+  const base = 'display:flex;align-items:center;justify-content:center;gap:0.4em;padding:0.5em 1em;border-radius:5px;text-decoration:none;font-size:1.05em;font-weight:700;color:white;letter-spacing:0.02em;';
+  const wStyle = base + 'background:linear-gradient(135deg,#b0665d 50%,#ce715c 50%);';
+  const aStyle = base + 'background:linear-gradient(135deg,#6e1ac7 50%,#8a35e0 50%);';
+  return '<div style="display:flex;flex-direction:column;gap:0.4em;margin-top:0.65em;">'
+    + '<a href="' + weaponUrl + '" target="_blank" rel="noopener" style="' + wStyle + '">&#9876;&#xFE0F; Weapon Loot</a>'
+    + '<a href="' + armorUrl  + '" target="_blank" rel="noopener" style="' + aStyle + '">&#128737;&#xFE0F; Armor Loot</a>'
+    + '</div>';
+}
+
+
 async function loadData() {
   try { const r=await fetch('assets.json'); if(!r.ok) throw new Error(r.status); initMap(await r.json()); }
   catch(e) { console.error('Failed:', e); }
@@ -355,15 +569,23 @@ function initMap(data) {
     'Secret orbs':new circleArea({fillColor:'#a23030',radius:coordToMapScalar*40,opacity:0.5,fillOpacity:0.5}).props,
     'Haydn Seek':new circleArea({fillColor:'#388e9f',radius:coordToMapScalar*70,opacity:0.5,fillOpacity:0.5}).props,
   };
-  // Pre-build registry for non-gatherable categories only
-  // Gatherable subtypes are counted when building subTypeMap
+  // Pre-build registry for non-gatherable, non-faction categories only
   const gatherableLabels = new Set();
   ['Ores','Plants'].forEach(mc => {
     Object.values(GATHERABLE_SUBS[mc]).forEach(({labels}) => labels.forEach(l => gatherableLabels.add(l.toLowerCase())));
   });
   data.forEach((item,idx)=>{
     const cat=item.categories?.[0]||'Misc';
-    if (gatherableLabels.has(item.label.toLowerCase())) return; // handled by subTypeMap
+    if (gatherableLabels.has(item.label.toLowerCase())) return;
+    if (cat === 'Mobs') {
+      const uf = item.unitFaction && MOB_FACTIONS[item.unitFaction] ? item.unitFaction : MOB_UNIT_FACTION[item.unit||''];
+      if (uf === '__skip__') return; // Dummy items
+      if (uf === '__Critters__') { // count toward Critters
+        if(!categoryRegistry['Critters']) categoryRegistry['Critters']={total:0,markerIds:[],markers:[]};
+        categoryRegistry['Critters'].total++; categoryRegistry['Critters'].markerIds.push(getMarkerId(item,idx)); return;
+      }
+      if (uf) return; // counted via faction pre-count below
+    }
     if(!categoryRegistry[cat]) categoryRegistry[cat]={total:0,markerIds:[],markers:[]};
     categoryRegistry[cat].total++;
     categoryRegistry[cat].markerIds.push(getMarkerId(item,idx));
@@ -374,25 +596,63 @@ function initMap(data) {
   ['Ores','Plants'].forEach(mainCat => {
     const subs = GATHERABLE_SUBS[mainCat];
     Object.entries(subs).forEach(([subKey,{labels,icon}]) => {
-      const layerKey = subKey; // e.g. 'Copper', 'Tin', 'Madrigold'
+      const layerKey = subKey;
       if (!layers[layerKey]) layers[layerKey] = L.layerGroup();
       if (!categoryRegistry[layerKey]) categoryRegistry[layerKey] = {total:0, markerIds:[], markers:[], mainCat};
       labels.forEach(lbl => { subTypeMap[lbl.toLowerCase()] = {iconUrl:icon, subKey, layerKey, mainCat}; });
     });
   });
 
+  // Build mob faction layers
+  Object.entries(MOB_FACTIONS).forEach(([faction, {icon}]) => {
+    if (!layers[faction]) layers[faction] = L.layerGroup();
+    if (!categoryRegistry[faction]) categoryRegistry[faction] = {total:0, markerIds:[], markers:[], mainCat:'Mobs'};
+  });
+  // Pre-count faction mobs
+  data.forEach((item,idx)=>{
+    const cat=item.categories?.[0]||'Misc';
+    if (cat !== 'Mobs') return;
+    const faction = /\bsparkle\b/i.test(item.label||'') && !/\bsparkling\b/i.test(item.label||'') ? 'Sparkles'
+      : item.unitFaction && MOB_FACTIONS[item.unitFaction] ? item.unitFaction
+      : (MOB_UNIT_FACTION[item.unit||''] || null);
+    if (!faction || faction === '__skip__' || faction === '__Critters__') return;
+    categoryRegistry[faction].total++;
+    categoryRegistry[faction].markerIds.push(getMarkerId(item,idx));
+  });
+
   data.forEach((item,idx)=>{
     const coords=[(s1*(4096-item.y)+b1),s2*(item.x+b2)];
     const cat=item.categories?.[0]||'Misc';
     const subInfo = subTypeMap[item.label.toLowerCase()];
-    // Subtypes go into their own layer, not layers['Ores']/layers['Plants']
-    const effectiveCat = subInfo ? subInfo.layerKey : cat;
+    // Mob faction routing
+    const mobFaction = (cat==='Mobs')
+      ? (/\bsparkle\b/i.test(item.label||'') && !/\bsparkling\b/i.test(item.label||'') ? 'Sparkles'
+         : item.unitFaction && MOB_FACTIONS[item.unitFaction] ? item.unitFaction
+         : MOB_UNIT_FACTION[item.unit||''] || null)
+      : null;
+    // Skip dummy/test markers
+    if (mobFaction === '__skip__') return;
+    // Critters miscategorised as Mobs
+    const effectiveCat = subInfo ? subInfo.layerKey
+      : mobFaction === '__Critters__' ? 'Critters'
+      : mobFaction ? mobFaction
+      : cat;
     if (!layers[effectiveCat]) layers[effectiveCat]=L.layerGroup();
     let m;
     if (subInfo && subInfo.iconUrl) {
       const sz=28;
       const icon = L.icon({iconUrl:subInfo.iconUrl, iconSize:[sz,sz], iconAnchor:[sz/2,sz/2], popupAnchor:[0,-sz/2]});
       m = L.marker(coords, {icon});
+    } else if (mobFaction && MOB_FACTIONS[mobFaction]) {
+      const sz=32;
+      const icon = L.icon({iconUrl:MOB_FACTIONS[mobFaction].icon, iconSize:[sz,sz], iconAnchor:[sz/2,sz/2], popupAnchor:[0,-sz/2]});
+      m = L.marker(coords, {icon});
+    } else if (effectiveCat in iconDict) {
+      m = L.marker(coords,{icon:L.icon(iconDict[effectiveCat])});
+    } else if (effectiveCat in circleDict) {
+      m = L.circle(coords,circleDict[effectiveCat]);
+    } else if (effectiveCat in stylingDict) {
+      m = L.circleMarker(coords,stylingDict[effectiveCat]);
     } else if (cat in iconDict) {
       m = L.marker(coords,{icon:L.icon(iconDict[cat])});
     } else if (cat in circleDict) {
@@ -403,8 +663,16 @@ function initMap(data) {
       m = L.circleMarker(coords,new cMarker().props);
     }
     const mid=getMarkerId(item,idx);
-    allMarkers.push({markerId:mid,marker:m,category:effectiveCat,label:item.label,coords,subKey:subInfo?.subKey,mainCat:subInfo?.mainCat});
-    m.bindPopup(`<div style="text-align:center;font-family:Noto,sans-serif;">${item.label}</div>`);
+    // Track counts for subtype layers (gatherables, mob factions)
+    if (subInfo && categoryRegistry[effectiveCat]) {
+      categoryRegistry[effectiveCat].total++;
+      categoryRegistry[effectiveCat].markerIds.push(mid);
+    }
+    // Fix dungeon display names and add wiki link
+    const displayLabel = cat==='Dungeons' ? getDungeonLabel(item.label, coords) : item.label;
+    const wikiLink = cat==='Dungeons' ? dungeonWikiLink(displayLabel) : '';
+    allMarkers.push({markerId:mid,marker:m,category:effectiveCat,label:displayLabel,coords,subKey:subInfo?.subKey,mainCat:subInfo?.mainCat||mobFaction?'Mobs':null});
+    m.bindPopup(`<div style="text-align:center;font-family:Noto,sans-serif;">${displayLabel}${wikiLink}</div>`);
     m.on('contextmenu',e=>{ L.DomEvent.preventDefault(e); L.DomEvent.stopPropagation(e); m.closePopup(); toggleComplete(mid,m,cat); });
     m.on('click',e=>{ if (!isMobile()||routeDrawing) return; toggleComplete(mid,m,cat); });
     m.on('add',()=>setTimeout(()=>applyCompletedStyle(m,completedMarkers.has(mid)),0));
@@ -414,12 +682,12 @@ function initMap(data) {
   // Map mouse/touch events for route drawing and marker placement
   const mapEl = map.getContainer();
 
-  // Desktop: mousedown starts drawing, mousemove adds points, mouseup finishes
+  // Desktop: mousedown starts drawing, mousemove adds points, mouseup PAUSES (shows Finish/Cancel)
   mapEl.addEventListener('mousedown', e => {
     if (!routeDrawing || e.button !== 0) return;
     map.dragging.disable();
     routeDrawActive = true;
-    routePoints = [];
+    if (!routePoints.length) routePoints = [];
     const latlng = map.mouseEventToLatLng(e);
     routePoints.push([latlng.lat, latlng.lng]);
   });
@@ -432,8 +700,9 @@ function initMap(data) {
   mapEl.addEventListener('mouseup', e => {
     if (!routeDrawing || !routeDrawActive || e.button !== 0) return;
     map.dragging.enable();
-    finishRoute();
-    updateCustModeStatus('Route saved! Hold & drag to draw another');
+    routeDrawActive = false;
+    // Don't auto-save — show Finish/Cancel so user confirms
+    window._showDesktopRouteControls?.();
   });
 
   // Mobile touch drawing
@@ -480,9 +749,15 @@ function initMap(data) {
   buildSidebar(layers);
   loadChecked(layers);
   updateCounts();
-  loadRegions();
+  loadRegions().then(() => refreshRegionVisibility());
   renderCustomMarkers();
   renderRoutes();
+  // Fit full map now that sidebar is rendered, unless a permalink set the view
+  if (!window._permalinkApplied) {
+    setTimeout(() => { map.invalidateSize(); map.fitBounds(bounds, {animate:false}); refreshRegionVisibility(); }, 150);
+  } else {
+    setTimeout(() => refreshRegionVisibility(), 150);
+  }
 }
 
 let pendingCustPlace = false;
@@ -521,7 +796,7 @@ function buildSidebar(layers) {
   aboutRow.innerHTML=`<span>ℹ️ About</span><span id="sb-about-chevron">${aboutOpen?'▲':'▼'}</span>`;
   const aboutPanel=mk('div',{id:'sb-about-panel'});
   aboutPanel.style.display=aboutOpen?'block':'none';
-  aboutPanel.innerHTML=`Welcome to the Farever interactive map by the <a href="https://farever.wiki" target="_blank">Farever Wiki</a> team.<br><br>Data pulled from the game. Feedback: <strong>@IceCaveBear</strong> on Discord.`;
+  aboutPanel.innerHTML=`Welcome to the Farever interactive map, built by the <a href="https://farever.wiki" target="_blank">Farever Wiki</a> team.<br><br>This map pulls data directly from the game. You can use the buttons to filter what is displayed. Note that some items have had their locations slightly obscured to avoid spoiling the fun of exploration! You will find them within the indicated area.<br><br>Please send any feedback about this map or the wiki to <strong>@IceCaveBear</strong> on Discord.`;
   aboutRow.addEventListener('click',()=>{ const o=aboutPanel.style.display==='block'; aboutPanel.style.display=o?'none':'block'; document.getElementById('sb-about-chevron').textContent=o?'▼':'▲'; localStorage.setItem('sbAboutOpen',o?'0':'1'); });
   sidebar.appendChild(aboutRow);
   sidebar.appendChild(aboutPanel);
@@ -535,27 +810,34 @@ function buildSidebar(layers) {
 
   // ── Tabs: Filter / Custom ────────────────────────────────────────
   const tabBar=mk('div',{id:'sb-tabs'});
-  [{key:'filter',label:'🔍 Filter'},{key:'custom',label:'📍 Custom'}].forEach((t,i)=>{
+  [{key:'filter',label:'Filter'},{key:'custom',label:'Add Icons'},{key:'routes',label:'Routes'}].forEach((t,i)=>{
     const btn=mk('button',{class:'sb-tab'+(i===0?' active':'')}); btn.dataset.tab=t.key; btn.textContent=t.label;
     btn.addEventListener('click',()=>{
       tabBar.querySelectorAll('.sb-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
-      document.getElementById('sb-panel-filter')?.classList.toggle('active',t.key==='filter');
-      document.getElementById('sb-panel-custom')?.classList.toggle('active',t.key==='custom');
+      sidebar.querySelectorAll('.sb-panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById(`sb-panel-${t.key}`)?.classList.add('active');
     });
     tabBar.appendChild(btn);
   });
   sidebar.appendChild(tabBar);
 
-  // ── Tool buttons (hide / reset) ──────────────────────────────────
+  // ── Panel: Filter (tools + zones + filters all inside) ───────────
+  const filterPanel=mk('div',{id:'sb-panel-filter',class:'sb-panel active'});
+
+  // Tool row inside filter panel
   const iconTools=mk('div',{id:'sb-icon-tools'});
   const searchToolBtn=mkToolBtn('sb-search-tool',SVG.search,'Search'); searchToolBtn.classList.add('compact-only');
-  const hideBtn=mkToolBtn('sb-hide-btn',SVG.eye,'Hide Completed');
-  const resetBtn=mkToolBtn('sb-reset-btn',SVG.reset,'Reset Completed');
-  iconTools.appendChild(searchToolBtn); iconTools.appendChild(hideBtn); iconTools.appendChild(resetBtn);
-  sidebar.appendChild(iconTools);
-  sidebar.appendChild(sep());
+  const completedRow=mk('div',{style:'display:flex;border-bottom:1px solid rgba(0,0,0,0.07);flex-shrink:0;'});
+  const hideBtn=mk('button',{id:'sb-hide-btn',class:'sb-tool-btn',style:'border-bottom:none;border-right:1px solid rgba(0,0,0,0.07);flex:1;'}); hideBtn.setAttribute('data-tip','Hide Completed'); hideBtn.innerHTML=`${SVG.eye}<span class="sb-tool-label">Hide Completed</span>`;
+  const resetBtn=mk('button',{id:'sb-reset-btn',class:'sb-tool-btn',style:'border-bottom:none;flex:1;color:#c0392b;'}); resetBtn.setAttribute('data-tip','Reset Completed'); resetBtn.innerHTML=`${SVG.reset}<span class="sb-tool-label">Reset Completed</span>`;
+  completedRow.appendChild(hideBtn); completedRow.appendChild(resetBtn);
+  const shareBtn=mkToolBtn('sb-share-btn',`<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="12" cy="13" r="2"/><line x1="6" y1="9" x2="10" y2="12"/><line x1="10" y1="4" x2="6" y2="7"/></svg>`,'Share Location');
+  shareBtn.addEventListener('click', copyPermalink);
+  iconTools.appendChild(searchToolBtn); iconTools.appendChild(completedRow); iconTools.appendChild(shareBtn);
+  filterPanel.appendChild(iconTools);
+  filterPanel.appendChild(sep());
 
-  // ── Zone toggles ─────────────────────────────────────────────────
+  // Zone toggles inside filter panel
   const zoneTogs=mk('div',{id:'sb-zone-toggles'});
   [{key:'region',svg:SVG.region,label:'Regions',id:'ztog-region',tip:'Toggle Regions'},{key:'subregion',svg:SVG.sub,label:'Sub',id:'ztog-subregion',tip:'Toggle Sub-regions'},{key:'zone',svg:SVG.zone,label:'Zones',id:'ztog-zone',tip:'Toggle Zones'}].forEach(({key,svg,label,id,tip})=>{
     const btn=mk('button',{class:'zone-tog-btn'+(isRegionVisible(key)?' active':''),id});
@@ -570,11 +852,8 @@ function buildSidebar(layers) {
     });
     zoneTogs.appendChild(btn);
   });
-  sidebar.appendChild(zoneTogs);
-  sidebar.appendChild(sep());
-
-  // ── Panel: Filter ────────────────────────────────────────────────
-  const filterPanel=mk('div',{id:'sb-panel-filter',class:'sb-panel active'});
+  filterPanel.appendChild(zoneTogs);
+  filterPanel.appendChild(sep());
 
   const catList=mk('div',{id:'sb-cat-list'});
   FILTER_GROUPS.forEach(group => {
@@ -584,6 +863,7 @@ function buildSidebar(layers) {
 
     // Group header
     const ghdr=mk('div',{class:'filter-group-header'});
+    ghdr.setAttribute('data-group', group.key);
     const eyeBtn=mk('button',{class:'fgh-eye'}); eyeBtn.innerHTML=SVG.eye;
     eyeBtn.addEventListener('click',e=>{ e.stopPropagation(); toggleGroupVisibility(group, layers, eyeBtn); });
     ghdr.innerHTML=`<div class="fgh-left"><span>${group.icon}</span><span class="fgh-title">${group.title}</span></div><div style="display:flex;align-items:center;gap:0.4em"></div>`;
@@ -600,28 +880,39 @@ function buildSidebar(layers) {
         const colour = COLOURS[mainCat]||'#ffa958';
         const subDiv = mk('div',{class:'filter-subgroup'});
         if(localStorage.getItem(`fsg_${mainCat}`)==='1') subDiv.classList.add('collapsed');
-
-        // Plain collapsible header - just title + chevron
         const shdr = mk('div',{class:'filter-subgroup-header'});
-        const shdrTitle = mk('span',{class:'fsh-title',style:`color:${colour};flex:1;`});
-        shdrTitle.textContent = mainCat;
+        shdr.setAttribute('data-sub', mainCat);
+        const shdrTitle = mk('span',{class:'fsh-title',style:'flex:1;'}); shdrTitle.textContent = mainCat;
         const shdrChev = mk('span',{class:'fsh-chevron'}); shdrChev.textContent='▼';
         shdr.appendChild(shdrTitle); shdr.appendChild(shdrChev);
-        shdr.addEventListener('click', () => {
-          subDiv.classList.toggle('collapsed');
-          localStorage.setItem(`fsg_${mainCat}`, subDiv.classList.contains('collapsed')?'1':'0');
-        });
+        shdr.addEventListener('click', () => { subDiv.classList.toggle('collapsed'); localStorage.setItem(`fsg_${mainCat}`, subDiv.classList.contains('collapsed')?'1':'0'); });
         subDiv.appendChild(shdr);
-
-        // Each subtype is a normal category row
         const subRows = mk('div',{class:'filter-subgroup-rows'});
-        Object.entries(subs).forEach(([subName,{icon}]) => {
-          const row = buildCatRow(subName, layers, icon);
-          subRows.appendChild(row);
-        });
+        Object.entries(subs).forEach(([subName,{icon}]) => { subRows.appendChild(buildCatRow(subName, layers, icon)); });
         subDiv.appendChild(subRows);
         groupRows.appendChild(subDiv);
       });
+    } else if (group.hasMobSub) {
+      // Enemies: Minibosses + Sparkling mobs first, then Mobs subgroup with factions
+      group.cats.forEach(cat => { if (layers[cat]||categoryRegistry[cat]) groupRows.appendChild(buildCatRow(cat, layers)); });
+      // Mobs subgroup
+      const mobDiv = mk('div',{class:'filter-subgroup'});
+      if(localStorage.getItem('fsg_Mobs')==='1') mobDiv.classList.add('collapsed');
+      const mobHdr = mk('div',{class:'filter-subgroup-header'});
+      mobHdr.setAttribute('data-sub','Mobs');
+      const mobTitle = mk('span',{class:'fsh-title',style:'flex:1;'}); mobTitle.textContent='Mobs';
+      const mobChev = mk('span',{class:'fsh-chevron'}); mobChev.textContent='▼';
+      mobHdr.appendChild(mobTitle); mobHdr.appendChild(mobChev);
+      mobHdr.addEventListener('click',()=>{ mobDiv.classList.toggle('collapsed'); localStorage.setItem('fsg_Mobs',mobDiv.classList.contains('collapsed')?'1':'0'); });
+      mobDiv.appendChild(mobHdr);
+      const mobRows = mk('div',{class:'filter-subgroup-rows'});
+      Object.entries(MOB_FACTIONS).forEach(([faction,{icon}]) => {
+        mobRows.appendChild(buildCatRow(faction, layers, icon));
+      });
+      // Unfactioned mobs row (empty faction)
+      if (categoryRegistry['Mobs']) mobRows.appendChild(buildCatRow('Mobs', layers));
+      mobDiv.appendChild(mobRows);
+      groupRows.appendChild(mobDiv);
     } else {
       group.cats.forEach(cat => { if (layers[cat]) groupRows.appendChild(buildCatRow(cat, layers)); });
     }
@@ -630,17 +921,9 @@ function buildSidebar(layers) {
   });
 
   // Scroll indicators
-  const scrollUp=mk('div',{id:'sb-scroll-up'}); scrollUp.innerHTML=`<svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,7 6,1 11,7"/></svg>`;
-  const scrollDn=mk('div',{id:'sb-scroll-down'}); scrollDn.innerHTML=`<svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,1 6,7 11,1"/></svg>`;
-  const updateScrollInds=()=>{ scrollUp.style.display=catList.scrollTop>8?'flex':'none'; scrollDn.style.display=(catList.scrollHeight-catList.scrollTop-catList.clientHeight)>8?'flex':'none'; };
-  catList.addEventListener('scroll',updateScrollInds);
-  btnTV.addEventListener('click',()=>setTimeout(updateScrollInds,300));
-  requestAnimationFrame(()=>setTimeout(updateScrollInds,50));
-  window.addEventListener('resize',updateScrollInds);
+  // Scroll indicators removed - they caused layout recalculation on every scroll event
 
-  filterPanel.appendChild(scrollUp);
   filterPanel.appendChild(catList);
-  filterPanel.appendChild(scrollDn);
   sidebar.appendChild(filterPanel);
 
   // ── Compact list (icon-only, all cats) ───────────────────────────
@@ -651,6 +934,8 @@ function buildSidebar(layers) {
     if (prevGroup && prevGroup!==group.key) { compactList.appendChild(mk('span',{class:'compact-cat-sep'})); }
     const cats = group.hasSub
       ? [...Object.keys(PLANT_SUBS), ...Object.keys(ORE_SUBS)]
+      : group.hasMobSub
+      ? [...group.cats, ...Object.keys(MOB_FACTIONS)]
       : group.cats;
     cats.forEach(cat=>{
       if (!layers[cat]) return;
@@ -679,6 +964,11 @@ function buildSidebar(layers) {
   buildCustomPanel(customPanel);
   sidebar.appendChild(customPanel);
 
+  // ── Panel: Routes ────────────────────────────────────────────────
+  const routesPanel=mk('div',{id:'sb-panel-routes',class:'sb-panel'});
+  buildRoutesPanel(routesPanel);
+  sidebar.appendChild(routesPanel);
+
   // ── Hint ─────────────────────────────────────────────────────────
   sidebar.appendChild(sep({id:'sb-sep-hint'}));
   const hint=mk('div',{id:'sb-hint'});
@@ -687,10 +977,14 @@ function buildSidebar(layers) {
   sidebar.appendChild(hint);
   document.body.appendChild(sidebar);
 
-  // ── Toggle arrow — lives inside sidebar, always attached ──────────
+  // ── Toggle arrow — body child, positioned after sidebar transition ──
   const toggle = mk('button',{id:'sb-toggle'});
   toggle.innerHTML = '▶';
-  sidebar.appendChild(toggle);
+  document.body.appendChild(toggle);
+
+  function positionToggle() {
+    toggle.style.right = sidebarOpen ? sidebar.offsetWidth + 'px' : '0px';
+  }
 
   // ── Floating search (sidebar closed) ────────────────────────────
   const floatWrap=mk('div',{id:'sb-search-float'});
@@ -738,13 +1032,14 @@ function buildSidebar(layers) {
   // ── Layout & state ───────────────────────────────────────────────
   let sidebarOpen = savedView !== 'closed';
   function saveView() { localStorage.setItem('sbView', !sidebarOpen ? 'closed' : isCompact() ? 'compact' : 'full'); }
-  function sbW() { return sidebar.offsetWidth || (isCompact() ? 52 : (isMobile() ? 290 : 320)); }
+  function sbW() { return sidebar.offsetWidth || (isCompact() ? 52 : (isMobile() ? 310 : 350)); }
   function applyLayout(animate) {
     if (!animate) sidebar.style.transition = 'none';
     sidebar.style.transform = sidebarOpen ? '' : `translateX(${sbW()}px)`;
     toggle.innerHTML = sidebarOpen ? '▶' : '◀';
     floatWrap.style.display = sidebarOpen ? 'none' : 'flex';
-    if (!animate) requestAnimationFrame(() => sidebar.style.transition = '');
+    positionToggle();
+    if (!animate) requestAnimationFrame(() => { sidebar.style.transition = ''; });
   }
   toggle.addEventListener('click',()=>{sidebarOpen=!sidebarOpen;saveView();applyLayout(true);});
   btnTV.addEventListener('click',()=>{
@@ -754,7 +1049,7 @@ function buildSidebar(layers) {
     sidebar.addEventListener('transitionend', () => applyLayout(false), {once:true});
   });
   applyLayout(false);
-  window.addEventListener('resize',()=>applyLayout(false));
+  window.addEventListener('resize',()=>{ applyLayout(false); positionToggle(); });
 
   // ── Checkboxes (full filter panel) ──────────────────────────────
   document.querySelectorAll('#sb-cat-list input[type="checkbox"]').forEach(cb=>{
@@ -786,11 +1081,9 @@ function buildSidebar(layers) {
 function toggleGroupVisibility(group, layers, eyeBtn) {
   let allCats;
   if (group.hasSub) {
-    // Get all subtype layer keys for Plants + Ores
-    allCats = [
-      ...Object.keys(PLANT_SUBS),
-      ...Object.keys(ORE_SUBS),
-    ];
+    allCats = [...Object.keys(PLANT_SUBS), ...Object.keys(ORE_SUBS)];
+  } else if (group.hasMobSub) {
+    allCats = [...group.cats, ...Object.keys(MOB_FACTIONS), 'Mobs'];
   } else {
     allCats = group.cats;
   }
@@ -813,95 +1106,269 @@ function toggleGroupVisibility(group, layers, eyeBtn) {
 
 // ─── Route share codes ────────────────────────────────────────────────────────
 function encodeRouteCode(route) {
-  // Compact: colour (3 hex digits) + point count + lat/lng pairs rounded to 1dp
-  const c = route.colour||'#e74c3c';
-  const hex6 = c.replace('#','');
-  // Convert to 3-char hex
-  const r3 = Math.round(parseInt(hex6.slice(0,2),16)/17).toString(16);
-  const g3 = Math.round(parseInt(hex6.slice(2,4),16)/17).toString(16);
-  const b3 = Math.round(parseInt(hex6.slice(4,6),16)/17).toString(16);
+  const c = (route.colour||'#e74c3c').replace('#','');
+  const r3 = Math.round(parseInt(c.slice(0,2),16)/17).toString(16);
+  const g3 = Math.round(parseInt(c.slice(2,4),16)/17).toString(16);
+  const b3 = Math.round(parseInt(c.slice(4,6),16)/17).toString(16);
   const colCode = r3+g3+b3;
-  const pts = route.points.map(p=>`${Math.round(p[0]*10)},${Math.round(p[1]*10)}`).join(';');
-  const note = (route.note||'').replace(/[^a-zA-Z0-9 ]/g,'').slice(0,30);
-  const raw = `${colCode}|${pts}|${note}`;
+  // Delta encode: store first point then differences, rounded to nearest 2 units
+  const pts = route.points;
+  const first = [Math.round(pts[0][0]/2), Math.round(pts[0][1]/2)];
+  const deltas = [first[0]+','+first[1]];
+  for (let i=1;i<pts.length;i++) {
+    const da = Math.round(pts[i][0]/2) - Math.round(pts[i-1][0]/2);
+    const db = Math.round(pts[i][1]/2) - Math.round(pts[i-1][1]/2);
+    deltas.push(da+','+db);
+  }
+  const raw = colCode+'|'+deltas.join(';');
   return btoa(raw).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
 }
 function decodeRouteCode(code) {
   try {
     const padded = code.replace(/-/g,'+').replace(/_/g,'/');
     const raw = atob(padded + '=='.slice(0,(4-padded.length%4)%4));
-    const [colCode, ptsStr, note=''] = raw.split('|');
-    // Expand 3-char hex to 6
+    const pipe = raw.indexOf('|');
+    const colCode = raw.slice(0,pipe), ptsStr = raw.slice(pipe+1);
     const r=parseInt(colCode[0],16)*17, g=parseInt(colCode[1],16)*17, b=parseInt(colCode[2],16)*17;
     const colour = '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
-    const points = ptsStr.split(';').map(s=>{ const [a,b2]=s.split(','); return [parseFloat(a)/10,parseFloat(b2)/10]; });
+    const deltas = ptsStr.split(';').map(s=>s.split(',').map(Number));
+    if (!deltas.length) return null;
+    const points = [[deltas[0][0]*2, deltas[0][1]*2]];
+    for (let i=1;i<deltas.length;i++) {
+      const prev = [Math.round(points[i-1][0]/2), Math.round(points[i-1][1]/2)];
+      points.push([(prev[0]+deltas[i][0])*2, (prev[1]+deltas[i][1])*2]);
+    }
     if (points.length<2) return null;
-    return {colour, points, note};
+    // Try legacy format (flat coords, no delta) if points look wrong
+    return {colour, points, note:''};
   } catch { return null; }
+}
+
+// ─── Routes Panel ─────────────────────────────────────────────────────────────
+function buildRoutesPanel(panel) {
+  panel.innerHTML = '';
+
+  // ── Hint ──────────────────────────────────────────────────────────
+  const hint = mk('div',{class:'cust-mode-status',style:'font-size:0.74em;font-weight:700;color:#f0a040;padding:0.2em 0;flex-shrink:0;'});
+  hint.textContent = 'Hold & drag on the map to draw a route';
+
+  // ── Name input ────────────────────────────────────────────────────
+  const nameRow = mk('div',{style:'display:flex;gap:0.35em;align-items:center;'});
+  const nameLabel = mk('span',{style:'font-size:0.78em;font-weight:700;color:#3a2e1e;white-space:nowrap;'}); nameLabel.textContent='Name:';
+  const nameInput = mk('input'); Object.assign(nameInput,{type:'text',placeholder:'e.g. Ore run, Chest route…',style:'flex:1;padding:0.32em 0.5em;border:1.5px solid #a09880;border-radius:4px;font-family:Noto,sans-serif;font-size:0.8em;background:rgb(232,228,218);color:#1a1a1a;outline:none;'});
+  nameRow.appendChild(nameLabel); nameRow.appendChild(nameInput);
+
+  // ── Draw / Visible buttons ────────────────────────────────────────
+  const modeRow = mk('div',{class:'cust-mode-row'});
+  const btnRoute = mk('button',{class:'cust-btn cust-btn-route'}); btnRoute.innerHTML=`${SVG.route} Draw Route`;
+  const btnFinish = mk('button',{class:'cust-btn cust-btn-route',style:'display:none'}); btnFinish.textContent='✓ Finish';
+  const btnCancel = mk('button',{class:'cust-btn cust-btn-cancel',style:'display:none'}); btnCancel.textContent='✕ Cancel';
+  modeRow.appendChild(btnRoute); modeRow.appendChild(btnFinish); modeRow.appendChild(btnCancel);
+
+  const visRow = mk('div',{class:'cust-mode-row',style:'margin-top:0.3em;'});
+  const btnVis = mk('button',{class:`cust-btn cust-btn-route${routesVisible?' active':''}`,style:'flex:1;'});
+  btnVis.textContent = routesVisible?'👁 Routes Visible':'👁 Routes Hidden';
+  btnVis.addEventListener('click',()=>{
+    routesVisible=!routesVisible; localStorage.setItem('routesVisible',routesVisible?'1':'0');
+    btnVis.classList.toggle('active',routesVisible);
+    btnVis.textContent=routesVisible?'👁 Routes Visible':'👁 Routes Hidden';
+    renderRoutes(); refreshRouteList();
+  });
+  visRow.appendChild(btnVis);
+
+  function saveRouteWithName() {
+    const name = nameInput.value.trim();
+    if (name && customRoutes.length) { customRoutes[customRoutes.length-1].note = name; saveCustom(); }
+    nameInput.value = '';
+  }
+  function showRouteControls() {
+    btnRoute.style.display = 'none';
+    btnFinish.style.display = '';
+    btnCancel.style.display = '';
+  }
+  function hideRouteControls() {
+    btnRoute.style.display = '';
+    btnFinish.style.display = 'none';
+    btnCancel.style.display = 'none';
+  }
+  // Called by desktop mouseup — pause drawing, show Finish/Cancel
+  window._showDesktopRouteControls = showRouteControls;
+
+  btnRoute.addEventListener('click', () => {
+    routeDrawing = true; routePoints = []; pendingCustPlace = false;
+    if (isMobile()) { showRouteControls(); showMobileRouteBar(); }
+    else { updateCustModeStatus('Hold & drag on map to draw — release then click Finish'); }
+  });
+  btnFinish.addEventListener('click', () => {
+    finishRoute(); routeDrawing = false;
+    hideRouteControls();
+    hideMobileRouteBar(true); saveRouteWithName(); refreshRouteList();
+  });
+  btnCancel.addEventListener('click', () => {
+    routeDrawing = false; routePoints = []; routeDrawActive = false;
+    if (routePreviewLayer) { map.removeLayer(routePreviewLayer); routePreviewLayer = null; }
+    hideRouteControls();
+    hideMobileRouteBar(true);
+    updateCustModeStatus('Hold & drag on the map to draw a route');
+  });
+  window._onRouteFinished = () => { saveRouteWithName(); refreshRouteList(); };
+
+  // ── New route colour picker ───────────────────────────────────────
+  const colTitle=mk('div',{class:'cust-section-title'}); colTitle.textContent='New Route Colour';
+  const colRow=mk('div',{class:'color-swatch-row'});
+  let selSwatch=null;
+  CUSTOM_COLOURS.forEach(col=>{
+    const s=mk('div',{class:'color-swatch'+(col===selectedCustColour?' selected':'')}); s.style.background=col;
+    s.addEventListener('click',()=>{ selectedCustColour=col; localStorage.setItem('custColour',col); selSwatch?.classList.remove('selected'); s.classList.add('selected'); selSwatch=s; });
+    if(col===selectedCustColour) selSwatch=s;
+    colRow.appendChild(s);
+  });
+
+  // ── Global opacity slider ─────────────────────────────────────────
+  const opTitle=mk('div',{class:'cust-section-title'}); opTitle.textContent='All Routes Opacity';
+  const opRow=mk('div',{style:'display:flex;align-items:center;gap:0.5em;'});
+  const opSlider=mk('input'); Object.assign(opSlider,{type:'range',min:'0.05',max:'1',step:'0.01',value:String(globalRouteOpacity),style:'flex:1;cursor:pointer;accent-color:rgb(210,120,0);'});
+  const opVal=mk('span',{style:'font-size:0.75em;color:#555;width:2.8em;text-align:right;flex-shrink:0;'}); opVal.textContent=Math.round(globalRouteOpacity*100)+'%';
+  opSlider.addEventListener('input',()=>{ globalRouteOpacity=parseFloat(opSlider.value); opVal.textContent=Math.round(globalRouteOpacity*100)+'%'; localStorage.setItem('routeOpacity',globalRouteOpacity); renderRoutes(); });
+  opRow.appendChild(opSlider); opRow.appendChild(opVal);
+
+  // ── Route list ────────────────────────────────────────────────────
+  const listTitle=mk('div',{class:'cust-section-title',id:'route-list-title'}); listTitle.textContent=`My Routes (${customRoutes.length})`;
+  const routeList=mk('div',{id:'route-list',style:'display:flex;flex-direction:column;'});
+
+  function refreshRouteList() {
+    listTitle.textContent=`My Routes (${customRoutes.length})`;
+    routeList.innerHTML='';
+    if(!customRoutes.length){ const e=mk('div',{style:'font-size:0.78em;color:#888;padding:0.4em 0;'}); e.textContent='No routes yet — draw one above'; routeList.appendChild(e); return; }
+    customRoutes.forEach((rt,i)=>{
+      const row=mk('div',{style:'background:rgb(225,220,210);border-radius:5px;padding:0.45em 0.6em;border:1px solid #c0b898;margin-bottom:0.3em;'});
+
+      // Top: visibility check + editable name + sort + fly + delete
+      const topRow=mk('div',{style:'display:flex;align-items:center;gap:0.3em;'});
+      // Visibility checkbox (check0/check1 png)
+      const visChk=mk('span',{style:`background-image:url("${rt.hidden?'check0':'check1'}.png");background-size:contain;background-repeat:no-repeat;width:1.05em;height:1.05em;flex-shrink:0;cursor:pointer;`});
+      visChk.addEventListener('click',()=>{ rt.hidden=!rt.hidden; saveCustom(); renderRoutes(); refreshRouteList(); });
+      // Colour dot — click to expand inline swatch row below
+      const colDot=mk('div',{style:`width:16px;height:16px;border-radius:50%;background:${rt.colour||'#e74c3c'};flex-shrink:0;cursor:pointer;border:2px solid rgba(0,0,0,0.25);`});
+      colDot.title='Click to change colour';
+      const colSwatchRow=mk('div',{style:'display:none;flex-wrap:wrap;gap:0.25em;margin-top:0.3em;'});
+      CUSTOM_COLOURS.forEach(col=>{
+        const sw=mk('div',{style:`width:1.3em;height:1.3em;border-radius:3px;background:${col};cursor:pointer;border:2px solid ${col===(rt.colour||'#e74c3c')?'#1a1a1a':'transparent'};flex-shrink:0;`});
+        sw.addEventListener('click',()=>{ rt.colour=col; saveCustom(); renderRoutes(); refreshRouteList(); });
+        colSwatchRow.appendChild(sw);
+      });
+      colDot.addEventListener('click',e=>{ e.stopPropagation(); colSwatchRow.style.display=colSwatchRow.style.display==='none'?'flex':'none'; });
+
+      const nameInp=mk('input'); Object.assign(nameInp,{type:'text',value:rt.note||`Route ${i+1}`,style:'flex:1;padding:0.2em 0.4em;border:1px solid #a09880;border-radius:3px;font-size:0.79em;background:transparent;color:#3a2e1e;outline:none;font-weight:600;cursor:text;min-width:0;'});
+      nameInp.addEventListener('change',()=>{ rt.note=nameInp.value.trim()||`Route ${i+1}`; saveCustom(); });
+      const upBtn=mk('button',{style:'background:none;border:none;cursor:pointer;color:#555;font-size:0.8em;padding:0.1em;'}); upBtn.textContent='↑';
+      upBtn.addEventListener('click',()=>{ if(i>0){[customRoutes[i-1],customRoutes[i]]=[customRoutes[i],customRoutes[i-1]]; saveCustom(); renderRoutes(); refreshRouteList();} });
+      const dnBtn=mk('button',{style:'background:none;border:none;cursor:pointer;color:#555;font-size:0.8em;padding:0.1em;'}); dnBtn.textContent='↓';
+      dnBtn.addEventListener('click',()=>{ if(i<customRoutes.length-1){[customRoutes[i],customRoutes[i+1]]=[customRoutes[i+1],customRoutes[i]]; saveCustom(); renderRoutes(); refreshRouteList();} });
+      const flyBtn=mk('button',{style:'background:none;border:none;cursor:pointer;color:#388e9f;font-size:0.85em;padding:0.1em 0.2em;'}); flyBtn.title='Go to route'; flyBtn.textContent='🎯';
+      flyBtn.addEventListener('click',()=>{ if(rt.points.length) map.flyTo(rt.points[0],0,{animate:true,duration:0.7}); });
+      const delBtn=mk('button',{style:'background:none;border:none;cursor:pointer;color:#c0392b;font-size:0.8em;padding:0.1em 0.2em;'}); delBtn.innerHTML=SVG.trash;
+      delBtn.addEventListener('click',()=>{ customRoutes.splice(i,1); saveCustom(); renderRoutes(); refreshRouteList(); });
+      topRow.appendChild(visChk); topRow.appendChild(colDot); topRow.appendChild(nameInp); topRow.appendChild(upBtn); topRow.appendChild(dnBtn); topRow.appendChild(flyBtn); topRow.appendChild(delBtn);
+
+      // Share code row
+      const code=encodeRouteCode(rt);
+      const codeRow=mk('div',{style:'display:flex;align-items:center;gap:0.3em;margin-top:0.3em;'});
+      const codeBox=mk('input'); Object.assign(codeBox,{type:'text',readOnly:true,value:code,title:'Click to copy',style:'flex:1;padding:0.2em 0.4em;border:1px solid #a09880;border-radius:3px;font-size:0.68em;background:rgb(215,210,200);color:#3a2e1e;outline:none;cursor:pointer;'});
+      codeBox.addEventListener('click',()=>{ navigator.clipboard?.writeText(code).then(()=>{ codeBox.style.background='rgb(200,230,200)'; setTimeout(()=>codeBox.style.background='',1000); }); });
+      codeRow.appendChild(codeBox);
+
+      row.appendChild(topRow); row.appendChild(colSwatchRow); row.appendChild(codeRow);
+      routeList.appendChild(row);
+    });
+  }
+  window._routeRenderHook=()=>refreshRouteList();
+
+  // ── Import ────────────────────────────────────────────────────────
+  const importTitle=mk('div',{class:'cust-section-title'}); importTitle.textContent='Import Route';
+  const importRow=mk('div',{style:'display:flex;gap:0.3em;'});
+  const importInput=mk('input'); Object.assign(importInput,{type:'text',placeholder:'Paste route code…',style:'flex:1;padding:0.32em 0.5em;border:1.5px solid #a09880;border-radius:4px;font-family:Noto,sans-serif;font-size:0.8em;background:rgb(232,228,218);color:#1a1a1a;outline:none;'});
+  const importBtn=mk('button',{style:'padding:0.32em 0.7em;border-radius:4px;border:none;background:rgb(120,90,55);color:white;font-family:Noto,sans-serif;font-size:0.78em;font-weight:700;cursor:pointer;white-space:nowrap;'}); importBtn.textContent='Import';
+  const importStatus=mk('div',{style:'font-size:0.72em;min-height:1em;color:#5a4a2a;'});
+  importBtn.addEventListener('click',()=>{
+    const rt=decodeRouteCode(importInput.value.trim());
+    if(!rt){ importStatus.textContent='❌ Invalid code'; importStatus.style.color='#c0392b'; return; }
+    customRoutes.push(rt); saveCustom(); renderRoutes(); refreshRouteList();
+    importInput.value=''; importStatus.textContent='✓ Route imported!'; importStatus.style.color='#27ae60';
+    setTimeout(()=>importStatus.textContent='',3000);
+  });
+  importRow.appendChild(importInput); importRow.appendChild(importBtn);
+
+  panel.appendChild(hint);
+  panel.appendChild(nameRow); panel.appendChild(modeRow); panel.appendChild(visRow);
+  panel.appendChild(sep());
+  panel.appendChild(colTitle); panel.appendChild(colRow);
+  panel.appendChild(sep());
+  panel.appendChild(opTitle); panel.appendChild(opRow);
+  panel.appendChild(sep());
+  panel.appendChild(listTitle); panel.appendChild(routeList);
+  panel.appendChild(sep());
+  panel.appendChild(importTitle); panel.appendChild(importRow); panel.appendChild(importStatus);
+
+  // Delete All Routes
+  panel.appendChild(sep());
+  const delAllBtn = mk('button',{style:'width:100%;padding:0.5em;border-radius:5px;border:none;background:linear-gradient(135deg,#b0665d 50%,#ce715c 50%);color:white;font-family:Noto,sans-serif;font-size:0.88em;font-weight:700;cursor:pointer;'});
+  delAllBtn.textContent = '🗑 Delete All Routes';
+  const delAllStatus = mk('div',{style:'font-size:0.75em;text-align:center;min-height:1.2em;margin-top:0.3em;'});
+  let delAllPending = false;
+  delAllBtn.addEventListener('click', () => {
+    if (!delAllPending) {
+      delAllPending = true;
+      delAllBtn.textContent = '⚠️ Are you sure? Click again to confirm';
+      delAllBtn.style.background = 'linear-gradient(135deg,#8a3030 50%,#a03030 50%)';
+      setTimeout(() => {
+        if (delAllPending) {
+          delAllPending = false;
+          delAllBtn.textContent = '🗑 Delete All Routes';
+          delAllBtn.style.background = 'linear-gradient(135deg,#b0665d 50%,#ce715c 50%)';
+        }
+      }, 4000);
+    } else {
+      delAllPending = false;
+      customRoutes.length = 0;
+      saveCustom(); renderRoutes(); refreshRouteList();
+      delAllBtn.textContent = '🗑 Delete All Routes';
+      delAllBtn.style.background = 'linear-gradient(135deg,#b0665d 50%,#ce715c 50%)';
+      delAllStatus.textContent = '✓ All routes deleted';
+      delAllStatus.style.color = '#27ae60';
+      setTimeout(() => delAllStatus.textContent = '', 3000);
+    }
+  });
+  panel.appendChild(delAllBtn);
+  panel.appendChild(delAllStatus);
+
+  refreshRouteList();
 }
 
 function buildCustomPanel(panel) {
   panel.innerHTML='';
 
-  const statusEl=mk('div',{class:'cust-mode-status',id:'cust-mode-status'}); statusEl.textContent='Select an icon to place on the map';
+  // Status hint — always on top, never behind grid
+  const statusEl=mk('div',{class:'cust-mode-status',id:'cust-mode-status'});
+  statusEl.style.cssText='font-size:0.74em;font-weight:700;color:#f0a040;min-height:1.6em;padding:0.2em 0;flex-shrink:0;';
+  statusEl.textContent='Select an icon then click the map to place it';
 
   // Icon grid
-  const iconTitle=mk('div',{class:'cust-section-title'}); iconTitle.textContent='';
   const iconGrid=mk('div',{class:'cust-icon-grid'});
   let selIconBtn=null;
   CUSTOM_ICONS.forEach(ic=>{
     const b=mk('div',{class:'cust-icon-btn'}); b.textContent=ic;
     b.addEventListener('click',()=>{
-      if(selIconBtn===b && pendingCustPlace){ // clicking selected icon cancels
+      if(selIconBtn===b && pendingCustPlace){
         pendingCustPlace=false; b.classList.remove('selected'); selIconBtn=null;
-        updateCustModeStatus('Click an icon to select it');
+        updateCustModeStatus('Select an icon then click the map to place it');
         return;
       }
       selectedCustIcon=ic; localStorage.setItem('custIcon',ic);
       selIconBtn?.classList.remove('selected'); b.classList.add('selected'); selIconBtn=b;
-      pendingCustPlace=true; updateCustModeStatus(`Click map to place ${ic} — click icon again to cancel`);
+      pendingCustPlace=true; updateCustModeStatus(`Click map to place ${ic} — tap again to cancel`);
     });
     iconGrid.appendChild(b);
-  });
-
-  // Route drawing
-  const routeTitle=mk('div',{class:'cust-section-title'}); routeTitle.textContent='Routes';
-  const routeInstructions=mk('div',{class:'cust-route-instructions'}); routeInstructions.textContent='Click "Draw Route" then click the map to add waypoints. Click a route on the map to edit/delete.';
-  const modeRow=mk('div',{class:'cust-mode-row'});
-  const btnRoute=mk('button',{class:'cust-btn cust-btn-route'}); btnRoute.innerHTML=`${SVG.route} Draw Route`;
-  const btnFinish=mk('button',{class:'cust-btn cust-btn-route',style:'display:none'}); btnFinish.textContent='✓ Finish';
-  const btnCancel=mk('button',{class:'cust-btn cust-btn-cancel',style:'display:none'}); btnCancel.textContent='✕ Cancel';
-  modeRow.appendChild(btnRoute); modeRow.appendChild(btnFinish); modeRow.appendChild(btnCancel);
-
-  const routeVisRow=mk('div',{class:'cust-mode-row',style:'margin-top:0.3em;'});
-  const btnToggleRoutes=mk('button',{class:`cust-btn cust-btn-route${routesVisible?' active':''}`});
-  btnToggleRoutes.textContent=routesVisible?'👁 Routes Visible':'👁 Routes Hidden';
-  btnToggleRoutes.style.flex='1';
-  btnToggleRoutes.addEventListener('click',()=>{
-    routesVisible=!routesVisible; localStorage.setItem('routesVisible',routesVisible?'1':'0');
-    btnToggleRoutes.classList.toggle('active',routesVisible);
-    btnToggleRoutes.textContent=routesVisible?'👁 Routes Visible':'👁 Routes Hidden';
-    renderRoutes();
-  });
-  routeVisRow.appendChild(btnToggleRoutes);
-  btnRoute.addEventListener('click',()=>{
-    routeDrawing=true; pendingCustPlace=false;
-    btnRoute.style.display='none'; btnFinish.style.display=''; btnCancel.style.display='';
-    updateCustModeStatus('Hold and drag on the map to draw a route');
-    if(isMobile()) showMobileRouteBar(btnFinish, btnCancel, btnRoute);
-  });
-  btnFinish.addEventListener('click',()=>{
-    finishRoute(); routeDrawing=false;
-    btnRoute.style.display=''; btnFinish.style.display='none'; btnCancel.style.display='none';
-    updateCustModeStatus('Route saved');
-    hideMobileRouteBar(true);
-  });
-  btnCancel.addEventListener('click',()=>{
-    routeDrawing=false; routePoints=[]; routeDrawActive=false;
-    if(routePreviewLayer){map.removeLayer(routePreviewLayer);routePreviewLayer=null;}
-    btnRoute.style.display=''; btnFinish.style.display='none'; btnCancel.style.display='none';
-    updateCustModeStatus('');
-    hideMobileRouteBar(true);
   });
 
   // Colour picker
@@ -915,62 +1382,8 @@ function buildCustomPanel(panel) {
     colRow.appendChild(s);
   });
 
-  // Route share
-  const shareTitle=mk('div',{class:'cust-section-title'}); shareTitle.textContent='Share Routes';
-  const shareWrap=mk('div',{style:'display:flex;flex-direction:column;gap:0.4em;'});
-
-  // Export: pick a route to share
-  const exportLabel=mk('div',{style:'font-size:0.74em;color:#5a4a2a;'}); exportLabel.textContent='Copy code for a route:';
-  const exportSelect=mk('select',{style:'width:100%;padding:0.35em 0.5em;border:1.5px solid #a09880;border-radius:4px;font-family:Noto,sans-serif;font-size:0.82em;background:rgb(232,228,218);color:#1a1a1a;outline:none;'});
-  const exportCodeBox=mk('input'); Object.assign(exportCodeBox,{type:'text',readOnly:true,placeholder:'Select a route above',style:'width:100%;padding:0.32em 0.5em;border:1.5px solid #a09880;border-radius:4px;font-family:Noto,sans-serif;font-size:0.74em;background:rgb(225,220,210);color:#1a1a1a;outline:none;cursor:pointer;'});
-  exportCodeBox.title='Click to copy';
-  exportCodeBox.addEventListener('click',()=>{ if(exportCodeBox.value&&exportCodeBox.value!=='No routes yet'){ navigator.clipboard?.writeText(exportCodeBox.value).then(()=>{exportCodeBox.style.background='rgb(200,230,200)';setTimeout(()=>exportCodeBox.style.background='',1000);}); } });
-
-  function refreshExportSelect() {
-    exportSelect.innerHTML='';
-    if (!customRoutes.length) { const o=mk('option'); o.textContent='No routes'; exportSelect.appendChild(o); exportCodeBox.value='No routes yet'; return; }
-    customRoutes.forEach((rt,i)=>{
-      const o=mk('option'); o.value=i; o.textContent=`Route ${i+1}${rt.note?' — '+rt.note.slice(0,20):''}  (${rt.points.length} pts)`;
-      exportSelect.appendChild(o);
-    });
-    exportSelect.dispatchEvent(new Event('change'));
-  }
-  exportSelect.addEventListener('change',()=>{ const rt=customRoutes[+exportSelect.value]; if(rt) exportCodeBox.value=encodeRouteCode(rt); });
-
-  // Import
-  const importLabel=mk('div',{style:'font-size:0.74em;color:#5a4a2a;margin-top:0.2em;'}); importLabel.textContent='Import a shared code:';
-  const importRow=mk('div',{style:'display:flex;gap:0.3em;'});
-  const importInput=mk('input'); Object.assign(importInput,{type:'text',placeholder:'Paste code here…',style:'flex:1;padding:0.32em 0.5em;border:1.5px solid #a09880;border-radius:4px;font-family:Noto,sans-serif;font-size:0.8em;background:rgb(232,228,218);color:#1a1a1a;outline:none;'});
-  const importBtn=mk('button',{style:'padding:0.32em 0.7em;border-radius:4px;border:none;background:rgb(120,90,55);color:white;font-family:Noto,sans-serif;font-size:0.78em;font-weight:700;cursor:pointer;white-space:nowrap;'}); importBtn.textContent='Import';
-  const importStatus=mk('div',{style:'font-size:0.72em;min-height:1em;color:#5a4a2a;'});
-  importBtn.addEventListener('click',()=>{
-    const rt=decodeRouteCode(importInput.value.trim());
-    if (!rt) { importStatus.textContent='❌ Invalid code'; importStatus.style.color='#c0392b'; return; }
-    customRoutes.push(rt); saveCustom(); renderRoutes(); refreshExportSelect();
-    importInput.value=''; importStatus.textContent='✓ Route imported!'; importStatus.style.color='#27ae60';
-    setTimeout(()=>importStatus.textContent='',3000);
-  });
-  importRow.appendChild(importInput); importRow.appendChild(importBtn);
-
-  shareWrap.appendChild(exportLabel); shareWrap.appendChild(exportSelect);
-  shareWrap.appendChild(exportCodeBox); shareWrap.appendChild(importLabel);
-  shareWrap.appendChild(importRow); shareWrap.appendChild(importStatus);
-
-  // Refresh export list when routes change
-  const origRenderRoutes = window._routeRenderHook;
-  window._routeRenderHook = () => { refreshExportSelect(); };
-
   panel.appendChild(statusEl);
   panel.appendChild(iconGrid);
-  panel.appendChild(sep());
-  panel.appendChild(routeTitle); panel.appendChild(routeInstructions);
-  panel.appendChild(modeRow); panel.appendChild(routeVisRow);
-  panel.appendChild(sep());
-  panel.appendChild(colTitle); panel.appendChild(colRow);
-  panel.appendChild(sep());
-  panel.appendChild(shareTitle); panel.appendChild(shareWrap);
-
-  refreshExportSelect();
 }
 
 // ─── Build category row ───────────────────────────────────────────────────────
@@ -1074,7 +1487,7 @@ function mkToolBtn(id,svg,tip){const b=mk('button',{id,class:'sb-tool-btn'});b.s
 function showMobileRouteBar() {
   document.getElementById('mobile-route-bar')?.remove();
   const sb = document.getElementById('sidebar');
-  if(sb) { const w = sb.offsetWidth || 290; sb.style.transform = `translateX(${w}px)`; }
+  if(sb) { const w = sb.offsetWidth || 310; sb.style.transform = `translateX(${w}px)`; }
   const bar = mk('div',{id:'mobile-route-bar'});
   bar.style.cssText=`position:fixed;bottom:0;left:0;right:0;z-index:1200;display:flex;gap:0.5em;padding:0.75em 1em;background:linear-gradient(135deg,#785a37 50%,#8e6a41 50%);box-shadow:0 -3px 12px rgba(0,0,0,0.3);`;
   const label=mk('span'); label.style.cssText='color:white;font-size:0.82em;font-weight:700;flex:1;display:flex;align-items:center;'; label.textContent='Hold & drag to draw route';
