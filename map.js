@@ -119,7 +119,7 @@ const MOB_UNIT_FACTION = {
   'Elemental_Z2W_Underwater_U':'Sparkles', // Aquamarine Sparkle
   // Spirits (non-sparkle elementals + herald)
   'Elemental_Z2W':'Spirits','Elemental_Z2W_2':'Spirits',
-  'Elemental_Z2W_Underwater_2':'Spirits','TODO_Z1W_HeraldSpirit':'Spirits',
+  'Elemental_Z2W_Underwater_2':'Sparkles','TODO_Z1W_HeraldSpirit':'Spirits',
   // Kobolds
   'Z1_Kobold_Mines_2':'Kobolds','Z1_Kobold_Patrol_Unique':'Kobolds',
   'Z2_Kobold_Eksod':'Kobolds','Z2_Kobold_Eksod_Ogre':'Kobolds',
@@ -350,7 +350,7 @@ function buildCustPopup(cm, i) {
   noteEl.addEventListener('change', () => { cm.note=noteEl.value; saveCustom(); });
   const delBtn = document.createElement('button');
   delBtn.className='cust-popup-del'; delBtn.textContent='🗑 Delete Marker';
-  delBtn.addEventListener('click', () => { customMarkers.splice(i,1); saveCustom(); renderCustomMarkers(); map.closePopup(); });
+  delBtn.addEventListener('click', () => { customMarkers.splice(i,1); saveCustom(); renderCustomMarkers(); window._refreshMyIcons?.(); map.closePopup(); });
   div.appendChild(noteEl); div.appendChild(delBtn);
   return div;
 }
@@ -612,12 +612,25 @@ function initMap(data) {
   data.forEach((item,idx)=>{
     const cat=item.categories?.[0]||'Misc';
     if (cat !== 'Mobs') return;
-    const faction = /\bsparkle\b/i.test(item.label||'') && !/\bsparkling\b/i.test(item.label||'') ? 'Sparkles'
+    const faction = /^sparkling\b/i.test(item.label||'') ? 'Sparkling mobs'
+      : /\bsparkle\b/i.test(item.label||'') ? 'Sparkles'
+      : /\bslime\b/i.test(item.label||'') ? 'Slimes'
       : item.unitFaction && MOB_FACTIONS[item.unitFaction] ? item.unitFaction
       : (MOB_UNIT_FACTION[item.unit||''] || null);
     if (!faction || faction === '__skip__' || faction === '__Critters__') return;
     categoryRegistry[faction].total++;
     categoryRegistry[faction].markerIds.push(getMarkerId(item,idx));
+    // Also count in extra factions detected from label
+    const lbl = item.label || '';
+    const extras = [];
+    if (/\bboar/i.test(lbl)    && faction !== 'Boars')   extras.push('Boars');
+    if (/\bcoyote/i.test(lbl)  && faction !== 'Coyotes') extras.push('Coyotes');
+    if (/\bwolf\b|\bwolves\b/i.test(lbl) && faction !== 'Wolves') extras.push('Wolves');
+    if (/\bsparkle\b/i.test(lbl) && !/\bsparkling\b/i.test(lbl) && faction !== 'Sparkles') extras.push('Sparkles');
+    if (/\bgolem/i.test(lbl)   && faction !== 'Golems')  extras.push('Golems');
+    extras.forEach(f => {
+      if (categoryRegistry[f]) { categoryRegistry[f].total++; categoryRegistry[f].markerIds.push(getMarkerId(item,idx)); }
+    });
   });
 
   data.forEach((item,idx)=>{
@@ -626,7 +639,9 @@ function initMap(data) {
     const subInfo = subTypeMap[item.label.toLowerCase()];
     // Mob faction routing
     const mobFaction = (cat==='Mobs')
-      ? (/\bsparkle\b/i.test(item.label||'') && !/\bsparkling\b/i.test(item.label||'') ? 'Sparkles'
+      ? (/^sparkling\b/i.test(item.label||'') ? 'Sparkling mobs'
+         : /\bsparkle\b/i.test(item.label||'') ? 'Sparkles'
+         : /\bslime\b/i.test(item.label||'') ? 'Slimes'
          : item.unitFaction && MOB_FACTIONS[item.unitFaction] ? item.unitFaction
          : MOB_UNIT_FACTION[item.unit||''] || null)
       : null;
@@ -676,7 +691,44 @@ function initMap(data) {
     m.on('contextmenu',e=>{ L.DomEvent.preventDefault(e); L.DomEvent.stopPropagation(e); m.closePopup(); toggleComplete(mid,m,cat); });
     m.on('click',e=>{ if (!isMobile()||routeDrawing) return; toggleComplete(mid,m,cat); });
     m.on('add',()=>setTimeout(()=>applyCompletedStyle(m,completedMarkers.has(mid)),0));
-    m.addTo(layers[effectiveCat]);
+    // Detect additional factions from label (multi-species spawn points)
+    const extraFactions = [];
+    if (cat === 'Mobs' && mobFaction) {
+      const lbl = item.label || '';
+      if (/\bboar/i.test(lbl)    && mobFaction !== 'Boars')   extraFactions.push('Boars');
+      if (/\bcoyote/i.test(lbl)  && mobFaction !== 'Coyotes') extraFactions.push('Coyotes');
+      if (/\bwolf\b|\bwolves\b/i.test(lbl) && mobFaction !== 'Wolves') extraFactions.push('Wolves');
+      if (/\bsparkle\b/i.test(lbl) && !/\bsparkling\b/i.test(lbl) && mobFaction !== 'Sparkles') extraFactions.push('Sparkles');
+      if (/\bgolem/i.test(lbl)   && mobFaction !== 'Golems')  extraFactions.push('Golems');
+    }
+    const allFactions = mobFaction && MOB_FACTIONS[mobFaction] ? [mobFaction, ...extraFactions] : null;
+
+    // For multi-faction markers: add to map directly, control visibility via updateMultiFactionIcons
+    if (allFactions && allFactions.length > 1) {
+      const sz = 32;
+      const overlap = 14;
+      function makeMultiIcon(show) {
+        if (show.length === 1) {
+          return L.icon({iconUrl:MOB_FACTIONS[show[0]].icon, iconSize:[sz,sz], iconAnchor:[sz/2,sz/2], popupAnchor:[0,-sz/2]});
+        }
+        const totalW = sz + (show.length - 1) * (sz - overlap);
+        const imgs = show.map((f,i) =>
+          `<img src="${MOB_FACTIONS[f].icon}" width="${sz}" height="${sz}" style="position:absolute;left:${i*(sz-overlap)}px;top:0;">`
+        ).join('');
+        return L.divIcon({
+          html:`<div style="position:relative;width:${totalW}px;height:${sz}px;">${imgs}</div>`,
+          className:'', iconSize:[totalW,sz], iconAnchor:[totalW/2,sz/2], popupAnchor:[0,-sz/2]
+        });
+      }
+      m.setIcon(makeMultiIcon(allFactions));
+      m._allFactions = allFactions;
+      m._makeMultiIcon = makeMultiIcon;
+      // Add directly to map — visibility controlled by updateMultiFactionIcons
+      m.addTo(map);
+    } else {
+      m.addTo(layers[effectiveCat]);
+      extraFactions.forEach(f => { if (layers[f]) m.addTo(layers[f]); });
+    }
   });
 
   // Map mouse/touch events for route drawing and marker placement
@@ -737,6 +789,7 @@ function initMap(data) {
       customMarkers.push(cm);
       saveCustom();
       renderCustomMarkers();
+      window._refreshMyIcons?.();
       document.querySelectorAll('.cust-icon-btn.selected').forEach(b=>b.classList.remove('selected'));
       pendingCustPlace = false;
       updateCustModeStatus('Click an icon to select it');
@@ -749,6 +802,7 @@ function initMap(data) {
   buildSidebar(layers);
   loadChecked(layers);
   updateCounts();
+  updateMultiFactionIcons();
   loadRegions().then(() => refreshRegionVisibility());
   renderCustomMarkers();
   renderRoutes();
@@ -791,24 +845,10 @@ function buildSidebar(layers) {
   sidebar.appendChild(hdr);
   sidebar.appendChild(sep({id:'sb-sep-first'}));
 
-  // ── About ────────────────────────────────────────────────────────
-  const aboutRow=mk('div',{id:'sb-about-row'});
-  aboutRow.innerHTML=`<span>ℹ️ About</span><span id="sb-about-chevron">${aboutOpen?'▲':'▼'}</span>`;
-  const aboutPanel=mk('div',{id:'sb-about-panel'});
-  aboutPanel.style.display=aboutOpen?'block':'none';
-  aboutPanel.innerHTML=`Welcome to the Farever interactive map, built by the <a href="https://farever.wiki" target="_blank">Farever Wiki</a> team.<br><br>This map pulls data directly from the game. You can use the buttons to filter what is displayed. Note that some items have had their locations slightly obscured to avoid spoiling the fun of exploration! You will find them within the indicated area.<br><br>Please send any feedback about this map or the wiki to <strong>@IceCaveBear</strong> on Discord.`;
-  aboutRow.addEventListener('click',()=>{ const o=aboutPanel.style.display==='block'; aboutPanel.style.display=o?'none':'block'; document.getElementById('sb-about-chevron').textContent=o?'▼':'▲'; localStorage.setItem('sbAboutOpen',o?'0':'1'); });
-  sidebar.appendChild(aboutRow);
-  sidebar.appendChild(aboutPanel);
-  sidebar.appendChild(sep({id:'sb-sep-about'}));
+  // ── About ─────────────────────────────── moved inside filter panel ──
+  // ── Search ────────────────────────────── moved inside filter panel ──
 
-  // ── Search (above tabs) ──────────────────────────────────────────
-  const searchRow=mk('div',{id:'sb-search-row'});
-  searchRow.innerHTML=`<input id="sb-search" type="text" placeholder="🔍 Search markers & regions…" autocomplete="off"><button id="sb-search-clear" style="display:none">✕</button>`;
-  sidebar.appendChild(searchRow);
-  sidebar.appendChild(sep());
-
-  // ── Tabs: Filter / Custom ────────────────────────────────────────
+  // ── Tabs: Filter / Custom / Routes ──────────────────────────────────
   const tabBar=mk('div',{id:'sb-tabs'});
   [{key:'filter',label:'Filter'},{key:'custom',label:'Add Icons'},{key:'routes',label:'Routes'}].forEach((t,i)=>{
     const btn=mk('button',{class:'sb-tab'+(i===0?' active':'')}); btn.dataset.tab=t.key; btn.textContent=t.label;
@@ -821,7 +861,13 @@ function buildSidebar(layers) {
   });
   sidebar.appendChild(tabBar);
 
-  // ── Panel: Filter (tools + zones + filters all inside) ───────────
+  // ── Search — below tabs, always visible ─────────────────────────────
+  const searchRow=mk('div',{id:'sb-search-row',style:'flex-shrink:0;'});
+  searchRow.innerHTML=`<input id="sb-search" type="text" placeholder="🔍 Search markers & regions…" autocomplete="off"><button id="sb-search-clear" style="display:none">✕</button>`;
+  sidebar.appendChild(searchRow);
+  sidebar.appendChild(sep());
+
+  // ── Panel: Filter ───────────────────────────────────────────────────
   const filterPanel=mk('div',{id:'sb-panel-filter',class:'sb-panel active'});
 
   // Tool row inside filter panel
@@ -856,6 +902,17 @@ function buildSidebar(layers) {
   filterPanel.appendChild(sep());
 
   const catList=mk('div',{id:'sb-cat-list'});
+
+  // ── About (scrolls with filter content) ───────────────────────────
+  const aboutRow=mk('div',{id:'sb-about-row',style:'flex-shrink:0;'});
+  aboutRow.innerHTML=`<span>ℹ️ About</span><span id="sb-about-chevron">${aboutOpen?'▲':'▼'}</span>`;
+  const aboutPanel=mk('div',{id:'sb-about-panel'});
+  aboutPanel.style.display=aboutOpen?'block':'none';
+  aboutPanel.innerHTML=`Welcome to the Farever interactive map, built by the <a href="https://farever.wiki" target="_blank">Farever Wiki</a> team.<br><br>This map pulls data directly from the game. You can use the buttons to filter what is displayed. Note that some items have had their locations slightly obscured to avoid spoiling the fun of exploration! You will find them within the indicated area.<br><br>Please send any feedback about this map or the wiki to <strong>@IceCaveBear</strong> on Discord.`;
+  aboutRow.addEventListener('click',()=>{ const o=aboutPanel.style.display==='block'; aboutPanel.style.display=o?'none':'block'; document.getElementById('sb-about-chevron').textContent=o?'▼':'▲'; localStorage.setItem('sbAboutOpen',o?'0':'1'); });
+  catList.appendChild(aboutRow);
+  catList.appendChild(aboutPanel);
+  catList.appendChild(sep({id:'sb-sep-about'}));
   FILTER_GROUPS.forEach(group => {
     const groupDiv=mk('div',{class:'filter-group'});
     const groupCollapsed=localStorage.getItem(`fg_${group.key}`)==='1';
@@ -905,11 +962,10 @@ function buildSidebar(layers) {
       mobHdr.appendChild(mobTitle); mobHdr.appendChild(mobChev);
       mobHdr.addEventListener('click',()=>{ mobDiv.classList.toggle('collapsed'); localStorage.setItem('fsg_Mobs',mobDiv.classList.contains('collapsed')?'1':'0'); });
       mobDiv.appendChild(mobHdr);
-      const mobRows = mk('div',{class:'filter-subgroup-rows'});
+      const mobRows = mk('div',{style:'display:grid;grid-template-columns:1fr 1fr;gap:0;'});
       Object.entries(MOB_FACTIONS).forEach(([faction,{icon}]) => {
         mobRows.appendChild(buildCatRow(faction, layers, icon));
       });
-      // Unfactioned mobs row (empty faction)
       if (categoryRegistry['Mobs']) mobRows.appendChild(buildCatRow('Mobs', layers));
       mobDiv.appendChild(mobRows);
       groupRows.appendChild(mobDiv);
@@ -1053,7 +1109,12 @@ function buildSidebar(layers) {
 
   // ── Checkboxes (full filter panel) ──────────────────────────────
   document.querySelectorAll('#sb-cat-list input[type="checkbox"]').forEach(cb=>{
-    cb.addEventListener('change',e=>{ const n=e.target.dataset.layer; if(!hiddenGroups.has(n)){e.target.checked?map.addLayer(layers[n]):map.removeLayer(layers[n]);} updateLocalStorage(); });
+    cb.addEventListener('change',e=>{
+      const n=e.target.dataset.layer;
+      if(!hiddenGroups.has(n)){e.target.checked?map.addLayer(layers[n]):map.removeLayer(layers[n]);}
+      updateLocalStorage();
+      updateMultiFactionIcons();
+    });
   });
 
   // ── Search ───────────────────────────────────────────────────────
@@ -1384,6 +1445,58 @@ function buildCustomPanel(panel) {
 
   panel.appendChild(statusEl);
   panel.appendChild(iconGrid);
+  panel.appendChild(sep());
+
+  // ── My Icons list ────────────────────────────────────────────────
+  const myTitle = mk('div',{class:'cust-section-title',id:'my-icons-title'});
+  myTitle.textContent = `My Icons (${customMarkers.length})`;
+  const myList = mk('div',{id:'my-icons-list',style:'display:flex;flex-direction:column;gap:0.3em;'});
+
+  function refreshMyIcons() {
+    myTitle.textContent = `My Icons (${customMarkers.length})`;
+    myList.innerHTML = '';
+    if (!customMarkers.length) {
+      const empty = mk('div',{style:'font-size:0.78em;color:#888;padding:0.3em 0;'});
+      empty.textContent = 'No icons placed yet'; myList.appendChild(empty); return;
+    }
+    customMarkers.forEach((cm, i) => {
+      const row = mk('div',{style:'background:rgb(225,220,210);border-radius:5px;padding:0.4em 0.6em;border:1px solid #c0b898;'});
+      const topRow = mk('div',{style:'display:flex;align-items:center;gap:0.35em;'});
+
+      // Icon preview (coloured)
+      const iconPrev = mk('span',{style:`font-size:1.2em;color:${cm.colour||'#e74c3c'};text-shadow:0 1px 3px rgba(0,0,0,0.4);flex-shrink:0;line-height:1;`});
+      iconPrev.textContent = cm.icon || '⚔️';
+
+      // Editable note/name
+      const nameInp = mk('input'); Object.assign(nameInp,{type:'text',value:cm.note||'',placeholder:'Add a name…',style:'flex:1;padding:0.2em 0.4em;border:1px solid #a09880;border-radius:3px;font-size:0.79em;background:transparent;color:#3a2e1e;outline:none;min-width:0;cursor:text;'});
+      nameInp.addEventListener('change',()=>{ cm.note=nameInp.value.trim(); saveCustom(); refreshMyIcons(); });
+
+      // Up/down sort
+      const upBtn = mk('button',{style:'background:none;border:none;cursor:pointer;color:#555;font-size:0.8em;padding:0.1em;line-height:1;'}); upBtn.textContent='↑';
+      upBtn.addEventListener('click',()=>{ if(i>0){[customMarkers[i-1],customMarkers[i]]=[customMarkers[i],customMarkers[i-1]]; saveCustom(); renderCustomMarkers(); refreshMyIcons();} });
+      const dnBtn = mk('button',{style:'background:none;border:none;cursor:pointer;color:#555;font-size:0.8em;padding:0.1em;line-height:1;'}); dnBtn.textContent='↓';
+      dnBtn.addEventListener('click',()=>{ if(i<customMarkers.length-1){[customMarkers[i],customMarkers[i+1]]=[customMarkers[i+1],customMarkers[i]]; saveCustom(); renderCustomMarkers(); refreshMyIcons();} });
+
+      // Fly to
+      const flyBtn = mk('button',{style:'background:none;border:none;cursor:pointer;color:#388e9f;font-size:0.85em;padding:0.1em 0.2em;'}); flyBtn.title='Go to marker'; flyBtn.textContent='🎯';
+      flyBtn.addEventListener('click',()=>{ map.flyTo([cm.lat,cm.lng],1,{animate:true,duration:0.7}); });
+
+      // Delete
+      const delBtn = mk('button',{style:'background:none;border:none;cursor:pointer;color:#c0392b;font-size:0.8em;padding:0.1em 0.2em;'}); delBtn.innerHTML=SVG.trash;
+      delBtn.addEventListener('click',()=>{ customMarkers.splice(i,1); saveCustom(); renderCustomMarkers(); refreshMyIcons(); });
+
+      topRow.appendChild(iconPrev); topRow.appendChild(nameInp); topRow.appendChild(upBtn); topRow.appendChild(dnBtn); topRow.appendChild(flyBtn); topRow.appendChild(delBtn);
+      row.appendChild(topRow);
+      myList.appendChild(row);
+    });
+  }
+
+  // Keep list in sync when markers are placed from map
+  window._refreshMyIcons = refreshMyIcons;
+
+  panel.appendChild(myTitle);
+  panel.appendChild(myList);
+  refreshMyIcons();
 }
 
 // ─── Build category row ───────────────────────────────────────────────────────
@@ -1442,6 +1555,25 @@ function wireSearch(input, clearBtn, container, layers, onResultClick) {
 }
 
 // ─── Counts, storage, clear ───────────────────────────────────────────────────
+function updateMultiFactionIcons() {
+  const checkedFactions = new Set(
+    [...document.querySelectorAll('#sb-cat-list input[type="checkbox"].category')]
+      .filter(cb => cb.checked && MOB_FACTIONS[cb.dataset.layer])
+      .map(cb => cb.dataset.layer)
+  );
+  allMarkers.forEach(({marker}) => {
+    if (!marker._allFactions || !marker._makeMultiIcon) return;
+    const visible = marker._allFactions.filter(f => checkedFactions.has(f));
+    if (visible.length === 0) {
+      // No faction selected — hide marker
+      if (map.hasLayer(marker)) map.removeLayer(marker);
+    } else {
+      // Show marker with icon of visible factions only
+      marker.setIcon(marker._makeMultiIcon(visible));
+      if (!map.hasLayer(marker)) marker.addTo(map);
+    }
+  });
+}
 function updateCounts() {
   Object.keys(categoryRegistry).forEach(cat => {
     const reg = categoryRegistry[cat];
