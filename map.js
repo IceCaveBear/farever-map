@@ -843,10 +843,6 @@ function buildSidebar(layers) {
   viewBtns.appendChild(btnTV);
   hdr.appendChild(title); hdr.appendChild(viewBtns);
   sidebar.appendChild(hdr);
-  sidebar.appendChild(sep({id:'sb-sep-first'}));
-
-  // ── About ─────────────────────────────── moved inside filter panel ──
-  // ── Search ────────────────────────────── moved inside filter panel ──
 
   // ── Tabs: Filter / Custom / Routes ──────────────────────────────────
   const tabBar=mk('div',{id:'sb-tabs'});
@@ -865,12 +861,11 @@ function buildSidebar(layers) {
   const searchRow=mk('div',{id:'sb-search-row',style:'flex-shrink:0;'});
   searchRow.innerHTML=`<input id="sb-search" type="text" placeholder="🔍 Search markers & regions…" autocomplete="off"><button id="sb-search-clear" style="display:none">✕</button>`;
   sidebar.appendChild(searchRow);
-  sidebar.appendChild(sep());
 
   // ── Panel: Filter ───────────────────────────────────────────────────
   const filterPanel=mk('div',{id:'sb-panel-filter',class:'sb-panel active'});
 
-  // Tool row inside filter panel
+  // Tool row — outside filter panel so visible in compact mode
   const iconTools=mk('div',{id:'sb-icon-tools'});
   const searchToolBtn=mkToolBtn('sb-search-tool',SVG.search,'Search'); searchToolBtn.classList.add('compact-only');
   const completedRow=mk('div',{style:'display:flex;border-bottom:1px solid rgba(0,0,0,0.07);flex-shrink:0;'});
@@ -880,8 +875,8 @@ function buildSidebar(layers) {
   const shareBtn=mkToolBtn('sb-share-btn',`<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="12" cy="13" r="2"/><line x1="6" y1="9" x2="10" y2="12"/><line x1="10" y1="4" x2="6" y2="7"/></svg>`,'Share Location');
   shareBtn.addEventListener('click', copyPermalink);
   iconTools.appendChild(searchToolBtn); iconTools.appendChild(completedRow); iconTools.appendChild(shareBtn);
-  filterPanel.appendChild(iconTools);
-  filterPanel.appendChild(sep());
+  sidebar.appendChild(iconTools);
+  // filterPanel follows directly — zone toggles have sep after them
 
   // Zone toggles inside filter panel
   const zoneTogs=mk('div',{id:'sb-zone-toggles'});
@@ -923,11 +918,40 @@ function buildSidebar(layers) {
     ghdr.setAttribute('data-group', group.key);
     const eyeBtn=mk('button',{class:'fgh-eye'}); eyeBtn.innerHTML=SVG.eye;
     eyeBtn.addEventListener('click',e=>{ e.stopPropagation(); toggleGroupVisibility(group, layers, eyeBtn); });
+
+    // Select-all / deselect-all button — icon reflects current state
+    const selAllBtn=mk('button',{class:'fgh-sel-all'}); selAllBtn.title='Select/deselect all';
+    const svgCheck='<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="1,6 4,9 11,2"/></svg>';
+    const svgDash='<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="2" y1="6" x2="10" y2="6"/></svg>';
+    function updateSelAllIcon() {
+      const inputs=[...groupRows.querySelectorAll('input[type="checkbox"][data-layer]')];
+      const allChecked=inputs.length>0&&inputs.every(cb=>cb.checked);
+      selAllBtn.innerHTML=allChecked?svgCheck:svgDash;
+      selAllBtn.title=allChecked?'Deselect all':'Select all';
+      selAllBtn.style.opacity=allChecked?'1':'0.7';
+    }
+    selAllBtn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const inputs=[...groupRows.querySelectorAll('input[type="checkbox"][data-layer]')];
+      const anyUnchecked=inputs.some(cb=>!cb.checked);
+      inputs.forEach(cb=>{
+        const n=cb.dataset.layer;
+        if(anyUnchecked){ cb.checked=true; if(!hiddenGroups.has(n)&&layers[n]) map.addLayer(layers[n]); }
+        else { cb.checked=false; if(layers[n]) map.removeLayer(layers[n]); }
+      });
+      updateLocalStorage();
+      updateSelAllIcon();
+      updateMultiFactionIcons();
+    });
+    // Update icon after sidebar is built
+    requestAnimationFrame(updateSelAllIcon);
+
     ghdr.innerHTML=`<div class="fgh-left"><span>${group.icon}</span><span class="fgh-title">${group.title}</span></div><div style="display:flex;align-items:center;gap:0.4em"></div>`;
+    ghdr.querySelector('div:last-child').prepend(selAllBtn);
     ghdr.querySelector('div:last-child').prepend(eyeBtn);
     const chev=mk('span',{class:'fgh-chevron'}); chev.textContent='▼';
     ghdr.querySelector('div:last-child').appendChild(chev);
-    ghdr.addEventListener('click',e=>{ if(e.target.closest('.fgh-eye')) return; groupDiv.classList.toggle('collapsed'); localStorage.setItem(`fg_${group.key}`,groupDiv.classList.contains('collapsed')?'1':'0'); });
+    ghdr.addEventListener('click',e=>{ if(e.target.closest('.fgh-eye')||e.target.closest('.fgh-sel-all')) return; groupDiv.classList.toggle('collapsed'); localStorage.setItem(`fg_${group.key}`,groupDiv.classList.contains('collapsed')?'1':'0'); });
 
     const groupRows=mk('div',{class:'filter-group-rows'});
 
@@ -1155,14 +1179,17 @@ function toggleGroupVisibility(group, layers, eyeBtn) {
     if (nowHiding) {
       hiddenGroups.add(cat);
       if (layers[cat]) map.removeLayer(layers[cat]);
-      document.querySelectorAll(`input[data-layer="${cat}"]`).forEach(cb=>{ cb.checked=false; cb.closest('.compact-cat-row')?.classList.remove('checked'); });
+      // DON'T uncheck — eye only hides visually
     } else {
       hiddenGroups.delete(cat);
-      document.querySelectorAll(`input[data-layer="${cat}"]`).forEach(cb=>{ cb.checked=true; cb.closest('.compact-cat-row')?.classList.add('checked'); });
-      if (layers[cat]) map.addLayer(layers[cat]);
+      // Only re-add layer if checkbox is currently checked
+      document.querySelectorAll(`input[data-layer="${cat}"]`).forEach(cb=>{
+        if (cb.checked && layers[cat]) map.addLayer(layers[cat]);
+      });
     }
   });
   updateLocalStorage();
+  if (group.hasMobSub) updateMultiFactionIcons();
 }
 
 // ─── Route share codes ────────────────────────────────────────────────────────
@@ -1210,7 +1237,7 @@ function buildRoutesPanel(panel) {
   panel.innerHTML = '';
 
   // ── Hint ──────────────────────────────────────────────────────────
-  const hint = mk('div',{class:'cust-mode-status',style:'font-size:0.74em;font-weight:700;color:#f0a040;padding:0.2em 0;flex-shrink:0;'});
+  const hint = mk('div',{class:'cust-mode-status',style:'font-size:0.74em;font-weight:700;color:#1a1008;padding:0.2em 0;flex-shrink:0;'});
   hint.textContent = 'Hold & drag on the map to draw a route';
 
   // ── Name input ────────────────────────────────────────────────────
@@ -1411,7 +1438,7 @@ function buildCustomPanel(panel) {
 
   // Status hint — always on top, never behind grid
   const statusEl=mk('div',{class:'cust-mode-status',id:'cust-mode-status'});
-  statusEl.style.cssText='font-size:0.74em;font-weight:700;color:#f0a040;min-height:1.6em;padding:0.2em 0;flex-shrink:0;';
+  statusEl.style.cssText='font-size:0.74em;font-weight:700;color:#1a1008;min-height:1.6em;padding:0.2em 0;flex-shrink:0;';
   statusEl.textContent='Select an icon then click the map to place it';
 
   // Icon grid
@@ -1509,7 +1536,7 @@ function buildCatRow(name, layers, iconOverride) {
     ? `<img src="${iconUrl}" class="sb-cat-icon" alt="">`
     : `<span class="sb-cat-dot-wrap"><span class="sb-cat-dot" style="background:${colour}"></span></span>`;
   const isCollectable = COMPLETABLE.has(name);
-  row.innerHTML=`<input type="checkbox" data-layer="${name}" class="category" style="display:none"><span class="sb-check-img"></span>${indicator}<span class="sb-cat-name" style="color:${colour}">${name}</span><span class="sb-cat-count" data-cat="${name}">${isCollectable?`0/${total}`:total}</span>`;
+  row.innerHTML=`<input type="checkbox" data-layer="${name}" class="category" style="display:none"><span class="sb-check-img"></span>${indicator}<span class="sb-cat-name">${name}</span><span class="sb-cat-count" data-cat="${name}">${isCollectable?`0/${total}`:total}</span>`;
   return row;
 }
 
@@ -1563,12 +1590,11 @@ function updateMultiFactionIcons() {
   );
   allMarkers.forEach(({marker}) => {
     if (!marker._allFactions || !marker._makeMultiIcon) return;
-    const visible = marker._allFactions.filter(f => checkedFactions.has(f));
+    // Visible = checked AND not hidden by eye toggle
+    const visible = marker._allFactions.filter(f => checkedFactions.has(f) && !hiddenGroups.has(f));
     if (visible.length === 0) {
-      // No faction selected — hide marker
       if (map.hasLayer(marker)) map.removeLayer(marker);
     } else {
-      // Show marker with icon of visible factions only
       marker.setIcon(marker._makeMultiIcon(visible));
       if (!map.hasLayer(marker)) marker.addTo(map);
     }
@@ -1581,7 +1607,7 @@ function updateCounts() {
     if (COMPLETABLE.has(cat)) {
       const done = reg.markerIds.filter(id => completedMarkers.has(id)).length;
       el.textContent = `${done}/${reg.total}`;
-      el.style.color = done===reg.total&&reg.total>0 ? '#27ae60' : done>0 ? '#e67e22' : '#777';
+      el.style.color = done===reg.total&&reg.total>0 ? '#1a7a40' : done>0 ? '#b05a10' : '#5a4a30';
       el.style.fontWeight = done>0 ? 'bold' : 'normal';
     } else {
       el.textContent = reg.total;
