@@ -448,12 +448,18 @@ function finishRoute() {
 
 // ─── Permalink: read URL hash on load ────────────────────────────────────────
 (function readPermalink() {
-  // Priority 1: URL hash (shared link)
   const hash = window.location.hash.replace('#','');
-  const m = hash.match(/^@(-?\d+\.?\d*),(-?\d+\.?\d*),([-\d.]+)$/);
+  const m = hash.match(/^@(-?\d+\.?\d*),(-?\d+\.?\d*),([-\d.]+)(?:,(.+))?$/);
   if (m) {
     map.setView([parseFloat(m[1]), parseFloat(m[2])], parseFloat(m[3]));
     window._permalinkApplied = true;
+    // m[4] = base64-encoded filter state if present
+    if (m[4]) {
+      try {
+        const filterStr = atob(m[4].replace(/-/g,'+').replace(/_/g,'/'));
+        window._permalinkFilters = filterStr ? new Set(filterStr.split(',')) : null;
+      } catch(e) {}
+    }
     return;
   }
   // Priority 2: last saved position in localStorage
@@ -462,10 +468,25 @@ function finishRoute() {
     if (saved) {
       const {lat,lng,zoom} = JSON.parse(saved);
       map.setView([lat,lng], zoom);
-      window._permalinkApplied = true; // skip fitBounds
+      window._permalinkApplied = true;
     }
   } catch(e) {}
 })();
+
+// Apply permalink filters after sidebar is built (called from initMap)
+function applyPermalinkFilters(layers) {
+  if (!window._permalinkFilters) return;
+  const active = window._permalinkFilters;
+  document.querySelectorAll('#sb-cat-list input[type="checkbox"][data-layer]').forEach(cb => {
+    const n = cb.dataset.layer;
+    cb.checked = active.has(n);
+    if (active.has(n) && !hiddenGroups.has(n) && layers[n]) map.addLayer(layers[n]);
+    else if (layers[n]) map.removeLayer(layers[n]);
+  });
+  updateLocalStorage();
+  updateMultiFactionIcons();
+  window._permalinkFilters = null;
+}
 
 // Save position continuously
 map.on('moveend', () => {
@@ -476,7 +497,11 @@ map.on('moveend', () => {
 function copyPermalink() {
   const c = map.getCenter();
   const z = map.getZoom();
-  const hash = `#@${c.lat.toFixed(1)},${c.lng.toFixed(1)},${z.toFixed(1)}`;
+  // Encode checked layers as base64
+  const checked = [...document.querySelectorAll('#sb-cat-list input[type="checkbox"][data-layer]')]
+    .filter(cb => cb.checked).map(cb => cb.dataset.layer).join(',');
+  const filterCode = btoa(checked).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+  const hash = `#@${c.lat.toFixed(1)},${c.lng.toFixed(1)},${z.toFixed(1)},${filterCode}`;
   const url  = window.location.origin + window.location.pathname + hash;
   window.history.replaceState(null, '', hash);
   navigator.clipboard?.writeText(url).then(() => {
@@ -803,6 +828,7 @@ function initMap(data) {
   loadChecked(layers);
   updateCounts();
   updateMultiFactionIcons();
+  applyPermalinkFilters(layers); // override filters if shared link has filter state
   loadRegions().then(() => refreshRegionVisibility());
   renderCustomMarkers();
   renderRoutes();
@@ -872,7 +898,7 @@ function buildSidebar(layers) {
   const hideBtn=mk('button',{id:'sb-hide-btn',class:'sb-tool-btn',style:'border-bottom:none;border-right:1px solid rgba(0,0,0,0.07);flex:1;'}); hideBtn.setAttribute('data-tip','Hide Completed'); hideBtn.innerHTML=`${SVG.eye}<span class="sb-tool-label">Hide Completed</span>`;
   const resetBtn=mk('button',{id:'sb-reset-btn',class:'sb-tool-btn',style:'border-bottom:none;flex:1;color:#c0392b;'}); resetBtn.setAttribute('data-tip','Reset Completed'); resetBtn.innerHTML=`${SVG.reset}<span class="sb-tool-label">Reset Completed</span>`;
   completedRow.appendChild(hideBtn); completedRow.appendChild(resetBtn);
-  const shareBtn=mkToolBtn('sb-share-btn',`<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="12" cy="13" r="2"/><line x1="6" y1="9" x2="10" y2="12"/><line x1="10" y1="4" x2="6" y2="7"/></svg>`,'Share Location');
+  const shareBtn=mkToolBtn('sb-share-btn',`<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="12" cy="13" r="2"/><line x1="6" y1="9" x2="10" y2="12"/><line x1="10" y1="4" x2="6" y2="7"/></svg>`,'Share Location & Filter');
   shareBtn.addEventListener('click', copyPermalink);
   iconTools.appendChild(searchToolBtn); iconTools.appendChild(completedRow); iconTools.appendChild(shareBtn);
   sidebar.appendChild(iconTools);
