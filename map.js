@@ -297,8 +297,14 @@ const CUSTOM_COLOURS = ['#e74c3c','#e67e22','#f1c40f','#2ecc71','#1abc9c','#3498
 
 let customMarkers = JSON.parse(localStorage.getItem('customMarkers')||'[]');
 let customRoutes  = JSON.parse(localStorage.getItem('customRoutes') ||'[]');
+// Backwards compatibility: ensure all markers/routes have new fields
+customMarkers.forEach(cm => { if (cm.hidden===undefined) cm.hidden=false; if (cm.ringColour===undefined) cm.ringColour=null; if (cm.ringThick===undefined) cm.ringThick=3; if (cm.ringStyle===undefined) cm.ringStyle='solid'; if (cm.comment===undefined) cm.comment=''; });
+customRoutes.forEach(rt => { if (rt.hidden===undefined) rt.hidden=false; if (rt.comment===undefined) rt.comment=''; });
 let selectedCustIcon   = localStorage.getItem('custIcon')  || '⚔️';
 let selectedCustColour = localStorage.getItem('custColour')|| '#e74c3c';
+let selectedRingColour = localStorage.getItem('ringColour') || null;
+let selectedRingThick  = parseFloat(localStorage.getItem('ringThick')||'3');
+let selectedRingStyle  = localStorage.getItem('ringStyle') || 'solid';
 // ─── Route drawing state ──────────────────────────────────────────────────────
 let routeDrawing = false;
 let routeDrawActive = false; // mouse is held down drawing
@@ -308,15 +314,48 @@ let routesVisible = localStorage.getItem('routesVisible') !== '0';
 let globalRouteOpacity = parseFloat(localStorage.getItem('routeOpacity')||'0.88');
 
 // Subsample raw points to avoid too many stored points
-function subsample(pts, minDist=15) {
-  if (!pts.length) return pts;
-  const out = [pts[0]];
-  for (let i=1;i<pts.length;i++) {
-    const last=out[out.length-1];
-    const dx=pts[i][1]-last[1], dy=pts[i][0]-last[0];
-    if (Math.sqrt(dx*dx+dy*dy)>=minDist) out.push(pts[i]);
+// Ramer-Douglas-Peucker: keep only points that deviate from straight line by > epsilon
+// Stores far fewer points than distance-based subsample, preserves shape better
+function rdpSimplify(pts, epsilon=6) {
+  if (pts.length <= 2) return pts;
+  // Find point with max distance from line between first and last
+  let maxDist = 0, maxIdx = 0;
+  const [ax,ay] = [pts[0][1], pts[0][0]];
+  const [bx,by] = [pts[pts.length-1][1], pts[pts.length-1][0]];
+  const len = Math.sqrt((bx-ax)**2+(by-ay)**2);
+  for (let i=1; i<pts.length-1; i++) {
+    const [px,py] = [pts[i][1], pts[i][0]];
+    const dist = len < 0.001
+      ? Math.sqrt((px-ax)**2+(py-ay)**2)
+      : Math.abs((by-ay)*px-(bx-ax)*py+bx*ay-by*ax) / len;
+    if (dist > maxDist) { maxDist=dist; maxIdx=i; }
   }
-  if (out[out.length-1]!==pts[pts.length-1]) out.push(pts[pts.length-1]);
+  if (maxDist > epsilon) {
+    const left  = rdpSimplify(pts.slice(0, maxIdx+1), epsilon);
+    const right = rdpSimplify(pts.slice(maxIdx), epsilon);
+    return [...left.slice(0,-1), ...right];
+  }
+  return [pts[0], pts[pts.length-1]];
+}
+
+// Catmull-Rom spline: given keypoints, generate smooth interpolated points
+function catmullRom(pts, tension=0.5, segments=8) {
+  if (pts.length < 2) return pts;
+  const out = [];
+  // Pad ends so first and last keypoints are included
+  const p = [pts[0], ...pts, pts[pts.length-1]];
+  for (let i=1; i<p.length-2; i++) {
+    const [p0,p1,p2,p3] = [p[i-1],p[i],p[i+1],p[i+2]];
+    for (let t=0; t<segments; t++) {
+      const s=t/segments, s2=s*s, s3=s2*s;
+      const h0=-tension*s3+2*tension*s2-tension*s;
+      const h1=(2-tension)*s3+(tension-3)*s2+1;
+      const h2=(tension-2)*s3+(3-2*tension)*s2+tension*s;
+      const h3=tension*s3-tension*s2;
+      out.push([h0*p0[0]+h1*p1[0]+h2*p2[0]+h3*p3[0], h0*p0[1]+h1*p1[1]+h2*p2[1]+h3*p3[1]]);
+    }
+  }
+  out.push(pts[pts.length-1]);
   return out;
 }
 
@@ -324,16 +363,33 @@ const custMarkerLayer = L.layerGroup().addTo(map);
 const custRouteLayer  = L.layerGroup().addTo(map);
 
 function saveCustom() {
-  localStorage.setItem('customMarkers', JSON.stringify(customMarkers.map(({lat,lng,icon,colour,note})=>({lat,lng,icon,colour,note}))));
-  localStorage.setItem('customRoutes',  JSON.stringify(customRoutes.map(({points,colour,note,opacity})=>({points,colour,note:note||'',opacity:opacity??0.88}))));
+  localStorage.setItem('customMarkers', JSON.stringify(customMarkers.map(({lat,lng,icon,ringColour,ringThick,ringStyle,note,comment,hidden})=>({lat,lng,icon,ringColour:ringColour||null,ringThick:ringThick||3,ringStyle:ringStyle||'solid',note,comment:comment||'',hidden:hidden||false}))));
+
+  localStorage.setItem('customRoutes',  JSON.stringify(customRoutes.map(({points,colour,note,comment,opacity})=>({points,colour,note:note||'',comment:comment||'',opacity:opacity??0.88}))));
 }
-function makeCustMarkerIcon(icon, colour) {
-  return L.divIcon({ html:`<div style="font-size:1.6em;color:${colour};text-shadow:1px 1px 4px rgba(0,0,0,0.7),0 0 8px rgba(0,0,0,0.5);line-height:1;cursor:pointer;">${icon}</div>`, className:'', iconAnchor:[12,22], iconSize:null });
+function makeCustMarkerIcon(icon, ringColour, ringThick, ringStyle) {
+  let ring = '';
+  if (ringColour) {
+    const t = ringThick || 3;
+    const r = 19;
+    let strokeDash = '';
+    if (ringStyle === 'dashed') strokeDash = `stroke-dasharray="${t*2.5} ${t*1.5}"`;
+    else if (ringStyle === 'dotted') strokeDash = `stroke-dasharray="${t*0.5} ${t*2}"`;
+    ring = `<svg width="44" height="44" style="position:absolute;top:-6px;left:-6px;pointer-events:none;" viewBox="0 0 44 44">
+      <circle cx="22" cy="22" r="${r}" fill="none" stroke="${ringColour}" stroke-width="${t}" ${strokeDash} opacity="0.95"/>
+      <circle cx="22" cy="22" r="${r}" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="1" opacity="0.4"/>
+    </svg>`;
+  }
+  return L.divIcon({
+    html: `<div style="position:relative;width:32px;height:32px;display:flex;align-items:center;justify-content:center;">${ring}<span style="font-size:1.55em;text-shadow:1px 1px 3px rgba(0,0,0,0.7),0 0 6px rgba(0,0,0,0.4);line-height:1;position:relative;z-index:1;cursor:pointer;">${icon}</span></div>`,
+    className:'', iconAnchor:[16,28], iconSize:[32,32]
+  });
 }
 function renderCustomMarkers() {
   custMarkerLayer.clearLayers();
   customMarkers.forEach((cm, i) => {
-    const m = L.marker([cm.lat, cm.lng], { icon:makeCustMarkerIcon(cm.icon||'⚔️', cm.colour||'#e74c3c'), draggable:true });
+    if (cm.hidden) return; // skip hidden markers
+    const m = L.marker([cm.lat, cm.lng], { icon:makeCustMarkerIcon(cm.icon||'⚔️', cm.ringColour||null, cm.ringThick||3, cm.ringStyle||'solid'), draggable:true });
     m.bindPopup(buildCustPopup(cm, i), {maxWidth:200});
     m.on('click', () => openCustPopup(m));
     m.on('dragend', () => { const p=m.getLatLng(); cm.lat=p.lat; cm.lng=p.lng; saveCustom(); });
@@ -342,16 +398,31 @@ function renderCustomMarkers() {
   });
 }
 function buildCustPopup(cm, i) {
-  const div = document.createElement('div');
-  div.style.cssText='font-family:Noto,sans-serif;min-width:140px;';
-  const noteEl = document.createElement('textarea');
-  noteEl.className='cust-popup-note-area';
-  noteEl.rows=3; noteEl.value=cm.note||''; noteEl.placeholder='Add a note…';
-  noteEl.addEventListener('change', () => { cm.note=noteEl.value; saveCustom(); });
-  const delBtn = document.createElement('button');
-  delBtn.className='cust-popup-del'; delBtn.textContent='🗑 Delete Marker';
-  delBtn.addEventListener('click', () => { customMarkers.splice(i,1); saveCustom(); renderCustomMarkers(); window._refreshMyIcons?.(); map.closePopup(); });
-  div.appendChild(noteEl); div.appendChild(delBtn);
+  const div=document.createElement('div'); div.style.cssText='font-family:Noto,sans-serif;min-width:170px;';
+
+  const nameLabel=document.createElement('div'); nameLabel.style.cssText='font-size:0.78em;font-weight:700;color:#7a6a50;margin-bottom:0.15em;text-transform:uppercase;letter-spacing:0.04em;'; nameLabel.textContent='Name';
+  const nameEl=document.createElement('input'); nameEl.type='text'; nameEl.value=cm.note||''; nameEl.placeholder='Icon name…';
+  nameEl.style.cssText='width:100%;padding:0.3em 0.5em;border:1px solid #a09880;border-radius:4px;font-size:0.95em;font-weight:600;color:#3a2e1e;background:rgb(235,228,215);outline:none;box-sizing:border-box;margin-bottom:0.5em;';
+  cm._popNameEl = nameEl;
+  nameEl.addEventListener('input',()=>{
+    cm.note = nameEl.value;
+    saveCustom();
+    if (cm._sbNameEl) cm._sbNameEl.value = cm.note;
+  });
+
+  const commentLabel=document.createElement('div'); commentLabel.style.cssText='font-size:0.78em;font-weight:700;color:#7a6a50;margin-bottom:0.15em;text-transform:uppercase;letter-spacing:0.04em;'; commentLabel.textContent='Comment';
+  const commentEl=document.createElement('textarea'); commentEl.rows=3; commentEl.value=cm.comment||''; commentEl.placeholder='Add a comment…';
+  commentEl.style.cssText='width:100%;padding:0.3em 0.5em;border:1px solid #a09880;border-radius:4px;font-size:0.9em;line-height:1.4;color:#3a2e1e;background:rgb(235,228,215);outline:none;resize:vertical;box-sizing:border-box;margin-bottom:0.5em;font-family:Noto,sans-serif;';
+  cm._popCommentEl = commentEl;
+  commentEl.addEventListener('input',()=>{
+    cm.comment = commentEl.value;
+    saveCustom();
+    if (cm._sbCommentEl) { cm._sbCommentEl.value = cm.comment; cm._sbCommentEl.dispatchEvent(new Event('_sync')); }
+  });
+
+  const delBtn=document.createElement('button'); delBtn.className='cust-popup-del'; delBtn.textContent='🗑 Delete Marker';
+  delBtn.addEventListener('click',()=>{ customMarkers.splice(i,1); saveCustom(); renderCustomMarkers(); window._refreshMyIcons?.(); map.closePopup(); });
+  div.append(nameLabel, nameEl, commentLabel, commentEl, delBtn);
   return div;
 }
 
@@ -374,108 +445,213 @@ map.on('popupopen', () => {
   sb.style.transform = `translateX(${sb.offsetWidth||310}px)`;
   map.once('popupclose', () => { sb.style.transform = ''; });
 });
+// ─── Shared route drawing helper (used by renderRoutes + temp shared route) ───
+function drawRouteOnLayer(points, colour, opacity, layer) {
+  if (points.length < 2) return;
+  const c = colour || '#e74c3c';
+
+  // Smooth the keypoints into a curve using Catmull-Rom spline
+  const smooth = catmullRom(points, 0.5, 10);
+
+  // Main line
+  L.polyline(smooth, { color:c, weight:3.5, opacity, smoothFactor:0 }).addTo(layer);
+
+  // Directional arrows along smoothed path
+  const total = smooth.length;
+  // Place arrows every ~15% of path length, minimum 1 arrow if path long enough
+  const interval = Math.max(6, Math.floor(total * 0.15));
+  for (let i = Math.floor(interval/2); i < total - 1; i += interval) {
+    const a = smooth[i], b = smooth[Math.min(i+3, total-1)];
+    const dX = b[1]-a[1], dY = b[0]-a[0];
+    const angle = Math.atan2(dX, dY) * 180 / Math.PI;
+    L.marker([a[0],a[1]], { interactive:false, icon: L.divIcon({
+      className:'',
+      iconAnchor:[8,10], iconSize:[16,20],
+      html:`<div style="transform:rotate(${angle}deg);transform-origin:50% 50%;filter:drop-shadow(0 0 2px rgba(0,0,0,0.8));">
+        <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
+          <line x1="8" y1="19" x2="8" y2="1" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/>
+          <polyline points="2,9 8,1 14,9" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <polyline points="4,14 8,7 12,14" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.65"/>
+        </svg></div>`
+    })}).addTo(layer);
+  }
+
+  // Start marker — green circle with S (on original first keypoint)
+  const start = points[0];
+  L.marker([start[0],start[1]], { interactive:false, icon: L.divIcon({
+    className:'', iconAnchor:[11,11], iconSize:[22,22],
+    html:`<div style="width:22px;height:22px;border-radius:50%;background:#27ae60;border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:sans-serif;font-size:10px;font-weight:800;color:white;">S</div>`
+  })}).addTo(layer);
+
+  // End marker — red circle with E (on original last keypoint)
+  const end = points[points.length-1];
+  L.marker([end[0],end[1]], { interactive:false, icon: L.divIcon({
+    className:'', iconAnchor:[11,11], iconSize:[22,22],
+    html:`<div style="width:22px;height:22px;border-radius:50%;background:#c0392b;border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:sans-serif;font-size:10px;font-weight:800;color:white;">E</div>`
+  })}).addTo(layer);
+}
+
 function renderRoutes() {
   custRouteLayer.clearLayers();
   if (!routesVisible) { window._routeRenderHook?.(); return; }
   customRoutes.forEach((route, ri) => {
     if (route.points.length < 2) return;
-    const raw = route.points.map(p=>[p[0],p[1]]);
-    const smooth = raw;
+    const points = route.points.map(p=>[p[0],p[1]]);
     const colour = route.colour||'#e74c3c';
-    const opacity = (route.hidden ? 0 : globalRouteOpacity);
-    if (route.hidden) return; // skip hidden routes
-    const line = L.polyline(smooth, { color:colour, weight:3.5, opacity:opacity, smoothFactor:1 });
-    line.addTo(custRouteLayer);
+    if (route.hidden) return;
+    const opacity = globalRouteOpacity;
 
-    // Place directional arrows along path
-    const total = smooth.length;
-    const interval = Math.max(8, Math.floor(total * 0.18));
-    for (let i = Math.floor(interval/2); i < total - 2; i += interval) {
-      const a = smooth[i];
-      const b = smooth[Math.min(i + 5, total - 1)];
-      // In CRS.Simple: lat=Y(up), lng=X(right)
-      // Direction vector: dX = b.lng-a.lng, dY = b.lat-a.lat (but screen Y is inverted)
-      // CSS rotate(0deg) = pointing up (north). We want arrow pointing toward b.
-      // angle = atan2(dX, dY) gives clockwise rotation from north
-      const dX = b[1] - a[1]; // lng diff = horizontal
-      const dY = b[0] - a[0]; // lat diff = vertical (in map coords, positive = up)
-      const angle = Math.atan2(dX, dY) * 180 / Math.PI;
-      const arrowIcon = L.divIcon({
-        html: `<div style="transform:rotate(${angle}deg);transform-origin:50% 50%;filter:drop-shadow(0 0 2px rgba(0,0,0,0.8));">
-          <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <line x1="8" y1="19" x2="8" y2="1" stroke="${colour}" stroke-width="2.5" stroke-linecap="round"/>
-            <polyline points="2,9 8,1 14,9" stroke="${colour}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <polyline points="4,14 8,7 12,14" stroke="${colour}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.65"/>
-          </svg>
-        </div>`,
-        className: '',
-        iconAnchor: [8, 10],
-        iconSize: [16, 20]
-      });
-      L.marker([a[0], a[1]], { icon: arrowIcon, interactive: false }).addTo(custRouteLayer);
-    }
+    drawRouteOnLayer(points, colour, opacity, custRouteLayer);
 
     // Clickable hit line for popup
-    const hitLine = L.polyline(smooth, {color:'transparent', weight:14, opacity:0});
+    const hitLine = L.polyline(points, {color:'transparent', weight:14, opacity:0});
     hitLine.bindPopup(buildRoutePopup(route, ri), {maxWidth:200});
     hitLine.addTo(custRouteLayer);
   });
   window._routeRenderHook?.();
 }
 function buildRoutePopup(route, ri) {
-  const div=document.createElement('div'); div.style.cssText='font-family:Noto,sans-serif;min-width:140px;';
-  const label=document.createElement('div'); label.style.cssText='font-size:0.82em;font-weight:700;color:#3a2e1e;margin-bottom:0.4em;'; label.textContent=`Route (${route.points.length} waypoints)`;
-  const noteEl=document.createElement('textarea'); noteEl.className='cust-popup-note-area'; noteEl.rows=3; noteEl.value=route.note||''; noteEl.placeholder='Add a note…';
-  noteEl.addEventListener('change',()=>{route.note=noteEl.value;saveCustom();});
+  const div=document.createElement('div'); div.style.cssText='font-family:Noto,sans-serif;min-width:170px;';
+
+  const nameLabel=document.createElement('div'); nameLabel.style.cssText='font-size:0.78em;font-weight:700;color:#7a6a50;margin-bottom:0.15em;text-transform:uppercase;letter-spacing:0.04em;'; nameLabel.textContent='Route Name';
+  const nameEl=document.createElement('input'); nameEl.type='text'; nameEl.value=route.note||`Route ${ri+1}`; nameEl.placeholder='Route name…';
+  nameEl.style.cssText='width:100%;padding:0.3em 0.5em;border:1px solid #a09880;border-radius:4px;font-size:0.95em;font-weight:600;color:#3a2e1e;background:rgb(235,228,215);outline:none;box-sizing:border-box;margin-bottom:0.5em;';
+  route._popNameEl = nameEl;
+  nameEl.addEventListener('input',()=>{
+    route.note = nameEl.value.trim()||`Route ${ri+1}`;
+    saveCustom();
+    if (route._sbNameEl) route._sbNameEl.value = route.note;
+  });
+
+  const commentLabel=document.createElement('div'); commentLabel.style.cssText='font-size:0.78em;font-weight:700;color:#7a6a50;margin-bottom:0.15em;text-transform:uppercase;letter-spacing:0.04em;'; commentLabel.textContent='Comment';
+  const commentEl=document.createElement('textarea'); commentEl.rows=3; commentEl.value=route.comment||''; commentEl.placeholder='Add a comment…';
+  commentEl.style.cssText='width:100%;padding:0.3em 0.5em;border:1px solid #a09880;border-radius:4px;font-size:0.9em;line-height:1.4;color:#3a2e1e;background:rgb(235,228,215);outline:none;resize:vertical;box-sizing:border-box;margin-bottom:0.5em;font-family:Noto,sans-serif;';
+  route._popCommentEl = commentEl;
+  commentEl.addEventListener('input',()=>{
+    route.comment = commentEl.value;
+    saveCustom();
+    if (route._sbCommentEl) { route._sbCommentEl.value = route.comment; route._sbCommentEl.dispatchEvent(new Event('_sync')); }
+  });
+
   const delBtn=document.createElement('button'); delBtn.className='cust-popup-del'; delBtn.textContent='🗑 Delete Route';
-  delBtn.addEventListener('click',()=>{customRoutes.splice(ri,1);saveCustom();renderRoutes();map.closePopup();});
-  div.appendChild(label); div.appendChild(noteEl); div.appendChild(delBtn);
+  delBtn.addEventListener('click',()=>{ customRoutes.splice(ri,1); saveCustom(); renderRoutes(); window._routeRenderHook?.(); map.closePopup(); });
+  div.append(nameLabel, nameEl, commentLabel, commentEl, delBtn);
   return div;
 }
 function updateRoutePreview() {
   if (routePreviewLayer) map.removeLayer(routePreviewLayer);
   if (routePoints.length >= 2) {
-    const smooth = routePoints;
-    routePreviewLayer = L.polyline(smooth, {color:selectedCustColour, weight:3, dashArray:'5 4', opacity:0.8, smoothFactor:1}).addTo(map);
+    const smooth = catmullRom(routePoints, 0.5, 6);
+    routePreviewLayer = L.polyline(smooth, {color:selectedCustColour, weight:3, dashArray:'5 4', opacity:0.8, smoothFactor:0}).addTo(map);
   }
 }
 function finishRoute() {
-  const sub = subsample(routePoints, 30);
+  const sub = rdpSimplify(routePoints, 8); // keep shape-defining corners only
   if (sub.length >= 2) { customRoutes.push({points:sub, colour:selectedCustColour, note:''}); saveCustom(); renderRoutes(); }
   routePoints = []; routeDrawActive = false;
   if (routePreviewLayer) { map.removeLayer(routePreviewLayer); routePreviewLayer=null; }
 }
 
+// ─── Binary icon encoding (compact share format) ─────────────────────────────
+// Magic byte 0xA1 distinguishes new binary format from old JSON (which starts with '[' = 0x5B)
+// Backwards compatible: old JSON links still decoded via TextDecoder+JSON.parse fallback
+function _encodeIconsBin(icons) {
+  const enc = new TextEncoder();
+  const bytes = [0xA1, Math.min(icons.length, 255)];
+  for (const ic of icons) {
+    // lat/lng: signed int16, precision /4 (~0.25 map unit)
+    const ax=Math.round(ic.lat*4), ay=Math.round(ic.lng*4);
+    bytes.push((ax>>8)&0xFF,ax&0xFF,(ay>>8)&0xFF,ay&0xFF);
+    // icon: UTF-8 length-prefixed
+    const iconB=enc.encode(ic.icon||'📍'); bytes.push(iconB.length,...iconB);
+    // ringColour: 0=none, 1-N=palette index, 255+3bytes=custom RGB
+    const ci=CUSTOM_COLOURS.indexOf(ic.ringColour||'');
+    if (!ic.ringColour) { bytes.push(0); }
+    else if (ci>=0) { bytes.push(ci+1); }
+    else { const c=(ic.ringColour).replace('#',''); bytes.push(255,parseInt(c.slice(0,2),16),parseInt(c.slice(2,4),16),parseInt(c.slice(4,6),16)); }
+    // ringThick * 10 as byte (covers 0.1–25.5px)
+    bytes.push(Math.round((ic.ringThick||3)*10)&0xFF);
+    // ringStyle: 0=solid,1=dashed,2=dotted
+    bytes.push(['solid','dashed','dotted'].indexOf(ic.ringStyle||'solid'));
+    // note: length-prefixed UTF-8 (1-byte len, max 255 chars)
+    const noteB=enc.encode((ic.note||'').slice(0,255)); bytes.push(noteB.length,...noteB);
+    // comment: 2-byte length-prefixed UTF-8
+    const cmtB=enc.encode(ic.comment||''); bytes.push((cmtB.length>>8)&0xFF,cmtB.length&0xFF,...cmtB);
+    // flags: bit0=hidden
+    bytes.push(ic.hidden?1:0);
+  }
+  const bin=String.fromCharCode(...bytes);
+  return btoa(bin).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+}
+function _decodeIconsBin(code) {
+  const bin=atob(code.replace(/-/g,'+').replace(/_/g,'/'));
+  const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+  // Detect format by magic byte
+  if (bytes[0]===0xA1) {
+    // New binary format
+    const dec=new TextDecoder(); const count=bytes[1]; let i=2; const icons=[];
+    for(let n=0;n<count&&i<bytes.length;n++){
+      const ax=(bytes[i]<<8)|bytes[i+1]; const lat=(ax>32767?ax-65536:ax)/4; i+=2;
+      const ay=(bytes[i]<<8)|bytes[i+1]; const lng=(ay>32767?ay-65536:ay)/4; i+=2;
+      const iconLen=bytes[i++]; const icon=dec.decode(bytes.slice(i,i+iconLen)); i+=iconLen;
+      const ci=bytes[i++]; let ringColour=null;
+      if(ci===255){ringColour='#'+[bytes[i],bytes[i+1],bytes[i+2]].map(v=>v.toString(16).padStart(2,'0')).join('');i+=3;}
+      else if(ci>0&&ci<=CUSTOM_COLOURS.length) ringColour=CUSTOM_COLOURS[ci-1];
+      const ringThick=bytes[i++]/10;
+      const ringStyle=['solid','dashed','dotted'][bytes[i++]]||'solid';
+      const noteLen=bytes[i++]; const note=dec.decode(bytes.slice(i,i+noteLen)); i+=noteLen;
+      const cmtLen=(bytes[i]<<8)|bytes[i+1]; i+=2; const comment=dec.decode(bytes.slice(i,i+cmtLen)); i+=cmtLen;
+      const hidden=(bytes[i++]&1)===1;
+      icons.push({lat,lng,icon,ringColour,ringThick,ringStyle,note,comment,hidden});
+    }
+    return icons;
+  } else {
+    // Old JSON format (backwards compatible)
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
+}
+
 // ─── Permalink: read URL hash on load ────────────────────────────────────────
 (function readPermalink() {
   const hash = window.location.hash.replace('#','');
-  const m = hash.match(/^@(-?\d+\.?\d*),(-?\d+\.?\d*),([-\d.]+)(?:,(.+))?$/);
+  const m = hash.match(/^@(-?\d+\.?\d*),(-?\d+\.?\d*),([-\d.]+)(?:,([^&]*))?(?:&i=([A-Za-z0-9+/=_-]*))?(?:&r=([A-Za-z0-9+/=_~-]*))?$/);
   if (m) {
     map.setView([parseFloat(m[1]), parseFloat(m[2])], parseFloat(m[3]));
     window._permalinkApplied = true;
-    // m[4] = base64-encoded filter state if present
+    // m[4] = filter code
     if (m[4]) {
       try {
         const filterStr = atob(m[4].replace(/-/g,'+').replace(/_/g,'/'));
         window._permalinkFilters = filterStr ? new Set(filterStr.split(',')) : null;
       } catch(e) {}
     }
+    // m[5] = shared icons
+    if (m[5]) {
+      try {
+        const icons = _decodeIconsBin(m[5]);
+        if (Array.isArray(icons) && icons.length) window._permalinkIcons = icons;
+      } catch(e) { console.warn('icon decode error:', e); }
+    }
+    // m[6] = route code(s) separated by ~
+    if (m[6]) {
+      try {
+        const routes = m[6].split('~').map(c=>decodeRouteCode(c.trim())).filter(Boolean);
+        if (routes.length) window._permalinkRoutes = routes;
+      } catch(e) {}
+    }
     return;
   }
-  // Priority 2: last saved position in localStorage
   try {
     const saved = localStorage.getItem('mapLastPos');
-    if (saved) {
-      const {lat,lng,zoom} = JSON.parse(saved);
-      map.setView([lat,lng], zoom);
-      window._permalinkApplied = true;
-    }
+    if (saved) { const {lat,lng,zoom}=JSON.parse(saved); map.setView([lat,lng],zoom); window._permalinkApplied=true; }
   } catch(e) {}
 })();
 
 // Apply permalink filters after sidebar is built (called from initMap)
+// Skipped for route-share links — those should never touch the viewer's filters
 function applyPermalinkFilters(layers) {
   if (!window._permalinkFilters) return;
+  if (window._permalinkRoutes) return; // route-share — leave filters alone
   const active = window._permalinkFilters;
   document.querySelectorAll('#sb-cat-list input[type="checkbox"][data-layer]').forEach(cb => {
     const n = cb.dataset.layer;
@@ -483,9 +659,12 @@ function applyPermalinkFilters(layers) {
     if (active.has(n) && !hiddenGroups.has(n) && layers[n]) map.addLayer(layers[n]);
     else if (layers[n]) map.removeLayer(layers[n]);
   });
-  updateLocalStorage();
+  // NOTE: deliberately NOT calling updateLocalStorage() — shared filters are
+  // session-only. The user's own filter prefs stay intact in localStorage.
+  // If they change a filter manually, that will save as normal.
   updateMultiFactionIcons();
   window._permalinkFilters = null;
+  showToast('🔍 Shared filters applied — not saved to your settings');
 }
 
 // Save position continuously
@@ -494,21 +673,213 @@ map.on('moveend', () => {
   localStorage.setItem('mapLastPos', JSON.stringify({lat:+c.lat.toFixed(2),lng:+c.lng.toFixed(2),zoom:+z.toFixed(2)}));
 });
 
-function copyPermalink() {
-  const c = map.getCenter();
-  const z = map.getZoom();
-  // Encode checked layers as base64
+function _buildFilterCode() {
   const checked = [...document.querySelectorAll('#sb-cat-list input[type="checkbox"][data-layer]')]
     .filter(cb => cb.checked).map(cb => cb.dataset.layer).join(',');
-  const filterCode = btoa(checked).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
-  const hash = `#@${c.lat.toFixed(1)},${c.lng.toFixed(1)},${z.toFixed(1)},${filterCode}`;
-  const url  = window.location.origin + window.location.pathname + hash;
-  window.history.replaceState(null, '', hash);
-  navigator.clipboard?.writeText(url).then(() => {
-    showToast('📋 Link copied!');
-  }).catch(() => {
-    prompt('Copy this link:', url);
+  return btoa(checked).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+}
+function _copyUrl(url, toast) {
+  navigator.clipboard?.writeText(url).then(() => showToast(toast)).catch(() => prompt('Copy this link:', url));
+}
+function copyPermalink() { openShareModal(); }
+function openShareModal() {
+  document.getElementById('share-modal')?.remove();
+  const c=map.getCenter(), z=map.getZoom();
+  const SS='font-family:Noto,sans-serif;';
+
+  const overlay=document.createElement('div');
+  overlay.id='share-modal';
+  overlay.style.cssText='position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(20,12,4,0.72);backdrop-filter:blur(3px);padding:1em;';
+
+  const modal=document.createElement('div');
+  modal.style.cssText=SS+'background:#eddece;border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,0.55);width:min(340px,100%);max-height:90vh;display:flex;flex-direction:column;overflow:hidden;border:2px solid #b89060;';
+
+  // Header
+  const header=document.createElement('div');
+  header.style.cssText='background:linear-gradient(108deg,#785a37 55%,#9e7a50 55%);padding:0.65em 1em;display:flex;align-items:center;flex-shrink:0;';
+  const htitle=document.createElement('span'); htitle.textContent='Share'; htitle.style.cssText='color:#f5e8d0;font-weight:800;font-size:1.1em;flex:1;';
+  const closeBtn=document.createElement('button'); closeBtn.textContent='✕';
+  closeBtn.style.cssText='background:rgba(0,0,0,0.3);border:none;color:#f5e8d0;font-size:1em;width:1.8em;height:1.8em;border-radius:5px;cursor:pointer;';
+  closeBtn.onclick=()=>overlay.remove();
+  header.append(htitle,closeBtn);
+
+  const body=document.createElement('div');
+  body.style.cssText='padding:0.85em 1em;display:flex;flex-direction:column;gap:0.4em;overflow-y:auto;';
+
+  // Section helper
+  function mkSection(emoji, title, sub, checked, disabled) {
+    const wrap=document.createElement('div');
+    wrap.style.cssText='border-radius:7px;overflow:hidden;border:2px solid transparent;transition:border-color 0.12s;';
+    const header=document.createElement('label');
+    header.style.cssText='display:flex;align-items:center;gap:0.6em;padding:0.5em 0.7em;background:rgb(218,212,200);cursor:'+(disabled?'default':'pointer')+';';
+    const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=!!checked; cb.disabled=!!disabled;
+    cb.style.cssText='width:16px;height:16px;flex-shrink:0;accent-color:#785a37;cursor:inherit;';
+    const lbl=document.createElement('div'); lbl.style.cssText='flex:1;';
+    const top=document.createElement('div'); top.style.cssText='font-size:0.95em;font-weight:700;color:#2a1e0e;'; top.textContent=`${emoji} ${title}`;
+    const bot=document.createElement('div'); bot.style.cssText='font-size:0.78em;color:#7a6050;margin-top:0.05em;'; bot.textContent=sub;
+    lbl.append(top,bot);
+    header.append(cb,lbl);
+    if (!disabled) header.addEventListener('mouseenter',()=>wrap.style.borderColor='#9e7a50');
+    header.addEventListener('mouseleave',()=>wrap.style.borderColor='transparent');
+    // Sub-panel slot
+    const subPanel=document.createElement('div');
+    subPanel.style.cssText='background:rgb(230,225,213);display:none;flex-direction:column;gap:0.25em;padding:0.5em 0.7em;border-top:1px solid rgba(0,0,0,0.08);';
+    wrap.append(header,subPanel);
+    return {wrap,cb,subPanel};
+  }
+
+  const {wrap:wLoc, cb:cbLoc}   = mkSection('📍','Map Location & Zoom',`${c.lat.toFixed(0)}, ${c.lng.toFixed(0)} · zoom ${z.toFixed(1)}`, true, true);
+  const {wrap:wFilt,cb:cbFilt}  = mkSection('🔍','Filter List','Your current layer visibility', true, false);
+  const {wrap:wIco, cb:cbIco, subPanel:spIco}  = mkSection('📌','Custom Icons', customMarkers.length?`${customMarkers.length} icon${customMarkers.length!==1?'s':''} — pick below`:'No icons placed', false, !customMarkers.length);
+  const {wrap:wRte, cb:cbRte, subPanel:spRte}  = mkSection('🗺️','Custom Route', customRoutes.length?'Select one route below':'No routes yet', false, !customRoutes.length);
+
+  body.append(wLoc,wFilt,wIco,wRte);
+
+  // Icon picker
+  const iconChecks=[];
+  if (customMarkers.length) {
+    const iHint=document.createElement('div'); iHint.textContent='Uncheck any icons to exclude:';
+    iHint.style.cssText='font-size:0.8em;font-weight:700;color:#5a3a1a;margin-bottom:0.1em;';
+    spIco.appendChild(iHint);
+    customMarkers.forEach((cm,i)=>{
+      const row=document.createElement('label');
+      row.style.cssText='display:flex;align-items:center;gap:0.5em;padding:0.3em 0.4em;border-radius:5px;cursor:pointer;background:rgb(220,215,203);';
+      const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=true; // default all selected
+      cb.style.cssText='width:14px;height:14px;accent-color:#785a37;flex-shrink:0;';
+      const ico=document.createElement('span'); ico.textContent=cm.icon||'📍';
+      ico.style.cssText=`font-size:1.1em;color:${cm.colour||'#e74c3c'};flex-shrink:0;`;
+      const name=document.createElement('span'); name.textContent=cm.note||`Icon ${i+1}`;
+      name.style.cssText='font-size:0.88em;font-weight:600;color:#2a1e0e;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+      row.append(cb,ico,name); spIco.appendChild(row);
+      iconChecks.push(cb);
+    });
+    cbIco.addEventListener('change',()=>{
+      spIco.style.display=cbIco.checked?'flex':'none';
+      if (cbIco.checked) iconChecks.forEach(cb=>cb.checked=true); // re-select all when re-enabling
+    });
+  }
+
+  // Route picker — radio buttons, single selection
+  let selectedRouteIdx=-1;
+  const routeRadios=[];
+  if (customRoutes.length) {
+    const rHint=document.createElement('div'); rHint.textContent='Select one route:';
+    rHint.style.cssText='font-size:0.8em;font-weight:700;color:#5a3a1a;margin-bottom:0.1em;';
+    spRte.appendChild(rHint);
+    customRoutes.forEach((rt,i)=>{
+      const row=document.createElement('label');
+      row.style.cssText='display:flex;align-items:center;gap:0.5em;padding:0.3em 0.4em;border-radius:5px;cursor:pointer;background:rgb(220,215,203);';
+      const rb=document.createElement('input'); rb.type='radio'; rb.name='share-route'; rb.value=i;
+      rb.style.cssText='width:14px;height:14px;accent-color:#785a37;flex-shrink:0;';
+      const dot=document.createElement('span'); dot.textContent='●';
+      dot.style.cssText=`color:${rt.colour||'#e74c3c'};font-size:1em;flex-shrink:0;`;
+      const name=document.createElement('span'); name.textContent=rt.note||`Route ${i+1}`;
+      name.style.cssText='font-size:0.88em;font-weight:600;color:#2a1e0e;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+      const pts=document.createElement('span'); pts.textContent=`${rt.points.length}pt`;
+      pts.style.cssText='font-size:0.73em;color:#7a6050;flex-shrink:0;';
+      rb.addEventListener('change',()=>{ if(rb.checked) selectedRouteIdx=i; });
+      row.append(rb,dot,name,pts); spRte.appendChild(row);
+      routeRadios.push(rb);
+    });
+    cbRte.addEventListener('change',()=>{ spRte.style.display=cbRte.checked?'flex':'none'; if(!cbRte.checked){selectedRouteIdx=-1;routeRadios.forEach(r=>r.checked=false);} });
+  }
+
+  // Copy button
+  const copyBtn=document.createElement('button');
+  copyBtn.style.cssText=SS+'margin-top:0.3em;width:100%;padding:0.65em;border-radius:6px;border:none;background:linear-gradient(135deg,#785a37,#9e7a50);color:#f5e8d0;font-size:1em;font-weight:800;cursor:pointer;';
+  copyBtn.textContent='📋 Copy Link';
+  copyBtn.addEventListener('click',()=>{
+    let hash=`#@${c.lat.toFixed(1)},${c.lng.toFixed(1)},${z.toFixed(1)}`;
+    if (cbFilt.checked) hash+=`,${_buildFilterCode()}`;
+    // Selected icons
+    const selIcons=customMarkers.filter((_,i)=>iconChecks[i]?.checked);
+    if (cbIco.checked && selIcons.length) {
+      try { hash += `&i=${_encodeIconsBin(selIcons)}`; } catch(e) { console.warn('icon encode error:', e); }
+    }
+    // Selected route (single)
+    if (cbRte.checked && selectedRouteIdx>=0) {
+      try { hash+=`&r=${encodeRouteCode(customRoutes[selectedRouteIdx])}`; } catch(e) {}
+    }
+    const url=location.origin+location.pathname+hash;
+    // Robust clipboard copy with fallback
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(()=>{ showToast('📋 Link copied!'); overlay.remove(); }).catch(()=>{ prompt('Copy this link:',url); overlay.remove(); });
+      } else {
+        // Fallback for non-secure or unavailable clipboard API
+        const ta=document.createElement('textarea'); ta.value=url; ta.style.cssText='position:fixed;opacity:0;top:0;left:0;';
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('📋 Link copied!'); overlay.remove();
+      }
+    } catch(e) { prompt('Copy this link:',url); overlay.remove(); }
   });
+  body.appendChild(copyBtn);
+
+  modal.append(header,body);
+  overlay.append(modal);
+  overlay.addEventListener('click',e=>{ if(e.target===overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+function openShareRouteModal() {
+  if (!customRoutes.length) { showToast('⚠️ No routes to share — draw one first'); return; }
+  document.getElementById('share-route-modal')?.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'share-route-modal';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(20,12,4,0.72);backdrop-filter:blur(3px);padding:1em;';
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'background:#eddece;border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,0.55);width:min(380px,100%);overflow:hidden;border:2px solid #b89060;font-family:Noto,sans-serif;';
+
+  const header = document.createElement('div');
+  header.style.cssText = 'background:linear-gradient(108deg,#785a37 55%,#9e7a50 55%);padding:0.65em 1em;display:flex;align-items:center;';
+  const htitle = document.createElement('span');
+  htitle.textContent = 'Share Route';
+  htitle.style.cssText = 'color:#f5e8d0;font-weight:800;font-size:1em;flex:1;';
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕';
+  closeBtn.style.cssText = 'background:rgba(0,0,0,0.3);border:none;color:#f5e8d0;font-size:1em;width:1.8em;height:1.8em;border-radius:5px;cursor:pointer;';
+  closeBtn.onclick = () => overlay.remove();
+  header.append(htitle, closeBtn);
+
+  const body = document.createElement('div');
+  body.style.cssText = 'padding:0.9em 1em;display:flex;flex-direction:column;gap:0.5em;';
+
+  const hint = document.createElement('div');
+  hint.textContent = 'Select a route to share:';
+  hint.style.cssText = 'font-size:0.82em;font-weight:700;color:#5a3a1a;';
+  body.appendChild(hint);
+
+  customRoutes.forEach((rt, i) => {
+    const row = document.createElement('button');
+    row.style.cssText = `display:flex;align-items:center;gap:0.6em;width:100%;padding:0.5em 0.7em;border-radius:6px;border:2px solid transparent;background:rgb(225,220,210);cursor:pointer;font-family:Noto,sans-serif;text-align:left;transition:border-color 0.15s;`;
+    const dot = document.createElement('div');
+    dot.style.cssText = `width:14px;height:14px;border-radius:50%;background:${rt.colour||'#e74c3c'};flex-shrink:0;border:2px solid rgba(0,0,0,0.2);`;
+    const name = document.createElement('span');
+    name.textContent = rt.note || `Route ${i+1}`;
+    name.style.cssText = 'font-size:0.88em;font-weight:700;color:#3a2e1e;flex:1;';
+    const pts = document.createElement('span');
+    pts.textContent = `${rt.points.length} pts`;
+    pts.style.cssText = 'font-size:0.74em;color:#7a6a50;';
+    row.append(dot, name, pts);
+    row.addEventListener('mouseenter', () => row.style.borderColor = '#9e7a50');
+    row.addEventListener('mouseleave', () => row.style.borderColor = 'transparent');
+    row.addEventListener('click', () => {
+      const c = map.getCenter(), z = map.getZoom();
+      const routeCode = encodeRouteCode(rt);
+      const hash = `#@${c.lat.toFixed(1)},${c.lng.toFixed(1)},${z.toFixed(1)}&r=${routeCode}`;
+      _copyUrl(location.origin + location.pathname + hash, `📋 Route "${rt.note||`Route ${i+1}`}" link copied!`);
+      overlay.remove();
+    });
+    body.appendChild(row);
+  });
+
+  modal.append(header, body);
+  overlay.append(modal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
 }
 function showToast(msg) {
   let t = document.getElementById('map-toast');
@@ -536,7 +907,6 @@ const DUNGEON_WIKI = {
   'Crimson Barracks':         { w:'Crimson_Barracks',         a:'Crimson_Barracks' },
   "Chakram's Chapel":         { w:"Chakram's_Chapel",         a:"Chakram's_Chapel" },
 };
-const WIKI_LOOT_PAGE = 'https://farever.wiki/Dungeons_loots:_Armors_%26_Weapons';
 function getDungeonLabel(rawLabel, coords) {
   if (DUNGEON_NAME_FIX[rawLabel]) return DUNGEON_NAME_FIX[rawLabel];
   if (rawLabel === 'Dungeon entrance') {
@@ -550,18 +920,7 @@ function getDungeonLabel(rawLabel, coords) {
   }
   return rawLabel;
 }
-function dungeonWikiLink(label) {
-  const entry = DUNGEON_WIKI[label]; if (!entry) return '';
-  const weaponUrl = WIKI_LOOT_PAGE + '#Weapons';
-  const armorUrl  = WIKI_LOOT_PAGE + '#' + entry.a;
-  const base = 'display:flex;align-items:center;justify-content:center;gap:0.4em;padding:0.5em 1em;border-radius:5px;text-decoration:none;font-size:1.05em;font-weight:700;color:white;letter-spacing:0.02em;';
-  const wStyle = base + 'background:linear-gradient(135deg,#b0665d 50%,#ce715c 50%);';
-  const aStyle = base + 'background:linear-gradient(135deg,#6e1ac7 50%,#8a35e0 50%);';
-  return '<div style="display:flex;flex-direction:column;gap:0.4em;margin-top:0.65em;">'
-    + '<a href="' + weaponUrl + '" target="_blank" rel="noopener" style="' + wStyle + '">&#9876;&#xFE0F; Weapon Loot</a>'
-    + '<a href="' + armorUrl  + '" target="_blank" rel="noopener" style="' + aStyle + '">&#128737;&#xFE0F; Armor Loot</a>'
-    + '</div>';
-}
+// dungeonWikiLink replaced by inline DOM button in initMap + openDungeonModal
 
 
 async function loadData() {
@@ -710,9 +1069,25 @@ function initMap(data) {
     }
     // Fix dungeon display names and add wiki link
     const displayLabel = cat==='Dungeons' ? getDungeonLabel(item.label, coords) : item.label;
-    const wikiLink = cat==='Dungeons' ? dungeonWikiLink(displayLabel) : '';
     allMarkers.push({markerId:mid,marker:m,category:effectiveCat,label:displayLabel,coords,subKey:subInfo?.subKey,mainCat:subInfo?.mainCat||mobFaction?'Mobs':null});
-    m.bindPopup(`<div style="text-align:center;font-family:Noto,sans-serif;">${displayLabel}${wikiLink}</div>`);
+    if (cat === 'Dungeons') {
+      const entry = DUNGEON_WIKI[displayLabel];
+      const popupEl = document.createElement('div');
+      popupEl.style.cssText = 'text-align:center;font-family:Noto,sans-serif;';
+      popupEl.innerHTML = `<strong>${displayLabel}</strong>`;
+      if (entry) {
+        const link = document.createElement('a');
+        link.href = 'https://farever.wiki/' + encodeURIComponent(entry.w);
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.style.cssText = 'margin-top:0.65em;width:100%;display:flex;align-items:center;justify-content:center;gap:0.5em;padding:0.55em 1em;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#6e1ac7 0%,#9e4aee 100%);color:white;font-size:1em;font-weight:700;letter-spacing:0.02em;box-shadow:0 2px 8px rgba(80,20,160,0.3);text-decoration:none;';
+        link.innerHTML = '⚔️🛡️ Dungeon Info &amp; Loot';
+        popupEl.appendChild(link);
+      }
+      m.bindPopup(popupEl);
+    } else {
+      m.bindPopup(`<div style="text-align:center;font-family:Noto,sans-serif;">${displayLabel}</div>`);
+    }
     m.on('contextmenu',e=>{ L.DomEvent.preventDefault(e); L.DomEvent.stopPropagation(e); m.closePopup(); toggleComplete(mid,m,cat); });
     m.on('click',e=>{ if (!isMobile()||routeDrawing) return; toggleComplete(mid,m,cat); });
     m.on('add',()=>setTimeout(()=>applyCompletedStyle(m,completedMarkers.has(mid)),0));
@@ -810,7 +1185,7 @@ function initMap(data) {
   map.on('click', e => {
     if (routeDrawing) return;
     if (pendingCustPlace) {
-      const cm = {lat:e.latlng.lat, lng:e.latlng.lng, icon:selectedCustIcon, colour:selectedCustColour, note:''};
+      const cm = {lat:e.latlng.lat, lng:e.latlng.lng, icon:selectedCustIcon, ringColour:selectedRingColour||null, ringThick:selectedRingThick, ringStyle:selectedRingStyle, note:'', comment:'', hidden:false};
       customMarkers.push(cm);
       saveCustom();
       renderCustomMarkers();
@@ -828,7 +1203,65 @@ function initMap(data) {
   loadChecked(layers);
   updateCounts();
   updateMultiFactionIcons();
-  applyPermalinkFilters(layers); // override filters if shared link has filter state
+  applyPermalinkFilters(layers);
+
+  // ── Shared content bars ───────────────────────────────────────────────────
+  let sharedBarCount = 0;
+  function mkSharedBar(text, saveLabel, onSave) {
+    const bar = document.createElement('div');
+    const bottomEm = 1.2 + sharedBarCount * 3.4;
+    sharedBarCount++;
+    bar.style.cssText = `position:fixed;bottom:${bottomEm}em;left:50%;transform:translateX(-50%);z-index:2000;display:flex;align-items:center;gap:0.6em;background:rgba(28,18,8,0.9);backdrop-filter:blur(4px);padding:0.55em 0.9em 0.55em 0.8em;border-radius:30px;box-shadow:0 4px 18px rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.12);font-family:Noto,sans-serif;white-space:nowrap;`;
+    const lbl = document.createElement('span'); lbl.textContent = text;
+    lbl.style.cssText = 'color:rgba(255,255,255,0.72);font-size:0.82em;';
+    const saveBtn = document.createElement('button'); saveBtn.textContent = saveLabel;
+    saveBtn.style.cssText = 'background:linear-gradient(135deg,#785a37,#9e7a50);border:none;color:#f5e8d0;font-family:Noto,sans-serif;font-size:0.8em;font-weight:700;padding:0.35em 0.85em;border-radius:20px;cursor:pointer;';
+    saveBtn.addEventListener('click', () => { onSave(); bar.remove(); });
+    const x = document.createElement('button'); x.textContent = '✕';
+    x.style.cssText = 'background:none;border:none;color:rgba(255,255,255,0.35);font-size:0.95em;cursor:pointer;padding:0 0.15em;';
+    x.addEventListener('click', () => bar.remove());
+    bar.append(lbl, saveBtn, x);
+    document.body.appendChild(bar);
+    return bar;
+  }
+
+  if (window._permalinkRoutes?.length) {
+    const sharedRoutes = window._permalinkRoutes;
+    window._permalinkRoutes = null;
+    const tempLayer = L.layerGroup().addTo(map);
+    sharedRoutes.forEach(rt => drawRouteOnLayer(rt.points.map(p=>[p[0],p[1]]), rt.colour||'#e74c3c', 0.85, tempLayer));
+    mkSharedBar(
+      `🗺️ ${sharedRoutes.length} shared route${sharedRoutes.length>1?'s':''} (temporary)`,
+      '＋ Save to My Routes',
+      () => {
+        sharedRoutes.forEach(rt => customRoutes.push({points:rt.points,colour:rt.colour||'#e74c3c',note:rt.note||'Shared route',comment:'',opacity:0.88}));
+        saveCustom(); renderRoutes(); window._routeRenderHook?.();
+        showToast(`✅ ${sharedRoutes.length} route${sharedRoutes.length>1?'s':''} saved!`);
+      }
+    );
+  }
+
+  if (window._permalinkIcons?.length) {
+    const sharedIcons = window._permalinkIcons;
+    window._permalinkIcons = null;
+    const tempIconLayer = L.layerGroup().addTo(map);
+    sharedIcons.forEach(cm => {
+      const icon = makeCustMarkerIcon(cm.icon||'📍', cm.ringColour||null, cm.ringThick||3, cm.ringStyle||'solid');
+      const mk2 = L.marker([cm.lat,cm.lng], {icon, interactive:true});
+      const hasInfo = cm.note || cm.comment;
+      if (hasInfo) mk2.bindPopup(`<div style="font-family:Noto,sans-serif;min-width:130px;font-size:1em;"><div style="font-weight:700;font-size:1em;color:#2a1e0e;margin-bottom:0.3em;">${cm.note||''}</div>${cm.comment?`<div style="font-size:0.9em;color:#5a4a2a;line-height:1.4;">${cm.comment}</div>`:''}</div>`);
+      mk2.addTo(tempIconLayer);
+    });
+    mkSharedBar(
+      `📌 ${sharedIcons.length} shared icon${sharedIcons.length>1?'s':''} (temporary)`,
+      '＋ Save to My Icons',
+      () => {
+        sharedIcons.forEach(cm => customMarkers.push({lat:cm.lat,lng:cm.lng,icon:cm.icon||'📍',ringColour:cm.ringColour||null,ringThick:cm.ringThick||3,ringStyle:cm.ringStyle||'solid',note:cm.note||'',comment:cm.comment||'',hidden:false}));
+        saveCustom(); renderCustomMarkers(); window._refreshMyIcons?.();
+        showToast(`✅ ${sharedIcons.length} icon${sharedIcons.length>1?'s':''} saved!`);
+      }
+    );
+  }
   loadRegions().then(() => refreshRegionVisibility());
   renderCustomMarkers();
   renderRoutes();
@@ -898,9 +1331,16 @@ function buildSidebar(layers) {
   const hideBtn=mk('button',{id:'sb-hide-btn',class:'sb-tool-btn',style:'border-bottom:none;border-right:1px solid rgba(0,0,0,0.07);flex:1;'}); hideBtn.setAttribute('data-tip','Hide Completed'); hideBtn.innerHTML=`${SVG.eye}<span class="sb-tool-label">Hide Completed</span>`;
   const resetBtn=mk('button',{id:'sb-reset-btn',class:'sb-tool-btn',style:'border-bottom:none;flex:1;color:#c0392b;'}); resetBtn.setAttribute('data-tip','Reset Completed'); resetBtn.innerHTML=`${SVG.reset}<span class="sb-tool-label">Reset Completed</span>`;
   completedRow.appendChild(hideBtn); completedRow.appendChild(resetBtn);
-  const shareBtn=mkToolBtn('sb-share-btn',`<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="12" cy="13" r="2"/><line x1="6" y1="9" x2="10" y2="12"/><line x1="10" y1="4" x2="6" y2="7"/></svg>`,'Share Location & Filter');
+  const shareBtn=mkToolBtn('sb-share-btn',`<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="12" cy="13" r="2"/><line x1="6" y1="9" x2="10" y2="12"/><line x1="10" y1="4" x2="6" y2="7"/></svg>`,'Share Location');
   shareBtn.addEventListener('click', copyPermalink);
-  iconTools.appendChild(searchToolBtn); iconTools.appendChild(completedRow); iconTools.appendChild(shareBtn);
+  const shareRouteBtn=mkToolBtn('sb-share-route-btn',`<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="12" cy="13" r="2"/><line x1="6" y1="9" x2="10" y2="12"/><line x1="10" y1="4" x2="6" y2="7"/><polyline points="9,0 12,3 9,6" fill="none"/></svg>`,'Share Route');
+  shareRouteBtn.addEventListener('click', openShareRouteModal);
+  // Put the two share buttons side-by-side in a row
+  const shareRow = mk('div', {style:'display:flex;flex-direction:row;border-bottom:1px solid rgba(0,0,0,0.07);'});
+  shareBtn.style.cssText += 'border-bottom:none;border-right:1px solid rgba(0,0,0,0.07);flex:1;';
+  shareRouteBtn.style.cssText += 'border-bottom:none;flex:1;';
+  shareRow.appendChild(shareBtn); shareRow.appendChild(shareRouteBtn);
+  iconTools.appendChild(searchToolBtn); iconTools.appendChild(completedRow); iconTools.appendChild(shareRow);
   sidebar.appendChild(iconTools);
   // filterPanel follows directly — zone toggles have sep after them
 
@@ -1218,44 +1658,76 @@ function toggleGroupVisibility(group, layers, eyeBtn) {
   if (group.hasMobSub) updateMultiFactionIcons();
 }
 
-// ─── Route share codes ────────────────────────────────────────────────────────
+// ─── Route share codes — compact binary base64url ─────────────────────────────
+// Format: 3 bytes colour | 2 bytes point count | 4 bytes first point (signed /4)
+// Then per delta: 1 byte if |v|≤62, else 2 bytes. base64url encoded.
+// ~60% shorter than old text-delta format. Old format still decoded (legacy).
+function _packInt(v, out) {
+  if (v >= -62 && v <= 62) { out.push(v < 0 ? 0x80 | (-v) : v); }
+  else { const s=v<0?1:0, a=Math.abs(v); out.push(0xC0|(s<<5)|(a>>8), a&0xFF); }
+}
+function _unpackInt(bytes, i) {
+  const b = bytes[i];
+  if (!(b & 0x40)) return { v: (b & 0x80) ? -(b & 0x3F) : b, len: 1 };
+  const b2 = bytes[i+1], neg=(b>>5)&1, mag=((b&0x1F)<<8)|b2;
+  return { v: neg ? -mag : mag, len: 2 };
+}
 function encodeRouteCode(route) {
-  const c = (route.colour||'#e74c3c').replace('#','');
-  const r3 = Math.round(parseInt(c.slice(0,2),16)/17).toString(16);
-  const g3 = Math.round(parseInt(c.slice(2,4),16)/17).toString(16);
-  const b3 = Math.round(parseInt(c.slice(4,6),16)/17).toString(16);
-  const colCode = r3+g3+b3;
-  // Delta encode: store first point then differences, rounded to nearest 2 units
   const pts = route.points;
-  const first = [Math.round(pts[0][0]/2), Math.round(pts[0][1]/2)];
-  const deltas = [first[0]+','+first[1]];
-  for (let i=1;i<pts.length;i++) {
-    const da = Math.round(pts[i][0]/2) - Math.round(pts[i-1][0]/2);
-    const db = Math.round(pts[i][1]/2) - Math.round(pts[i-1][1]/2);
-    deltas.push(da+','+db);
+  const c = (route.colour||'#e74c3c').replace('#','');
+  const bytes = [
+    parseInt(c.slice(0,2),16), parseInt(c.slice(2,4),16), parseInt(c.slice(4,6),16),
+    (pts.length>>8)&0xFF, pts.length&0xFF,
+  ];
+  const ax=Math.round(pts[0][0]/4), ay=Math.round(pts[0][1]/4);
+  bytes.push((ax>>8)&0xFF, ax&0xFF, (ay>>8)&0xFF, ay&0xFF);
+  for (let i=1; i<pts.length; i++) {
+    _packInt(Math.round(pts[i][0]/4)-Math.round(pts[i-1][0]/4), bytes);
+    _packInt(Math.round(pts[i][1]/4)-Math.round(pts[i-1][1]/4), bytes);
   }
-  const raw = colCode+'|'+deltas.join(';');
-  return btoa(raw).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+  // encode bytes to base64url
+  const bin = String.fromCharCode(...bytes);
+  return btoa(bin).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
 }
 function decodeRouteCode(code) {
+  if (!code) return null;
   try {
-    const padded = code.replace(/-/g,'+').replace(/_/g,'/');
-    const raw = atob(padded + '=='.slice(0,(4-padded.length%4)%4));
-    const pipe = raw.indexOf('|');
-    const colCode = raw.slice(0,pipe), ptsStr = raw.slice(pipe+1);
-    const r=parseInt(colCode[0],16)*17, g=parseInt(colCode[1],16)*17, b=parseInt(colCode[2],16)*17;
-    const colour = '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
-    const deltas = ptsStr.split(';').map(s=>s.split(',').map(Number));
-    if (!deltas.length) return null;
-    const points = [[deltas[0][0]*2, deltas[0][1]*2]];
-    for (let i=1;i<deltas.length;i++) {
-      const prev = [Math.round(points[i-1][0]/2), Math.round(points[i-1][1]/2)];
-      points.push([(prev[0]+deltas[i][0])*2, (prev[1]+deltas[i][1])*2]);
+    const padded = code.replace(/-/g,'+').replace(/_/g,'/') + '=='.slice(0,(4-code.replace(/-/g,'+').replace(/_/g,'/').length%4)%4);
+    const raw = atob(padded);
+    const bytes = Uint8Array.from(raw, c=>c.charCodeAt(0));
+    // Legacy format: bytes[3] would be point count high byte — but legacy stored text
+    // Detect legacy: if raw contains '|' it's the old text-delta format
+    if (raw.includes('|')) {
+      const pipe = raw.indexOf('|');
+      const colCode = raw.slice(0,pipe), ptsStr = raw.slice(pipe+1);
+      const r=parseInt(colCode[0],16)*17, g=parseInt(colCode[1],16)*17, b=parseInt(colCode[2],16)*17;
+      const colour = '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+      const deltas = ptsStr.split(';').map(s=>s.split(',').map(Number));
+      if (!deltas.length) return null;
+      const points = [[deltas[0][0]*2, deltas[0][1]*2]];
+      for (let i=1;i<deltas.length;i++) {
+        const prev=[Math.round(points[i-1][0]/2),Math.round(points[i-1][1]/2)];
+        points.push([(prev[0]+deltas[i][0])*2,(prev[1]+deltas[i][1])*2]);
+      }
+      return points.length>=2 ? {colour,points,note:''} : null;
     }
-    if (points.length<2) return null;
-    // Try legacy format (flat coords, no delta) if points look wrong
-    return {colour, points, note:''};
-  } catch { return null; }
+    // New binary format
+    if (bytes.length < 9) return null;
+    const colour = '#'+Array.from(bytes.slice(0,3)).map(v=>v.toString(16).padStart(2,'0')).join('');
+    const count = (bytes[3]<<8)|bytes[4];
+    const ax=(bytes[5]<<8|bytes[6]); const axS=ax>32767?ax-65536:ax;
+    const ay=(bytes[7]<<8|bytes[8]); const ayS=ay>32767?ay-65536:ay;
+    const points = [[axS*4, ayS*4]];
+    let i=9;
+    while (points.length<count && i<bytes.length) {
+      const dx=_unpackInt(bytes,i); i+=dx.len;
+      if (i>=bytes.length) break;
+      const dy=_unpackInt(bytes,i); i+=dy.len;
+      const prev=points[points.length-1];
+      points.push([(Math.round(prev[0]/4)+dx.v)*4,(Math.round(prev[1]/4)+dy.v)*4]);
+    }
+    return points.length>=2 ? {colour,points,note:''} : null;
+  } catch(e) { console.warn('decodeRouteCode:', e); return null; }
 }
 
 // ─── Routes Panel ─────────────────────────────────────────────────────────────
@@ -1374,7 +1846,12 @@ function buildRoutesPanel(panel) {
       colDot.addEventListener('click',e=>{ e.stopPropagation(); colSwatchRow.style.display=colSwatchRow.style.display==='none'?'flex':'none'; });
 
       const nameInp=mk('input'); Object.assign(nameInp,{type:'text',value:rt.note||`Route ${i+1}`,style:'flex:1;padding:0.2em 0.4em;border:1px solid #a09880;border-radius:3px;font-size:0.79em;background:transparent;color:#3a2e1e;outline:none;font-weight:600;cursor:text;min-width:0;'});
-      nameInp.addEventListener('change',()=>{ rt.note=nameInp.value.trim()||`Route ${i+1}`; saveCustom(); });
+      rt._sbNameEl = nameInp;
+      nameInp.addEventListener('input',()=>{
+        rt.note = nameInp.value.trim()||`Route ${i+1}`;
+        saveCustom();
+        if (rt._popNameEl) rt._popNameEl.value = rt.note;
+      });
       const upBtn=mk('button',{style:'background:none;border:none;cursor:pointer;color:#555;font-size:0.8em;padding:0.1em;'}); upBtn.textContent='↑';
       upBtn.addEventListener('click',()=>{ if(i>0){[customRoutes[i-1],customRoutes[i]]=[customRoutes[i],customRoutes[i-1]]; saveCustom(); renderRoutes(); refreshRouteList();} });
       const dnBtn=mk('button',{style:'background:none;border:none;cursor:pointer;color:#555;font-size:0.8em;padding:0.1em;'}); dnBtn.textContent='↓';
@@ -1385,6 +1862,27 @@ function buildRoutesPanel(panel) {
       delBtn.addEventListener('click',()=>{ customRoutes.splice(i,1); saveCustom(); renderRoutes(); refreshRouteList(); });
       topRow.appendChild(visChk); topRow.appendChild(colDot); topRow.appendChild(nameInp); topRow.appendChild(upBtn); topRow.appendChild(dnBtn); topRow.appendChild(flyBtn); topRow.appendChild(delBtn);
 
+      // Expandable comment section
+      const commentToggle=mk('div',{style:'font-size:0.72em;color:#7a6050;cursor:pointer;padding:0.15em 0;user-select:none;display:flex;align-items:center;gap:0.3em;'});
+      const commentArea=mk('div',{style:'display:none;margin-top:0.25em;'});
+      const commentTa=mk('textarea'); Object.assign(commentTa,{rows:2,value:rt.comment||'',placeholder:'Add a comment…'});
+      commentTa.style.cssText='width:100%;padding:0.25em 0.4em;border:1px solid #a09880;border-radius:4px;font-size:0.78em;color:#3a2e1e;background:rgb(225,220,208);outline:none;resize:vertical;box-sizing:border-box;font-family:Noto,sans-serif;';
+      rt._sbCommentEl = commentTa;
+      commentTa.addEventListener('input',()=>{
+        rt.comment = commentTa.value;
+        saveCustom();
+        updateCommentToggle();
+        if (rt._popCommentEl) rt._popCommentEl.value = rt.comment;
+      });
+      commentTa.addEventListener('_sync',()=>{ updateCommentToggle(); });
+      commentArea.appendChild(commentTa);
+      function updateCommentToggle() {
+        const has = rt.comment && rt.comment.trim();
+        commentToggle.innerHTML = `<span style="opacity:0.6">${commentArea.style.display==='none'?'▶':'▼'}</span> ${has ? '💬 '+rt.comment.trim().slice(0,40)+(rt.comment.trim().length>40?'…':'') : '+ Add comment'}`;
+      }
+      updateCommentToggle();
+      commentToggle.addEventListener('click',()=>{ commentArea.style.display=commentArea.style.display==='none'?'block':'none'; updateCommentToggle(); });
+
       // Share code row
       const code=encodeRouteCode(rt);
       const codeRow=mk('div',{style:'display:flex;align-items:center;gap:0.3em;margin-top:0.3em;'});
@@ -1392,7 +1890,7 @@ function buildRoutesPanel(panel) {
       codeBox.addEventListener('click',()=>{ navigator.clipboard?.writeText(code).then(()=>{ codeBox.style.background='rgb(200,230,200)'; setTimeout(()=>codeBox.style.background='',1000); }); });
       codeRow.appendChild(codeBox);
 
-      row.appendChild(topRow); row.appendChild(colSwatchRow); row.appendChild(codeRow);
+      row.appendChild(topRow); row.appendChild(colSwatchRow); row.appendChild(commentToggle); row.appendChild(commentArea); row.appendChild(codeRow);
       routeList.appendChild(row);
     });
   }
@@ -1485,19 +1983,78 @@ function buildCustomPanel(panel) {
     iconGrid.appendChild(b);
   });
 
-  // Colour picker
-  const colTitle=mk('div',{class:'cust-section-title'}); colTitle.textContent='Colour';
-  const colRow=mk('div',{class:'color-swatch-row'});
-  let selColSwatch=null;
-  CUSTOM_COLOURS.forEach(col=>{
-    const s=mk('div',{class:'color-swatch'+(col===selectedCustColour?' selected':'')}); s.style.background=col;
-    s.addEventListener('click',()=>{ selectedCustColour=col; localStorage.setItem('custColour',col); selColSwatch?.classList.remove('selected'); s.classList.add('selected'); selColSwatch=s; });
-    if(col===selectedCustColour) selColSwatch=s;
-    colRow.appendChild(s);
-  });
-
   panel.appendChild(statusEl);
   panel.appendChild(iconGrid);
+  panel.appendChild(sep());
+
+  // ── Ring settings (collapsible) ──────────────────────────────────
+  const ringToggleBtn=mk('div',{style:'font-size:0.82em;font-weight:700;color:#5a3a1a;cursor:pointer;padding:0.2em 0.1em;user-select:none;display:flex;align-items:center;gap:0.3em;'});
+  const ringBody=mk('div',{style:'display:none;padding-top:0.3em;display:flex;flex-direction:column;gap:0.4em;'});
+  ringBody.style.display='none';
+
+  function updateRingToggleLabel() {
+    const has = selectedRingColour;
+    ringToggleBtn.innerHTML=`<span style="opacity:0.6">${ringBody.style.display==='none'?'▶':'▼'}</span> ⭕ Ring${has?' — '+selectedRingStyle+', '+selectedRingThick+'px':' (none)'}`;
+  }
+  updateRingToggleLabel();
+  ringToggleBtn.addEventListener('click',()=>{
+    const open=ringBody.style.display==='flex';
+    ringBody.style.display=open?'none':'flex';
+    updateRingToggleLabel();
+  });
+
+  // Colour row
+  const rcLbl=mk('div',{style:'font-size:0.75em;font-weight:700;color:#7a6050;'}); rcLbl.textContent='Ring Colour';
+  const rcRow=mk('div',{style:'display:flex;flex-wrap:wrap;gap:0.3em;align-items:center;'});
+  let selRS=null;
+  // None
+  const rcNone=mk('div',{style:`width:1.3em;height:1.3em;border-radius:50%;border:2.5px dashed #a09880;cursor:pointer;flex-shrink:0;box-sizing:border-box;${!selectedRingColour?'outline:2px solid #785a37;outline-offset:2px;':''}`});
+  rcNone.title='No ring';
+  rcNone.addEventListener('click',()=>{
+    selectedRingColour=null; localStorage.removeItem('ringColour');
+    selRS?.style.removeProperty('outline'); selRS=null;
+    rcNone.style.outline='2px solid #785a37'; rcNone.style.outlineOffset='2px';
+    updateRingToggleLabel();
+  });
+  rcRow.appendChild(rcNone);
+  CUSTOM_COLOURS.forEach(col=>{
+    const s=mk('div',{style:`width:1.3em;height:1.3em;border-radius:50%;background:${col};cursor:pointer;flex-shrink:0;border:2px solid ${col===selectedRingColour?'#1a1a1a':'transparent'};`});
+    s.addEventListener('click',()=>{
+      selectedRingColour=col; localStorage.setItem('ringColour',col);
+      if(selRS) selRS.style.borderColor='transparent'; s.style.borderColor='#1a1a1a'; selRS=s;
+      rcNone.style.removeProperty('outline'); rcNone.style.removeProperty('outline-offset');
+      updateRingToggleLabel();
+    });
+    if(col===selectedRingColour){s.style.borderColor='#1a1a1a';selRS=s;}
+    rcRow.appendChild(s);
+  });
+
+  // Thickness slider
+  const rtLbl=mk('div',{style:'font-size:0.75em;font-weight:700;color:#7a6050;'}); rtLbl.textContent='Thickness';
+  const rtRow=mk('div',{style:'display:flex;align-items:center;gap:0.5em;'});
+  const rtSlider=mk('input'); Object.assign(rtSlider,{type:'range',min:'1',max:'8',step:'0.5',value:String(selectedRingThick),style:'flex:1;accent-color:#785a37;cursor:pointer;'});
+  const rtVal=mk('span',{style:'font-size:0.78em;color:#5a3a1a;width:2em;text-align:right;flex-shrink:0;'}); rtVal.textContent=selectedRingThick+'px';
+  rtSlider.addEventListener('input',()=>{ selectedRingThick=parseFloat(rtSlider.value); localStorage.setItem('ringThick',selectedRingThick); rtVal.textContent=selectedRingThick+'px'; updateRingToggleLabel(); });
+  rtRow.append(rtSlider,rtVal);
+
+  // Style buttons
+  const rsLbl=mk('div',{style:'font-size:0.75em;font-weight:700;color:#7a6050;'}); rsLbl.textContent='Ring Style';
+  const rsRow=mk('div',{style:'display:flex;gap:0.3em;flex-wrap:wrap;'});
+  const RING_STYLES=[['solid','━━━'],['dashed','╌╌╌'],['dotted','┄┄┄']];
+  RING_STYLES.forEach(([val,label])=>{
+    const b=mk('button',{style:`padding:0.2em 0.5em;border-radius:4px;border:1.5px solid ${val===selectedRingStyle?'#785a37':'#b09878'};background:${val===selectedRingStyle?'rgba(120,90,55,0.15)':'transparent'};font-size:0.78em;color:#3a2e1e;cursor:pointer;font-family:monospace;`});
+    b.textContent=label;
+    b.addEventListener('click',()=>{
+      selectedRingStyle=val; localStorage.setItem('ringStyle',val);
+      rsRow.querySelectorAll('button').forEach(x=>{x.style.borderColor='#b09878';x.style.background='transparent';});
+      b.style.borderColor='#785a37'; b.style.background='rgba(120,90,55,0.15)';
+      updateRingToggleLabel();
+    });
+    rsRow.appendChild(b);
+  });
+
+  ringBody.append(rcLbl,rcRow,rtLbl,rtRow,rsLbl,rsRow);
+  panel.appendChild(ringToggleBtn); panel.appendChild(ringBody);
   panel.appendChild(sep());
 
   // ── My Icons list ────────────────────────────────────────────────
@@ -1516,13 +2073,25 @@ function buildCustomPanel(panel) {
       const row = mk('div',{style:'background:rgb(225,220,210);border-radius:5px;padding:0.4em 0.6em;border:1px solid #c0b898;'});
       const topRow = mk('div',{style:'display:flex;align-items:center;gap:0.35em;'});
 
+      // Visibility toggle (check0/check1 png like routes)
+      const visChk=mk('span',{style:`background-image:url("${cm.hidden?'check0':'check1'}.png");background-size:contain;background-repeat:no-repeat;width:1.05em;height:1.05em;flex-shrink:0;cursor:pointer;`});
+      visChk.addEventListener('click',()=>{
+        cm.hidden=!cm.hidden; saveCustom(); renderCustomMarkers();
+        visChk.style.backgroundImage=`url("${cm.hidden?'check0':'check1'}.png")`;
+      });
+
       // Icon preview (coloured)
       const iconPrev = mk('span',{style:`font-size:1.2em;color:${cm.colour||'#e74c3c'};text-shadow:0 1px 3px rgba(0,0,0,0.4);flex-shrink:0;line-height:1;`});
       iconPrev.textContent = cm.icon || '⚔️';
 
       // Editable note/name
       const nameInp = mk('input'); Object.assign(nameInp,{type:'text',value:cm.note||'',placeholder:'Add a name…',style:'flex:1;padding:0.2em 0.4em;border:1px solid #a09880;border-radius:3px;font-size:0.79em;background:transparent;color:#3a2e1e;outline:none;min-width:0;cursor:text;'});
-      nameInp.addEventListener('change',()=>{ cm.note=nameInp.value.trim(); saveCustom(); refreshMyIcons(); });
+      cm._sbNameEl = nameInp;
+      nameInp.addEventListener('input',()=>{
+        cm.note = nameInp.value.trim();
+        saveCustom();
+        if (cm._popNameEl) cm._popNameEl.value = cm.note;
+      });
 
       // Up/down sort
       const upBtn = mk('button',{style:'background:none;border:none;cursor:pointer;color:#555;font-size:0.8em;padding:0.1em;line-height:1;'}); upBtn.textContent='↑';
@@ -1538,8 +2107,77 @@ function buildCustomPanel(panel) {
       const delBtn = mk('button',{style:'background:none;border:none;cursor:pointer;color:#c0392b;font-size:0.8em;padding:0.1em 0.2em;'}); delBtn.innerHTML=SVG.trash;
       delBtn.addEventListener('click',()=>{ customMarkers.splice(i,1); saveCustom(); renderCustomMarkers(); refreshMyIcons(); });
 
-      topRow.appendChild(iconPrev); topRow.appendChild(nameInp); topRow.appendChild(upBtn); topRow.appendChild(dnBtn); topRow.appendChild(flyBtn); topRow.appendChild(delBtn);
-      row.appendChild(topRow);
+      topRow.appendChild(visChk); topRow.appendChild(iconPrev); topRow.appendChild(nameInp); topRow.appendChild(upBtn); topRow.appendChild(dnBtn); topRow.appendChild(flyBtn); topRow.appendChild(delBtn);
+
+      // Collapsible ring settings per icon
+      const colToggle=mk('div',{style:'font-size:0.72em;color:#7a6050;cursor:pointer;padding:0.15em 0;user-select:none;display:flex;align-items:center;gap:0.3em;'});
+      const colArea=mk('div',{style:'display:none;margin-top:0.25em;padding:0.3em 0.2em;border-top:1px solid rgba(0,0,0,0.07);'});
+
+      // Ring colour row
+      const rcRow2=mk('div',{style:'display:flex;flex-wrap:wrap;gap:0.25em;align-items:center;margin-bottom:0.3em;'});
+      const rcLbl2=mk('span',{style:'font-size:0.7em;font-weight:700;color:#7a6050;width:100%;'}); rcLbl2.textContent='Ring Colour';
+      rcRow2.appendChild(rcLbl2);
+      let selRS2=null;
+      const rNone2=mk('div',{style:`width:1.1em;height:1.1em;border-radius:50%;background:transparent;border:2px dashed #a09880;cursor:pointer;flex-shrink:0;box-sizing:border-box;${!cm.ringColour?'outline:2px solid #785a37;outline-offset:1px;':''}`});
+      rNone2.addEventListener('click',()=>{ cm.ringColour=null; saveCustom(); renderCustomMarkers(); selRS2?.style.removeProperty('outline'); selRS2=null; rNone2.style.outline='2px solid #785a37'; rNone2.style.outlineOffset='1px'; updateColToggle(); });
+      rcRow2.appendChild(rNone2);
+      CUSTOM_COLOURS.forEach(col=>{
+        const s=mk('div',{style:`width:1.1em;height:1.1em;border-radius:50%;background:${col};cursor:pointer;flex-shrink:0;border:2px solid ${col===(cm.ringColour||'')?'#1a1a1a':'transparent'};`});
+        s.addEventListener('click',()=>{ cm.ringColour=col; saveCustom(); renderCustomMarkers(); if(selRS2) selRS2.style.borderColor='transparent'; s.style.borderColor='#1a1a1a'; selRS2=s; rNone2.style.removeProperty('outline'); rNone2.style.removeProperty('outline-offset'); updateColToggle(); });
+        if(col===(cm.ringColour||'')) selRS2=s;
+        rcRow2.appendChild(s);
+      });
+
+      // Thickness slider per icon
+      const rtRow2=mk('div',{style:'display:flex;align-items:center;gap:0.4em;margin-bottom:0.3em;'});
+      const rtLbl2=mk('span',{style:'font-size:0.7em;font-weight:700;color:#7a6050;white-space:nowrap;'}); rtLbl2.textContent='Thickness';
+      const rtSlider2=mk('input'); Object.assign(rtSlider2,{type:'range',min:'1',max:'8',step:'0.5',value:String(cm.ringThick||3),style:'flex:1;accent-color:#785a37;cursor:pointer;'});
+      const rtVal2=mk('span',{style:'font-size:0.72em;color:#5a3a1a;width:2em;text-align:right;flex-shrink:0;'}); rtVal2.textContent=(cm.ringThick||3)+'px';
+      rtSlider2.addEventListener('input',()=>{ cm.ringThick=parseFloat(rtSlider2.value); rtVal2.textContent=cm.ringThick+'px'; saveCustom(); renderCustomMarkers(); });
+      rtRow2.append(rtLbl2,rtSlider2,rtVal2);
+
+      // Style buttons per icon
+      const rsRow2=mk('div',{style:'display:flex;gap:0.25em;flex-wrap:wrap;'});
+      const rsLbl2=mk('span',{style:'font-size:0.7em;font-weight:700;color:#7a6050;width:100%;margin-bottom:0.1em;'}); rsLbl2.textContent='Style';
+      rsRow2.appendChild(rsLbl2);
+      const RING_STYLES2=[['solid','━━'],['dashed','╌╌'],['dotted','┄┄']];
+      RING_STYLES2.forEach(([val,label])=>{
+        const b=mk('button',{style:`padding:0.15em 0.4em;border-radius:3px;border:1.5px solid ${val===(cm.ringStyle||'solid')?'#785a37':'#b09878'};background:${val===(cm.ringStyle||'solid')?'rgba(120,90,55,0.15)':'transparent'};font-size:0.75em;color:#3a2e1e;cursor:pointer;font-family:monospace;`});
+        b.textContent=label; b.title=val;
+        b.addEventListener('click',()=>{ cm.ringStyle=val; saveCustom(); renderCustomMarkers(); rsRow2.querySelectorAll('button').forEach(x=>{x.style.borderColor='#b09878';x.style.background='transparent';}); b.style.borderColor='#785a37'; b.style.background='rgba(120,90,55,0.15)'; });
+        rsRow2.appendChild(b);
+      });
+
+      colArea.append(rcRow2, rtRow2, rsRow2);
+      function updateColToggle() {
+        const col=cm.ringColour;
+        colToggle.innerHTML=`<span style="opacity:0.6">${colArea.style.display==='none'?'▶':'▼'}</span> ⭕ Ring${col?' — '+col.slice(0,7):' (none)'}`;
+      }
+      updateColToggle();
+      colToggle.addEventListener('click',()=>{ colArea.style.display=colArea.style.display==='none'?'block':'none'; updateColToggle(); });
+
+      // Expandable comment
+      const cmtToggle=mk('div',{style:'font-size:0.72em;color:#7a6050;cursor:pointer;padding:0.15em 0;user-select:none;display:flex;align-items:center;gap:0.3em;'});
+      const cmtArea=mk('div',{style:'display:none;margin-top:0.25em;'});
+      const cmtTa=mk('textarea'); Object.assign(cmtTa,{rows:2,value:cm.comment||'',placeholder:'Add a comment…'});
+      cmtTa.style.cssText='width:100%;padding:0.25em 0.4em;border:1px solid #a09880;border-radius:4px;font-size:0.78em;color:#3a2e1e;background:rgb(225,220,208);outline:none;resize:vertical;box-sizing:border-box;font-family:Noto,sans-serif;';
+      cmtTa.addEventListener('input',()=>{
+        cm.comment = cmtTa.value;
+        saveCustom();
+        updateCmtToggle();
+        if (cm._popCommentEl) cm._popCommentEl.value = cm.comment;
+      });
+      cmtTa.addEventListener('_sync',()=>{ updateCmtToggle(); });
+      cmtArea.appendChild(cmtTa);
+      cm._sbCommentEl = cmtTa;
+      function updateCmtToggle() {
+        const has=cm.comment&&cm.comment.trim();
+        cmtToggle.innerHTML=`<span style="opacity:0.6">${cmtArea.style.display==='none'?'▶':'▼'}</span> ${has?'💬 '+cm.comment.trim().slice(0,40)+(cm.comment.trim().length>40?'…':''):'+ Add comment'}`;
+      }
+      updateCmtToggle();
+      cmtToggle.addEventListener('click',()=>{ cmtArea.style.display=cmtArea.style.display==='none'?'block':'none'; updateCmtToggle(); });
+
+      row.appendChild(topRow); row.appendChild(colToggle); row.appendChild(colArea); row.appendChild(cmtToggle); row.appendChild(cmtArea);
       myList.appendChild(row);
     });
   }
