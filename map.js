@@ -23,7 +23,7 @@ const categoryRegistry = {};
 const hiddenGroups = new Set();
 function saveCompleted() { localStorage.setItem('completedMarkers', JSON.stringify([...completedMarkers])); }
 function getMarkerId(item, idx) { return `${item.label}__${idx}`; }
-const COMPLETABLE = new Set(['Chests','Orb chests','Vault chests','Secret orbs','Recipes','Critters']);
+const COMPLETABLE = new Set(['Chests','Orb chests','Secret orbs','Recipes','Critters','Vault Chests']);
 
 function getMarkerEl(marker) {
   const el = marker.getElement(); if (!el) return null;
@@ -44,7 +44,7 @@ function toggleComplete(mid, marker, category) {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const COLOURS = {
-  'Misc':'#ffa958','Plants':'#ee74a3','Chests':'#c68a09','Orb chests':'#bb5b11',
+  'Misc':'#ffa958','Plants':'#ee74a3','Chests':'#c68a09','Orb chests':'#bb5b11','Vault Chests':'#9b59b6',
   'Ores':'#8758d3','NPCs':'#27ad71','Haydn Seek':'#388e9f','Obelisks':'#6e1ac7',
   'Mobs':'#d13a3a','Sparkling mobs':'#eb19c8','Dungeons':'#430dd8',
   'Checkpoints':'#4db3db','Minibosses':'#eb681c','Critters':'#de58ff',
@@ -57,7 +57,7 @@ const COLOURS = {
   'Madrigold':'#e8a030','Lavendula':'#9b59b6','Ancient Thyme':'#5d8a5e','Zealotus':'#c0392b',
 };
 const ICONS = {
-  'Obelisks':'./icons/mapMarker5.png','Chests':'./icons/mapMarker2.png',
+  'Obelisks':'./icons/mapMarker5.png','Chests':'./icons/mapMarker2.png','Vault Chests':'./icons/mapMarker13.png',
   'Orb chests':'./icons/mapMarker11.png','NPCs':'./icons/mapMarker8.png',
   'Dungeons':'./icons/mapMarker3.png','Checkpoints':'./icons/mapMarker6.png',
   'Minibosses':'./icons/mapMarker1.png',
@@ -65,7 +65,7 @@ const ICONS = {
 const FILTER_GROUPS = [
   { key:'npcs',        title:'NPCs',              icon:'👤', cats:['NPCs','Haydn Seek'] },
   { key:'poi',         title:'Points of Interest',icon:'⭐', cats:['Obelisks','Dungeons','Checkpoints'] },
-  { key:'collectables',title:'Collectables',      icon:'📦', cats:['Chests','Secret orbs','Orb chests','Recipes','Critters'] },
+  { key:'collectables',title:'Collectables',      icon:'📦', cats:['Chests','Vault Chests','Secret orbs','Orb chests','Recipes','Critters'] },
   { key:'gatherables', title:'Gatherables',       icon:'🌿', cats:['Plants','Ores'], hasSub:true },
   { key:'enemies',     title:'Enemies',           icon:'⚔️', cats:['Minibosses','Sparkling mobs'], hasMobSub:true },
 ];
@@ -77,11 +77,11 @@ const MOB_FACTIONS = {
   'Crimson':  { icon:'./icons/mobs/crimson.png' },
   'Demons':   { icon:'./icons/mobs/demon.png' },
   'Golems':   { icon:'./icons/mobs/golem.png' },
-  'Sparkles': { icon:'./icons/mobs/sparkle.png' },
   'Kobolds':  { icon:'./icons/mobs/kobold.png' },
   'Nepsids':  { icon:'./icons/mobs/nepsid.png' },
   'Skunks':   { icon:'./icons/mobs/skunk.png' },
   'Slimes':   { icon:'./icons/mobs/slime.png' },
+  'Sparkles': { icon:'./icons/mobs/sparkle.png' },
   'Spirits':  { icon:'./icons/mobs/spirits.png' },
   'Sprouts':  { icon:'./icons/mobs/sprout.png' },
   'Wolves':   { icon:'./icons/mobs/wolf.png' },
@@ -141,6 +141,12 @@ const MOB_UNIT_FACTION = {
   'Z1_World_Critters_Sheep':'__Critters__',
   // Dummy — skip
   'Dummy':'__skip__',
+  // Wind / Water / Fire Golems in new assets — all are golem-family sparkles
+  'Wind Golems':'Sparkles',
+  'Water Golems':'Sparkles',
+  'Fire Golems':'Sparkles',
+  // Companion critters
+  'Companions':'__Critters__',
 };
 const GATHERABLE_SUBS = { Ores: ORE_SUBS, Plants: PLANT_SUBS };
 const SVG = {
@@ -153,7 +159,7 @@ const SVG = {
   region:  `<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="7" r="5"/><circle cx="7" cy="7" r="2"/></svg>`,
   sub:     `<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="10" height="10" rx="2"/></svg>`,
   zone:    `<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="7,1 13,13 1,13"/></svg>`,
-  route:   `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 12 Q4 5 9 4"/><polyline points="7,2 9,4 7,6" fill="none"/></svg>`,
+  route:   `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="3" cy="11" r="1.6" stroke-width="1.8"/><circle cx="11" cy="3" r="1.6" stroke-width="1.8"/><path d="M3 9.4 C3 6 6 5 9 4.6" stroke-width="1.8" stroke-dasharray="1.5 1.8"/><polyline points="9,2 11,3 9.5,5" stroke-width="1.8" fill="none"/></svg>`,
   trash:   `<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="1,3 13,3"/><path d="M4 3V2h6v1"/><rect x="3" y="4" width="8" height="9" rx="1"/></svg>`,
 };
 
@@ -361,6 +367,20 @@ function catmullRom(pts, tension=0.5, segments=8) {
 
 const custMarkerLayer = L.layerGroup().addTo(map);
 const custRouteLayer  = L.layerGroup().addTo(map);
+
+// ─── Mob patrol path layers ───────────────────────────────────────────────────
+// One LayerGroup per effectiveCat/faction, drawn under mob markers
+const mobPathLayers = {}; // key → L.layerGroup
+function getMobPathLayer(key) {
+  if (!mobPathLayers[key]) mobPathLayers[key] = L.layerGroup();
+  return mobPathLayers[key];
+}
+function syncMobPathLayer(key) {
+  const pl = mobPathLayers[key]; if (!pl) return;
+  map.hasLayer(pl) ? null : null; // only toggled via showMobPath/hideMobPath
+}
+function showMobPathLayer(key) { const pl = mobPathLayers[key]; if (pl && !map.hasLayer(pl)) pl.addTo(map); }
+function hideMobPathLayer(key) { const pl = mobPathLayers[key]; if (pl) map.removeLayer(pl); }
 
 function saveCustom() {
   localStorage.setItem('customMarkers', JSON.stringify(customMarkers.map(({lat,lng,icon,ringColour,ringThick,ringStyle,note,comment,hidden})=>({lat,lng,icon,ringColour:ringColour||null,ringThick:ringThick||3,ringStyle:ringStyle||'solid',note,comment:comment||'',hidden:hidden||false}))));
@@ -934,8 +954,7 @@ function initMap(data) {
   class circleArea { constructor(f={}){this.props={radius:coordToMapScalar*50,fillColor:'#ffa958',color:'#ffffff',weight:1.05,opacity:1,fillOpacity:1};for(const[k,v]of Object.entries(f))this.props[k]=v;}}
   const stylingDict={
     'Misc':new cMarker().props,'Plants':new cMarker({fillColor:'#ee74a3'}).props,
-    'Chests':new cMarker({fillColor:'#c68a09',color:'#fffb00'}).props,'Orb chests':new cMarker({fillColor:'#bb5b11',color:'#fffb00'}).props,
-    'Vault chests':new cMarker({fillColor:'#bb590a',color:'#fffb00'}).props,'Vault chests':new cMarker({fillColor:'#bb590a',color:'#fffb00'}).props,
+    'Chests':new cMarker({fillColor:'#c68a09',color:'#fffb00'}).props,'Orb chests':new cMarker({fillColor:'#bb5b11',color:'#fffb00'}).props,'Vault Chests':new cMarker({fillColor:'#9b59b6',color:'#fffb00'}).props,
     'Ores':new cMarker({fillColor:'#8758d3'}).props,'NPCs':new cMarker({fillColor:'#27ad71'}).props,
     'Haydn Seek':new cMarker({fillColor:'#388e9f'}).props,'Obelisks':new cMarker({fillColor:'#6e1ac7'}).props,
     'Mobs':new cMarker({fillColor:'#d13a3a',radius:8}).props,'Sparkling mobs':new cMarker({fillColor:'#eb19c8'}).props,
@@ -944,7 +963,7 @@ function initMap(data) {
     'Recipes':new cMarker({fillColor:'#9b7700'}).props,'Secret orbs':new cMarker({fillColor:'#a23030'}).props,
   };
   const iconDict={
-    'Obelisks':new iconMarker({iconUrl:'./icons/mapMarker5.png'}).props,'Chests':new iconMarker({iconUrl:'./icons/mapMarker2.png'}).props,
+    'Obelisks':new iconMarker({iconUrl:'./icons/mapMarker5.png'}).props,'Chests':new iconMarker({iconUrl:'./icons/mapMarker2.png'}).props,'Vault Chests':new iconMarker({iconUrl:'./icons/mapMarker13.png'}).props,
     'Orb chests':new iconMarker({iconUrl:'./icons/mapMarker11.png'}).props,'NPCs':new iconMarker({iconUrl:'./icons/mapMarker8.png'}).props,
     'Dungeons':new iconMarker({iconUrl:'./icons/mapMarker3.png'}).props,'Checkpoints':new iconMarker({iconUrl:'./icons/mapMarker6.png'}).props,
     'Minibosses':new iconMarker({iconUrl:'./icons/mapMarker1.png'}).props,
@@ -963,9 +982,25 @@ function initMap(data) {
     const cat=item.categories?.[0]||'Misc';
     if (gatherableLabels.has(item.label.toLowerCase())) return;
     if (cat === 'Mobs') {
-      const uf = item.unitFaction && MOB_FACTIONS[item.unitFaction] ? item.unitFaction : MOB_UNIT_FACTION[item.unit||''];
+      const lbl = (item.label||'').trim();
+      const lbl_l = lbl.toLowerCase();
+      // Label-based routing (matches initMap mobFaction logic)
+      const labelFaction =
+        lbl === 'Dummy' ? '__skip__' :
+        lbl_l.startsWith('sparkling') ? 'Sparkling mobs' :
+        (lbl_l.includes('sparkle') && !lbl_l.includes('sparkling')) ? 'Sparkles' :
+        lbl_l.includes('slime') ? 'Slimes' :
+        /^TODO Z 2W Peasant$/i.test(lbl) ? 'Crimson' :
+        /^Elemental Z 2W Underwater 2$/i.test(lbl) ? 'Sparkles' :
+        /^TODO Z 1W Herald Spirit$/i.test(lbl) ? 'Spirits' :
+        /^Dog Z 1W Crimson$/i.test(lbl) ? 'Crimson' :
+        /^Crimson Z 1W Sword 2$/i.test(lbl) ? 'Crimson' : null;
+      // unitFaction routing (matches initMap UF_MAP + MOB_FACTIONS)
+      const ufRaw = item.unitFaction || '';
+      const ufMapped = {'Wind Golems':'Sparkles','Water Golems':'Sparkles','Fire Golems':'Sparkles','Companions':'__Critters__'}[ufRaw];
+      const uf = labelFaction || ufMapped || (MOB_FACTIONS[ufRaw] ? ufRaw : null) || (MOB_UNIT_FACTION[item.unit||''] || null);
       if (uf === '__skip__') return; // Dummy items
-      if (uf === '__Critters__') { // count toward Critters
+      if (uf === '__Critters__') {
         if(!categoryRegistry['Critters']) categoryRegistry['Critters']={total:0,markerIds:[],markers:[]};
         categoryRegistry['Critters'].total++; categoryRegistry['Critters'].markerIds.push(getMarkerId(item,idx)); return;
       }
@@ -1027,7 +1062,13 @@ function initMap(data) {
       ? (/^sparkling\b/i.test(item.label||'') ? 'Sparkling mobs'
          : /\bsparkle\b/i.test(item.label||'') ? 'Sparkles'
          : /\bslime\b/i.test(item.label||'') ? 'Slimes'
-         : item.unitFaction && MOB_FACTIONS[item.unitFaction] ? item.unitFaction
+         : /^TODO Z 2W Peasant$/i.test((item.label||'').trim()) ? 'Crimson'
+         : /^Elemental Z 2W Underwater 2$/i.test((item.label||'').trim()) ? 'Sparkles'
+         : /^TODO Z 1W Herald Spirit$/i.test((item.label||'').trim()) ? 'Spirits'
+         : /^Dog Z 1W Crimson$/i.test((item.label||'').trim()) ? 'Crimson'
+         : /^Crimson Z 1W Sword 2$/i.test((item.label||'').trim()) ? 'Crimson'
+         : /^Crimson Z 1W Sword 2$/i.test((item.label||'').trim()) ? 'Crimson'
+         : item.unitFaction && (MOB_FACTIONS[item.unitFaction] || MOB_UNIT_FACTION[item.unitFaction]) ? (MOB_UNIT_FACTION[item.unitFaction] || item.unitFaction)
          : MOB_UNIT_FACTION[item.unit||''] || null)
       : null;
     // Skip dummy/test markers
@@ -1124,13 +1165,70 @@ function initMap(data) {
       m.setIcon(makeMultiIcon(allFactions));
       m._allFactions = allFactions;
       m._makeMultiIcon = makeMultiIcon;
-      // Add directly to map — visibility controlled by updateMultiFactionIcons
-      m.addTo(map);
+      // Add to primary faction layer + all extra faction layers so toggles work normally
+      m.addTo(layers[effectiveCat]);
+      extraFactions.forEach(f => { if (layers[f]) m.addTo(layers[f]); });
     } else {
       m.addTo(layers[effectiveCat]);
       extraFactions.forEach(f => { if (layers[f]) m.addTo(layers[f]); });
     }
+
+    // ── Patrol path ────────────────────────────────────────────────
+    if (item.pathPoints && item.pathPoints.length >= 2) {
+      // Transform pathPoints using the same coordinate system as marker coords
+      const pathLatLngs = item.pathPoints.map(([px, py]) => [s1*(4096-py)+b1, s2*(px+b2)]);
+      // Key paths by raw category ('Mobs', 'Sparkling mobs', 'Critters') so the
+      // monkey-patched map.addLayer/removeLayer can find them via layers[key].
+      const pathKey = cat;
+      const pathColour = COLOURS[cat] || '#e74c3c';
+      const pathLayer  = getMobPathLayer(pathKey);
+
+      // Draw a semi-transparent patrol line with directional arrows
+      // Points are already dense — draw direct, no Catmull-Rom needed
+      L.polyline(pathLatLngs, {
+        color: pathColour, weight: 2.5, opacity: 0.55, smoothFactor: 1,
+        dashArray: null
+      }).addTo(pathLayer);
+
+      // Directional arrows every ~12% of path
+      const total = pathLatLngs.length;
+      const interval = Math.max(8, Math.floor(total * 0.12));
+      for (let i = Math.floor(interval / 2); i < total - 1; i += interval) {
+        const a = pathLatLngs[i], b = pathLatLngs[Math.min(i + 3, total - 1)];
+        const dX = b[1]-a[1], dY = b[0]-a[0];
+        const angle = Math.atan2(dX, dY) * 180 / Math.PI;
+        L.marker([a[0],a[1]], { interactive:false, icon: L.divIcon({
+          className:'',
+          iconAnchor:[6,8], iconSize:[12,16],
+          html:`<div style="transform:rotate(${angle}deg);transform-origin:50% 50%;opacity:0.75;">
+            <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+              <line x1="6" y1="15" x2="6" y2="1" stroke="${pathColour}" stroke-width="2" stroke-linecap="round"/>
+              <polyline points="1,7 6,1 11,7" stroke="${pathColour}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg></div>`
+        })}).addTo(pathLayer);
+      }
+    }
   });
+
+  // Sync patrol path layers: show/hide together with their marker layer.
+  // Respects the per-category path visibility toggle stored in localStorage.
+  const _origAdd = map.addLayer.bind(map);
+  const _origRem = map.removeLayer.bind(map);
+  map._origAdd = _origAdd;
+  map._origRem = _origRem;
+  map.addLayer = function(layer) {
+    _origAdd(layer);
+    const key = Object.keys(layers).find(k => layers[k] === layer);
+    if (key && mobPathLayers[key]) {
+      const pathVisible = localStorage.getItem(`mobPathVisible_${key}`) !== '0';
+      if (pathVisible) _origAdd(mobPathLayers[key]);
+    }
+  };
+  map.removeLayer = function(layer) {
+    _origRem(layer);
+    const key = Object.keys(layers).find(k => layers[k] === layer);
+    if (key && mobPathLayers[key]) _origRem(mobPathLayers[key]);
+  };
 
   // Map mouse/touch events for route drawing and marker placement
   const mapEl = map.getContainer();
@@ -1457,7 +1555,13 @@ function buildSidebar(layers) {
       Object.entries(MOB_FACTIONS).forEach(([faction,{icon}]) => {
         mobRows.appendChild(buildCatRow(faction, layers, icon));
       });
-      if (categoryRegistry['Mobs']) mobRows.appendChild(buildCatRow('Mobs', layers));
+      if (categoryRegistry['Mobs']) {
+        const dummyRow = buildCatRow('Mobs', layers);
+        // Relabel the display name to 'Dummy'
+        const nameEl = dummyRow.querySelector('.sb-cat-name');
+        if (nameEl) nameEl.textContent = 'Dummy';
+        mobRows.appendChild(dummyRow);
+      }
       mobDiv.appendChild(mobRows);
       groupRows.appendChild(mobDiv);
     } else {
@@ -2201,7 +2305,42 @@ function buildCatRow(name, layers, iconOverride) {
     ? `<img src="${iconUrl}" class="sb-cat-icon" alt="">`
     : `<span class="sb-cat-dot-wrap"><span class="sb-cat-dot" style="background:${colour}"></span></span>`;
   const isCollectable = COMPLETABLE.has(name);
+
+  // Build count cell — route toggle sits LEFT of the number when paths exist
+  const hasPath = !!mobPathLayers[name];
+  const pathKey = `mobPathVisible_${name}`;
+  const pathVisible = hasPath && localStorage.getItem(pathKey) !== '0';
+
+  // Route toggle button (created early so we can insert it before count)
+  let pathBtn = null;
+  if (hasPath) {
+    pathBtn = mk('button',{class:'sb-path-tog'+(pathVisible?' path-tog-on':'')} );
+    pathBtn.title = 'Toggle patrol paths';
+    pathBtn.style.cssText = 'padding:0 0.22em;border:none;border-radius:3px;cursor:pointer;font-size:0.85em;line-height:1.5;background:transparent;color:inherit;flex-shrink:0;vertical-align:middle;';
+    pathBtn.innerHTML = SVG.route;
+    pathBtn.style.opacity = pathVisible ? '1' : '0.3';
+  }
+
   row.innerHTML=`<input type="checkbox" data-layer="${name}" class="category" style="display:none"><span class="sb-check-img"></span>${indicator}<span class="sb-cat-name">${name}</span><span class="sb-cat-count" data-cat="${name}">${isCollectable?`0/${total}`:total}</span>`;
+
+  if (pathBtn) {
+    // Insert route toggle immediately before the count span
+    const countSpan = row.querySelector('.sb-cat-count');
+    row.insertBefore(pathBtn, countSpan);
+
+    pathBtn.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      const on = !pathBtn.classList.contains('path-tog-on');
+      pathBtn.classList.toggle('path-tog-on', on);
+      pathBtn.style.opacity = on ? '1' : '0.3';
+      localStorage.setItem(pathKey, on ? '1' : '0');
+      const pl = mobPathLayers[name]; if (!pl) return;
+      const markerOn = layers[name] && map.hasLayer(layers[name]);
+      if (on && markerOn) { if (!map.hasLayer(pl)) pl.addTo(map); }
+      else { if (map.hasLayer(pl)) map.removeLayer(pl); }
+    });
+  }
+
   return row;
 }
 
