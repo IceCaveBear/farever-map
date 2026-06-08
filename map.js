@@ -25,10 +25,10 @@ function saveCompleted() { localStorage.setItem('completedMarkers', JSON.stringi
 function getMarkerId(item, idx) { return `${item.label}__${idx}`; }
 // Display name overrides — internal key → label shown in sidebar
 const CAT_DISPLAY = {
-  'Vault Chests': 'Vault chests',
+  'Vault chests': 'Vault chests',
   'Mobs': 'Dummy',
 };
-const COMPLETABLE = new Set(['Chests','Orb chests','Secret orbs','Recipes','Critters','Vault Chests']);
+const COMPLETABLE = new Set(['Chests','Orb chests','Secret orbs','Recipes','Critters','Vault chests']);
 
 function getMarkerEl(marker) {
   const el = marker.getElement(); if (!el) return null;
@@ -49,7 +49,7 @@ function toggleComplete(mid, marker, category) {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const COLOURS = {
-  'Misc':'#ffa958','Plants':'#ee74a3','Chests':'#c68a09','Orb chests':'#bb5b11','Vault Chests':'#9b59b6',
+  'Misc':'#ffa958','Plants':'#ee74a3','Chests':'#c68a09','Orb chests':'#bb5b11','Vault chests':'#9b59b6',
   'Ores':'#8758d3','NPCs':'#27ad71','Haydn Seek':'#388e9f','Obelisks':'#6e1ac7',
   'Mobs':'#d13a3a','Sparkling mobs':'#eb19c8','Dungeons':'#430dd8',
   'Checkpoints':'#4db3db','Minibosses':'#eb681c','Critters':'#de58ff',
@@ -62,7 +62,7 @@ const COLOURS = {
   'Madrigold':'#e8a030','Lavendula':'#9b59b6','Ancient Thyme':'#5d8a5e','Zealotus':'#c0392b',
 };
 const ICONS = {
-  'Obelisks':'./icons/mapMarker5.png','Chests':'./icons/mapMarker2.png','Vault Chests':'./icons/mapMarker13.png',
+  'Obelisks':'./icons/mapMarker5.png','Chests':'./icons/mapMarker2.png','Vault chests':'./icons/mapMarker13.png',
   'Orb chests':'./icons/mapMarker11.png','NPCs':'./icons/mapMarker8.png',
   'Dungeons':'./icons/mapMarker3.png','Checkpoints':'./icons/mapMarker6.png',
   'Minibosses':'./icons/mapMarker1.png',
@@ -70,7 +70,7 @@ const ICONS = {
 const FILTER_GROUPS = [
   { key:'npcs',        title:'NPCs',              icon:'👤', cats:['NPCs','Haydn Seek'] },
   { key:'poi',         title:'Points of Interest',icon:'⭐', cats:['Obelisks','Dungeons','Checkpoints'] },
-  { key:'collectables',title:'Collectables',      icon:'📦', cats:['Chests','Vault Chests','Secret orbs','Orb chests','Recipes','Critters'] },
+  { key:'collectables',title:'Collectables',      icon:'📦', cats:['Chests','Vault chests','Secret orbs','Orb chests','Recipes','Critters'] },
   { key:'gatherables', title:'Gatherables',       icon:'🌿', cats:['Plants','Ores'], hasSub:true },
   { key:'enemies',     title:'Enemies',           icon:'⚔️', cats:['Minibosses','Sparkling mobs'], hasMobSub:true },
 ];
@@ -959,7 +959,7 @@ function initMap(data) {
   class circleArea { constructor(f={}){this.props={radius:coordToMapScalar*50,fillColor:'#ffa958',color:'#ffffff',weight:1.05,opacity:1,fillOpacity:1};for(const[k,v]of Object.entries(f))this.props[k]=v;}}
   const stylingDict={
     'Misc':new cMarker().props,'Plants':new cMarker({fillColor:'#ee74a3'}).props,
-    'Chests':new cMarker({fillColor:'#c68a09',color:'#fffb00'}).props,'Orb chests':new cMarker({fillColor:'#bb5b11',color:'#fffb00'}).props,'Vault Chests':new cMarker({fillColor:'#9b59b6',color:'#fffb00'}).props,
+    'Chests':new cMarker({fillColor:'#c68a09',color:'#fffb00'}).props,'Orb chests':new cMarker({fillColor:'#bb5b11',color:'#fffb00'}).props,'Vault chests':new cMarker({fillColor:'#9b59b6',color:'#fffb00'}).props,
     'Ores':new cMarker({fillColor:'#8758d3'}).props,'NPCs':new cMarker({fillColor:'#27ad71'}).props,
     'Haydn Seek':new cMarker({fillColor:'#388e9f'}).props,'Obelisks':new cMarker({fillColor:'#6e1ac7'}).props,
     'Mobs':new cMarker({fillColor:'#d13a3a',radius:8}).props,'Sparkling mobs':new cMarker({fillColor:'#eb19c8'}).props,
@@ -968,7 +968,7 @@ function initMap(data) {
     'Recipes':new cMarker({fillColor:'#9b7700'}).props,'Secret orbs':new cMarker({fillColor:'#a23030'}).props,
   };
   const iconDict={
-    'Obelisks':new iconMarker({iconUrl:'./icons/mapMarker5.png'}).props,'Chests':new iconMarker({iconUrl:'./icons/mapMarker2.png'}).props,'Vault Chests':new iconMarker({iconUrl:'./icons/mapMarker13.png'}).props,
+    'Obelisks':new iconMarker({iconUrl:'./icons/mapMarker5.png'}).props,'Chests':new iconMarker({iconUrl:'./icons/mapMarker2.png'}).props,'Vault chests':new iconMarker({iconUrl:'./icons/mapMarker13.png'}).props,
     'Orb chests':new iconMarker({iconUrl:'./icons/mapMarker11.png'}).props,'NPCs':new iconMarker({iconUrl:'./icons/mapMarker8.png'}).props,
     'Dungeons':new iconMarker({iconUrl:'./icons/mapMarker3.png'}).props,'Checkpoints':new iconMarker({iconUrl:'./icons/mapMarker6.png'}).props,
     'Minibosses':new iconMarker({iconUrl:'./icons/mapMarker1.png'}).props,
