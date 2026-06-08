@@ -23,7 +23,7 @@ const categoryRegistry = {};
 const hiddenGroups = new Set();
 function saveCompleted() { localStorage.setItem('completedMarkers', JSON.stringify([...completedMarkers])); }
 function getMarkerId(item, idx) { return `${item.label}__${idx}`; }
-const COMPLETABLE = new Set(['Chests','Orb chests','Secret orbs','Recipes','Critters']);
+const COMPLETABLE = new Set(['Chests','Orb chests','Vault chests','Secret orbs','Recipes','Critters']);
 
 function getMarkerEl(marker) {
   const el = marker.getElement(); if (!el) return null;
@@ -935,6 +935,7 @@ function initMap(data) {
   const stylingDict={
     'Misc':new cMarker().props,'Plants':new cMarker({fillColor:'#ee74a3'}).props,
     'Chests':new cMarker({fillColor:'#c68a09',color:'#fffb00'}).props,'Orb chests':new cMarker({fillColor:'#bb5b11',color:'#fffb00'}).props,
+    'Vault chests':new cMarker({fillColor:'#bb590a',color:'#fffb00'}).props,'Vault chests':new cMarker({fillColor:'#bb590a',color:'#fffb00'}).props,
     'Ores':new cMarker({fillColor:'#8758d3'}).props,'NPCs':new cMarker({fillColor:'#27ad71'}).props,
     'Haydn Seek':new cMarker({fillColor:'#388e9f'}).props,'Obelisks':new cMarker({fillColor:'#6e1ac7'}).props,
     'Mobs':new cMarker({fillColor:'#d13a3a',radius:8}).props,'Sparkling mobs':new cMarker({fillColor:'#eb19c8'}).props,
